@@ -2018,7 +2018,7 @@ body{
       <div class="key-actions"><button class="button" id="forget-key" type="button">清除此浏览器保存的 Key</button><span></span><button class="button primary" id="save-key" type="submit">保存并使用</button></div>
     </form>
   </dialog>
-  <dialog id="flow-dialog" aria-labelledby="flow-title"><div class="dialog-heading"><div><span class="eyebrow">THE WHOLE PICTURE</span><h3 id="flow-title">完整决策流程图</h3></div><button class="tool-button" id="close-flow" type="button" aria-label="关闭流程图">✕</button></div><div id="mermaid-render" class="mermaid-render"></div><details class="mermaid-source"><summary>查看 Mermaid 源码</summary><pre id="mermaid-code"></pre></details><div class="dialog-actions"><p>红色节点 = 待验证假设 · 绿色节点 = 第三条路 · 琥珀虚线节点 = 动态缺口（带 gap 编号）。</p><div class="flow-zoom"><button type="button" id="zoom-out">−</button><span class="zoom-label" id="zoom-label">100%</span><button type="button" id="zoom-in">+</button><button type="button" id="zoom-fit">适应宽度</button><button type="button" id="zoom-reset">原始大小</button></div>
+  <dialog id="flow-dialog" aria-labelledby="flow-title"><div class="dialog-heading"><div><span class="eyebrow">THE WHOLE PICTURE</span><h3 id="flow-title">完整决策流程图</h3></div><button class="tool-button" id="close-flow" type="button" aria-label="关闭流程图">✕</button></div><div id="mermaid-render" class="mermaid-render"></div><details class="mermaid-source"><summary>查看 Mermaid 源码</summary><pre id="mermaid-code"></pre></details><div class="dialog-actions"><p>深绿 = 你的决定 · 绿/橙/紫 = 路径 A/B/C 及其前提 · 红色 = 待验证假设 · 琥珀 = 动态缺口 · 蓝色平行四边形 = 你每轮补充的内容。</p><div class="flow-zoom"><button type="button" id="zoom-out">−</button><span class="zoom-label" id="zoom-label">100%</span><button type="button" id="zoom-in">+</button><button type="button" id="zoom-fit">适应宽度</button><button type="button" id="zoom-reset">原始大小</button></div>
       <button class="button" id="copy-mermaid" type="button">复制代码</button><button class="button primary" id="download-svg" type="button">下载 SVG ↓</button></div></dialog>
   <dialog id="whats-new-dialog" aria-labelledby="whats-new-title" class="whats-new-dialog">
     <div class="dialog-heading"><div><span class="eyebrow">WHAT'S NEW · v2.3 · 2026-11-08</span><h3 id="whats-new-title">这一版更新了什么</h3></div><button class="tool-button" id="close-whats-new" type="button" aria-label="关闭">✕</button></div>
@@ -4966,7 +4966,7 @@ function collectAnswers(){return $$('#followup-fields textarea').map(n=>({questi
 function saveDraft(){
   if(!$('#dilemma'))return;
   const draft={dilemma:$('#dilemma').value,context:$('#context').value,ownConditions:state.ownConditions,answers:collectAnswers(),actionFeedback:state.actionFeedback,switchChecks:state.switchChecks,ts:Date.now()};
-  if(state.report&&state.payload){draft.report=state.report;draft.payload=state.payload;draft.source=state.source;draft.model=state.model;draft.createdAt=state.createdAt;draft.version=state.version;draft.mermaid=state.mermaid;draft.droppedGaps=state.droppedGaps;draft.gapMeta=state.gapMeta;draft.historyId=state.historyId;}
+  if(state.report&&state.payload){draft.report=state.report;draft.payload=state.payload;draft.source=state.source;draft.model=state.model;draft.createdAt=state.createdAt;draft.version=state.version;draft.mermaid=state.mermaid;draft.droppedGaps=state.droppedGaps;draft.gapMeta=state.gapMeta;draft.historyId=state.historyId;draft.flowRounds=state.flowRounds;}
   if(!lsSet(DRAFT_KEY,JSON.stringify(draft)))toast('草稿存不进去，看看浏览器存储是不是被禁了。');
 }
 let draftTimer=null;
@@ -5397,6 +5397,23 @@ function flagReadingWrong(){
 function renderReport(envelope, payload, opts) {
   opts=opts||{};
   const a = envelope.analysis;
+if(opts.restore){
+    state.flowRounds=Array.isArray(envelope.flowRounds)?envelope.flowRounds:[];
+  }else{
+    state.flowRounds=Array.isArray(state.flowRounds)?state.flowRounds:[];
+    const prevPayload=state.payload;
+    if(prevPayload){
+      const keyOf=x=>x.gapId||x.question;
+      const prevKeys=new Set((prevPayload.answers||[]).map(keyOf));
+      const prevOwn=new Set((prevPayload.ownConditions||[]).map(x=>x.id));
+      const bits=[];
+      (payload.answers||[]).forEach(x=>{if(!prevKeys.has(keyOf(x))&&x.answer)bits.push('回答 '+x.answer);});
+      (payload.ownConditions||[]).forEach(x=>{if(!prevOwn.has(x.id)&&x.text)bits.push('补充 '+x.text);});
+      const ctx=String(payload.context||'').trim(), prevCtx=String(prevPayload.context||'').trim();
+      if(ctx!==prevCtx&&ctx)bits.push('背景 '+ctx);
+      if(bits.length)state.flowRounds.push({round:(state.version||0)+1,text:bits.join('；')});
+    }
+  }
   // 换了新问题（dilemma 改变）时重置 historyId，避免覆盖上一条历史；同题更新则沿用同一历史条目
   if(!opts.restore && (!state.payload || state.payload.dilemma!==payload.dilemma)) state.historyId=null;
   state.droppedGaps=envelope.droppedGaps||0;
@@ -5407,7 +5424,7 @@ function renderReport(envelope, payload, opts) {
   state.report=a;state.payload=structuredClone(payload);state.source=envelope.source;state.model=envelope.model || '';
   state.createdAt=envelope.createdAt||new Date().toLocaleString('zh-CN',{hour12:false});
   if(opts.restore){state.version=envelope.version||1;}else{state.version++;}
-  state.svg='';state.mermaid=envelope.mermaid||toMermaid(a);
+  state.svg='';state.mermaid=envelope.mermaid||toMermaid(a,state.flowRounds);
   $('#welcome').hidden=true;$('#report').hidden=false;$('#new-decision').style.display='';$('#report').classList.add('quick-only');
 text('#qv-stakes',a.summary||'');
 const qvOpts=Array.isArray(a.options)?a.options:[];
@@ -5511,7 +5528,7 @@ const qvBtn=$('#qv-toggle');if(qvBtn){qvBtn.textContent='展开全部细节 ↓'
   if(!opts.restore){
     if(envelope.source==='model'||envelope.source==='local'){
       if(!state.historyId)state.historyId='h_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,6);
-      pushHistory({id:state.historyId,title:safeTitle,createdAt:state.createdAt,dilemma:state.payload.dilemma,version:state.version,source:envelope.source,model:state.model,mermaid:state.mermaid,droppedGaps:state.droppedGaps,gapMeta:{labels:gapChanges.labels,states:gapChanges.states,priorities:gapChanges.priorities},report:a,payload:state.payload});
+      pushHistory({id:state.historyId,title:safeTitle,createdAt:state.createdAt,dilemma:state.payload.dilemma,version:state.version,source:envelope.source,model:state.model,mermaid:state.mermaid,droppedGaps:state.droppedGaps,gapMeta:{labels:gapChanges.labels,states:gapChanges.states,priorities:gapChanges.priorities},report:a,payload:state.payload,flowRounds:state.flowRounds});
       renderHistoryList();
     }
     saveDraft();
@@ -6087,9 +6104,15 @@ async function refine(event) {
 function mermaidLabel(value) {
   return [...String(value).replace(/[\r\n\t]/g,' ')].map(ch=>/[A-Za-z0-9\u3400-\u9fff ，。；：、？！·]/u.test(ch)?ch:`#${ch.codePointAt(0)};`).join('');
 }
-function toMermaid(a) {
-  const node=(id,label)=>`${id}["${mermaidLabel(label)}"]`;
-  // 防御性读取：避免模型少字段时 toMermaid 抛错
+function toMermaid(a, rounds) {
+  const node=(id,label,shape)=>{
+    const t=mermaidLabel(label);
+    if(shape==='stadium')return `${id}(["${t}"])`;
+    if(shape==='round')return `${id}("${t}")`;
+    if(shape==='hex')return `${id}{{"${t}"}}`;
+    if(shape==='para')return `${id}[/"${t}"/]`;
+    return `${id}["${t}"]`;
+  };
   const title=a?.title||'本次决定';
   const options=Array.isArray(a?.options)?a.options:[];
   const optA=options[0]||{title:'（缺选项 A）',condition:''};
@@ -6097,16 +6120,48 @@ function toMermaid(a) {
   const hidden=a?.hiddenOption||{title:'（缺第三条路）',signal:''};
   const blindspots=Array.isArray(a?.blindspots)?a.blindspots:[];
   const unknowns=Array.isArray(a?.unknowns)?a.unknowns:[];
-  const parts=['flowchart TB',node('Q',title),node('A',`A · ${optA.title}`),node('B',`B · ${optB.title}`),node('C',`C · ${hidden.title}`),'Q --> A','Q --> B','Q -. 第三条路 .-> C',
-    node('AO',`前提：${optA.condition}`),node('BO',`前提：${optB.condition}`),node('CO',`观察：${hidden.signal}`),'A --> AO','B --> BO','C --> CO'];
-  blindspots.forEach((item,i)=>{parts.push(node(`R${i}`,`待验证：${item?.claim||''}`),`Q -.-> R${i}`,`class R${i} risk`);});
-  // v2 新增：动态缺口进入流程图，琥珀色 gap 类，编号沿用 reconcileGaps 分配的 id
+  const parts=['flowchart TB',
+    node('Q',title,'stadium'),
+    node('A',`A · ${optA.title}`,'round'),
+    node('B',`B · ${optB.title}`,'round'),
+    node('C',`C · ${hidden.title}`,'hex'),
+    'Q --> A','Q --> B','Q -. 第三条路 .-> C',
+    node('AO',`前提：${optA.condition}`),
+    node('BO',`前提：${optB.condition}`),
+    node('CO',`观察：${hidden.signal}`),
+    'A --> AO','B --> BO','C --> CO'];
+  blindspots.forEach((item,i)=>{
+    parts.push(node(`R${i}`,`待验证：${item?.claim||''}`,'round'),`Q -.-> R${i}`,`class R${i} risk`);
+  });
   unknowns.forEach((item,i)=>{
     const gid=item?.id||`gap_${i+1}`;
     const shortNum=gid.replace(/^gap_/,'#');
     parts.push(node(`G${i}`,`缺口 ${shortNum}：${item?.question||''}`),`Q -.-> G${i}`,`class G${i} gap`);
   });
-  parts.push('classDef default fill:#fbfcf8,stroke:#bdcdb0,color:#36523a,rx:8,ry:8','classDef root fill:#eaf1e3,stroke:#97b17d,color:#355334','classDef hidden fill:#edf5e5,stroke:#7e9c63,color:#456432','classDef risk fill:#fbeee7,stroke:#c78f77,color:#935e47','classDef gap fill:#fdf6e3,stroke:#d4a95a,color:#8a6420,stroke-width:2px','class Q root','class C,CO hidden');
+  if(Array.isArray(rounds)&&rounds.length){
+    let chainFrom='Q';
+    rounds.forEach((r,i)=>{
+      const tid='T'+i;
+      const raw=String(r.text||'');
+      const txt=raw.length>140?raw.slice(0,140)+'…':raw;
+      parts.push(node(tid,`第${r.round}轮补充：${txt}`,'para'));
+      parts.push(`${chainFrom} -.-> ${tid}`);
+      parts.push(`class ${tid} timeline`);
+      chainFrom=tid;
+    });
+  }
+  parts.push(
+    'classDef root fill:#1f6b52,stroke:#17523f,color:#ffffff,font-weight:bold',
+    'classDef optA fill:#e7f4ee,stroke:#2f8f6b,color:#1d4a3b,stroke-width:2px',
+    'classDef condA fill:#f3faf7,stroke:#8fc7b3,color:#355f51',
+    'classDef optB fill:#fbf0e6,stroke:#d98a3d,color:#6b421f,stroke-width:2px',
+    'classDef condB fill:#fef7f0,stroke:#e8b98a,color:#75553a',
+    'classDef optC fill:#f1edfa,stroke:#7a5cc0,color:#3f3163,stroke-width:2px',
+    'classDef condC fill:#f7f4fd,stroke:#b7a6e0,color:#55487a',
+    'classDef risk fill:#fdeee9,stroke:#d97757,color:#8a3f28',
+    'classDef gap fill:#fdf6e3,stroke:#d4a95a,color:#8a6420,stroke-width:2px',
+    'classDef timeline fill:#e9f1fb,stroke:#5b8def,color:#2c4a7c,stroke-width:2px',
+    'class Q root','class A optA','class AO condA','class B optB','class BO condB','class C optC','class CO condC');
   return parts.join('\n');
 }
 let flowBaseW=0, flowZoom=1;
@@ -6122,7 +6177,7 @@ function applyFlowZoom(){
 function fitFlowZoom(){
   const svg=flowSvg(),box=$('#mermaid-render');
   if(!svg||!box||!flowBaseW)return;
-  flowZoom=Math.max(.7,Math.min(1,(box.clientWidth-40)/flowBaseW));
+  flowZoom=Math.max(.25,Math.min(1,(box.clientWidth-40)/flowBaseW));
   applyFlowZoom();
 }
 function initFlowZoom(){
@@ -6142,7 +6197,7 @@ async function showFlowchart() {
   text('#mermaid-render','正在绘制流程图…');
   try {
     if(!window.mermaid)throw new Error('流程图组件未加载。请刷新重试，或复制下方源码。');
-    window.mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',fontFamily:'Microsoft YaHei, PingFang SC, sans-serif',themeVariables:{primaryColor:'#f6f9f0',primaryTextColor:'#36523a',lineColor:'#a8bb95',fontSize:'13px'},flowchart:{htmlLabels:false,curve:'basis',nodeSpacing:44,rankSpacing:52,wrappingWidth:260,useMaxWidth:false}});
+    window.mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',fontFamily:'Microsoft YaHei, PingFang SC, sans-serif',themeVariables:{primaryColor:'#eef4ef',primaryBorderColor:'#9db8a8',primaryTextColor:'#2c4236',lineColor:'#7f9b85',secondaryColor:'#f6f1e8',tertiaryColor:'#f2f7f4',edgeLabelBackground:'#ffffff',fontSize:'14px',clusterBkg:'#f6faf8',clusterBorder:'#c4d6c9'},flowchart:{htmlLabels:false,curve:'basis',nodeSpacing:40,rankSpacing:56,wrappingWidth:200,useMaxWidth:false,padding:12}});
     const rendered=await window.mermaid.render(`lucid-flow-${seq}`,snapshot);
     if(seq!==state.renderSequence || snapshot!==state.mermaid)return;
     $('#mermaid-render').innerHTML=rendered.svg;state.svg=rendered.svg;$('#download-svg').disabled=false;
@@ -6464,7 +6519,7 @@ function loadSession(it){
   (it.report.unknowns||[]).forEach(u=>{if(validGapId(u.id)){gapUsedIds.add(u.id);gapSequence=Math.max(gapSequence,Number(u.id.slice(4))||0);}});
   updateOwnCondition();
   $('#welcome').hidden=true;$('#report').hidden=false;$('#new-decision').style.display='';$('#error-banner').hidden=true;
-  renderReport({source:it.source||'model',model:it.model||'',elapsedMs:0,analysis:it.report,droppedGaps:it.droppedGaps||0,gapMeta:it.gapMeta,createdAt:it.createdAt,mermaid:it.mermaid,version:it.version||1},it.payload,{restore:true});
+  renderReport({source:it.source||'model',model:it.model||'',elapsedMs:0,analysis:it.report,droppedGaps:it.droppedGaps||0,gapMeta:it.gapMeta,createdAt:it.createdAt,mermaid:it.mermaid,flowRounds:it.flowRounds,version:it.version||1},it.payload,{restore:true});
   if(Array.isArray(it.savedAnswers))it.savedAnswers.forEach(sa=>{const ta=$$('#followup-fields textarea').find(t=>(t.dataset.gapId||t.dataset.question)===sa.key);if(ta)ta.value=sa.answer;});
   updateInputState();
 }
@@ -6480,7 +6535,7 @@ function openHistory(id){
 // —— P2-7 草稿恢复（刷新后不丢输入与分析） ——
 let resumeDraft=null;
 function draftSession(d){
-  return {id:d.historyId||('draft_'+Date.now().toString(36)),title:(d.report&&d.report.title)||'',createdAt:d.createdAt,dilemma:d.payload.dilemma,version:d.version||1,source:d.source||'model',model:d.model||'',mermaid:d.mermaid,droppedGaps:d.droppedGaps||0,gapMeta:d.gapMeta,report:d.report,payload:d.payload,actionFeedback:d.actionFeedback,switchChecks:d.switchChecks,savedAnswers:(d.answers||[]).map(a=>({key:a.gapId||a.question,answer:a.answer}))};
+  return {id:d.historyId||('draft_'+Date.now().toString(36)),title:(d.report&&d.report.title)||'',createdAt:d.createdAt,dilemma:d.payload.dilemma,version:d.version||1,source:d.source||'model',model:d.model||'',mermaid:d.mermaid,droppedGaps:d.droppedGaps||0,gapMeta:d.gapMeta,report:d.report,payload:d.payload,actionFeedback:d.actionFeedback,flowRounds:d.flowRounds,switchChecks:d.switchChecks,savedAnswers:(d.answers||[]).map(a=>({key:a.gapId||a.question,answer:a.answer}))};
 }
 function restoreDraft(){
   const d=loadDraft();
