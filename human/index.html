@@ -1999,7 +1999,7 @@ body{
       <div class="dialog-heading"><div><span class="eyebrow">LOCAL-ONLY CREDENTIAL</span><h3 id="key-title">配置 API Key</h3></div><button class="tool-button" id="close-key" type="button" aria-label="关闭">✕</button></div>
       <div class="provider-tabs" id="provider-tabs" role="tablist" aria-label="服务商"></div>
       <p class="key-explanation">Key 只保存在此浏览器本机，不会写进 HTML 文件，也不会经过我们的服务器——请求从你的浏览器直接发往你选的服务商。</p>
-      <p class="provider-note" id="provider-note">豆包（火山方舟）和智谱的接口不允许浏览器直连，需要本地代理，暂未接入。</p>
+      <p class="provider-note" id="provider-note">豆包、智谱的接口不允许浏览器直连；OpenAI 官方接口在国内不可达，建议用 OpenRouter（同一把 Key 调 GPT / Claude / Gemini）。</p>
       <ol class="key-steps" id="key-steps"></ol>
       <label for="key-model" class="key-label">模型（可留空用默认）</label>
       <input id="key-model" type="text" autocomplete="off" spellcheck="false" placeholder="例如 deepseek-flash">
@@ -5577,7 +5577,8 @@ const PROVIDERS = {
   deepseek:   {name:'DeepSeek',  short:'DeepSeek', url:'https://api.deepseek.com/chat/completions', model:'deepseek-flash', models:["deepseek-flash","deepseek-chat","deepseek-reasoner"], keyPage:'https://platform.deepseek.com/api_keys', json:true, extra:{thinking:{type:'disabled'}}},
   qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model:'qwen-plus', models:["qwen-plus","qwen-max","qwen-turbo","qwen-long"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
   moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', model:'moonshot-v1-8k', models:["moonshot-v1-8k","moonshot-v1-32k","moonshot-v1-128k","kimi-latest"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
-  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', model:'deepseek-ai/DeepSeek-V3', models:["deepseek-ai/DeepSeek-V3","deepseek-ai/DeepSeek-R1","Qwen/Qwen2.5-72B-Instruct","Qwen/Qwen2.5-7B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}}
+  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', model:'deepseek-ai/DeepSeek-V3', models:["deepseek-ai/DeepSeek-V3","deepseek-ai/DeepSeek-R1","Qwen/Qwen2.5-72B-Instruct","Qwen/Qwen2.5-7B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
+  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', model:'openai/gpt-4o-mini', models:["openai/gpt-4o-mini","openai/gpt-4o","anthropic/claude-3.5-sonnet","google/gemini-2.0-flash-001","deepseek/deepseek-chat"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
 };
 const PROVIDER_KEY='lucidmap.provider.v1';
 function providerId(){const p=lsGet(PROVIDER_KEY);return PROVIDERS[p]?p:'deepseek';}
