@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f8f5">
+<title>清醒地图 · 把纠结摊开成一张能用的图</title>
+<meta name="description" content="写下你正在纠结的决定，得到事实、待确认的条件，和一条你没想到的第三条路。两个版本：专业版与人性版。纯前端，数据只存在你自己的浏览器里。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23eef4e9'/%3E%3Cpath d='M50 14 58 42 86 50 58 58 50 86 42 58 14 50 42 42Z' fill='%23769458'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#f7f8f5;
+    --panel:#ffffff;
+    --panel-soft:#f0f4e9;
+    --ink:#2f3b2b;
+    --ink-soft:#6e7c62;
+    --ink-faint:#98a48c;
+    --line:#e0e7d8;
+    --green:#5f8450;
+    --green-deep:#365d38;
+    --green-light:#eef4e9;
+    --font:"PingFang SC","Microsoft YaHei","Noto Sans SC","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  a{color:inherit;text-decoration:none}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:0 22px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(60vw 60vw at 12% -10%, #e8f0df 0%, transparent 62%),
+      radial-gradient(48vw 48vw at 92% 8%, #f1f0e4 0%, transparent 58%),
+      radial-gradient(#dde5d3 .9px, transparent .9px);
+    background-size:auto,auto,19px 19px;
+    opacity:.9;
+  }
+  .wrap{position:relative;z-index:1;width:100%;max-width:1040px;padding:52px 0 40px;flex:1;display:flex;flex-direction:column}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:11px}
+  .brand .logo{width:30px;height:30px;flex-shrink:0;align-self:center}
+  .brand b{font-size:19px;font-weight:600;letter-spacing:2px;color:var(--green-deep)}
+  .brand small{font-size:11px;letter-spacing:2px;color:var(--ink-faint);text-transform:uppercase}
+  .date-chip{font-size:10px;letter-spacing:.6px;color:#7c8b70;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:999px;padding:7px 13px;backdrop-filter:blur(4px)}
+
+  .hero{padding:64px 0 42px;text-align:center}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:2.4px;color:#7f9272;text-transform:uppercase}
+  .hero .eyebrow i{display:block;width:5px;height:5px;border-radius:50%;background:#8da674;font-style:normal}
+  .hero h1{font-size:45px;line-height:1.45;font-weight:500;letter-spacing:2px;margin:20px auto 0;max-width:19em;color:#33452f}
+  .hero h1 em{font-style:normal;color:#6b8f5c}
+  .hero p{max-width:34em;margin:20px auto 0;font-size:13px;line-height:2.15;color:#78876c;letter-spacing:.3px}
+  .hero p b{font-weight:600;color:#5f7a52}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:30px 28px 26px;text-align:left;
+    box-shadow:0 2px 4px #33452f05, 0 18px 40px #33452f07;
+    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  .card:hover{transform:translateY(-4px);border-color:#c8d7b9;box-shadow:0 3px 6px #33452f08, 0 26px 54px #33452f0f}
+  .card .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .card .index{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:11px;color:#9aab8c;border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:#fbfcf8}
+  .card .badge{font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:999px;background:#f3f7ec;border:1px solid #dde7d2;color:#6f875d}
+  .card .badge.warm{background:#fbf2ea;border-color:#f0dcc8;color:#a4795a}
+  .card h2{font-size:23px;font-weight:600;letter-spacing:1px;margin:18px 0 9px;color:#33452f}
+  .card .desc{font-size:12.5px;line-height:2;color:#7d8b70;min-height:4.2em}
+  .card ul{list-style:none;margin:18px 0 24px;display:flex;flex-direction:column;gap:9px}
+  .card li{position:relative;padding-left:19px;font-size:11.5px;line-height:1.75;color:#748265}
+  .card li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border:1.5px solid #a9bd97;transform:rotate(45deg);border-radius:1.5px}
+  .card .go{
+    margin-top:auto;display:inline-flex;align-items:center;justify-content:space-between;gap:10px;
+    border:1px solid #d7e3ca;background:linear-gradient(180deg,#fbfdf7,#f3f8ec);
+    border-radius:11px;padding:13px 16px;font-size:12.5px;font-weight:600;letter-spacing:.8px;color:#46663d;
+    transition:background .18s ease,border-color .18s ease;
+  }
+  .card .go span:last-child{font-size:16px;font-weight:400;transition:transform .18s ease}
+  .card:hover .go{background:linear-gradient(180deg,#f6fbf0,#ecf4e2);border-color:#b9cda5}
+  .card:hover .go span:last-child{transform:translateX(3px)}
+
+  .note{
+    margin-top:26px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+    background:rgba(255,255,255,.66);border:1px solid var(--line);border-radius:16px;padding:24px 26px;backdrop-filter:blur(5px);
+  }
+  .note .icon{width:34px;height:34px;border-radius:10px;background:var(--green-light);display:grid;place-items:center;font-size:15px;color:#71905c;border:1px solid #e2ebd7;flex-shrink:0}
+  .note h3{font-size:12.5px;font-weight:600;letter-spacing:.6px;color:#5c7750;margin-bottom:8px}
+  .note p{font-size:11.5px;line-height:2;color:#83907a}
+  .note p b{font-weight:600;color:#6c805d}
+  .note code{font-family:"SFMono-Regular",Consolas,monospace;font-size:10.5px;background:#f2f6ec;border:1px solid #e2ead8;border-radius:5px;padding:2px 6px;color:#66815a}
+
+  footer{position:relative;z-index:1;width:100%;max-width:1040px;padding:22px 0 30px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:10px;letter-spacing:.8px;color:#a3ae97;border-top:1px solid transparent}
+  footer span:last-child{text-align:right}
+
+  @media (max-width:860px){
+    .wrap{padding-top:34px}
+    .hero{padding:44px 0 32px}
+    .hero h1{font-size:33px;letter-spacing:1px}
+    .hero p{font-size:12.5px}
+    .cards{grid-template-columns:1fr;gap:14px}
+    .card{padding:25px 22px 22px}
+    .card .desc{min-height:0}
+  }
+  @media (max-width:520px){
+    body{padding:0 15px}
+    .hero h1{font-size:28px}
+    .hero .eyebrow{font-size:9.5px;letter-spacing:1.6px}
+    .brand b{font-size:17px}
+    .date-chip{display:none}
+    .note{grid-template-columns:1fr;padding:20px}
+    footer{flex-direction:column;gap:6px}
+    footer span:last-child{text-align:left}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+<!-- lucidmap-watermark
+  清醒地图 · LucidMap（正式版）
+  © 2026 ld007379 · 保留署名权
+  许可协议：CC BY-NC-SA 4.0（署名 - 非商业性使用 - 相同方式共享）
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+  未经许可不得移除本声明、不得用于商业用途、不得冒充原创。
+-->
+<meta name="author" content="ld007379">
+<meta name="copyright" content="© 2026 ld007379 · 清醒地图 LucidMap · CC BY-NC-SA 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#eef4e9"/><path d="M50 14 58 42 86 50 58 58 50 86 42 58 14 50 42 42Z" fill="#769458"/></svg>
+      <b>清醒地图</b><small>LucidMap</small>
+    </div>
+    <div class="date-chip">2026.11.08 版</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><i></i>不替你决定，只帮你看清<i></i></div>
+    <h1>把纠结，摊开成<em>一张能用的图</em>。</h1>
+    <p>写下你正在纠结的事——换不换工作、回不回老家、读不读研。它会还给你：<b>已知事实</b>、<b>待确认的缺口</b>、<b>几条路各自的条件与代价</b>，还有一条你没想到的<b>第三条路</b>。</p>
+  </section>
+
+  <main class="cards">
+    <a class="card" href="./pro/">
+      <div class="top"><span class="index">01</span><span class="badge">进阶版</span></div>
+      <h2>专业版</h2>
+      <p class="desc">措辞克制、术语更多、结构更密。适合专业用户和深度使用者，也适合把图拿去讨论、交付、存档。</p>
+      <ul>
+        <li>三条路各自的收益、代价、成立条件与可撤回性</li>
+        <li>待确认缺口分级编号，跨轮次保持稳定</li>
+        <li>支持多轮更新：补条件、勾反转、记上一轮的结果</li>
+        <li>可导出流程图 / 分享图 / Markdown</li>
+      </ul>
+      <div class="go"><span>进入专业版</span><span>→</span></div>
+    </a>
+
+    <a class="card" href="./human/">
+      <div class="top"><span class="index">02</span><span class="badge warm">大众版</span></div>
+      <h2>人性版</h2>
+      <p class="desc">口语化、直接戳情绪，把话说得更容易听懂。适合第一次接触的人，也适合在情绪最乱的时候用。</p>
+      <ul>
+        <li>同样的事实、缺口、三条路，换一种更直白的说法</li>
+        <li>不绕弯子：先说你最想听的那句，再给依据</li>
+        <li>同样支持多轮更新与导出</li>
+        <li>手机上读起来更轻松</li>
+      </ul>
+      <div class="go"><span>进入人性版</span><span>→</span></div>
+    </a>
+  </main>
+
+  <section class="note">
+    <div class="icon" aria-hidden="true">✦</div>
+    <div>
+      <h3>使用前，三件小事</h3>
+      <p>
+        <b>两个版本能力完全一样</b>，区别只在说话方式，选你读得下去的那个就好。<br>
+        <b>不用注册、不用登录</b>：这是纯前端页面，你的输入、历史和 API Key 只存在你自己的浏览器里，不经过任何服务器。<br>
+        <b>接 AI 需要你自己的 Key</b>：DeepSeek / 通义千问 / Kimi / 硅基流动等任选其一；不配也能用本地引擎，30 秒出一张规则版的图。<br>
+        <b>授权</b>：本作品采用 CC BY-NC-SA 4.0 许可——可以自由使用和分享，但须注明作者、不得商用。
+      </p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <span>© 2026 ld007379 · 清醒地图 LucidMap（正式版）</span>
+  <span>许可：CC BY-NC-SA 4.0 · 可自由使用，须署名，禁止商用</span>
+</footer>
+</body>
+</html>
