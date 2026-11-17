@@ -123,9 +123,15 @@
     footer span:last-child{text-align:left}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
-</style>
+  /* 新版 v3 入口提示条 */
+  .v3-bar{flex:0 0 auto;align-self:stretch;margin:0 -22px;display:flex;align-items:center;justify-content:center;gap:11px;background:#234d3d;color:#e9f3e0;font-size:12px;letter-spacing:.6px;padding:11px 18px;text-align:center;transition:background .18s ease}
+  .v3-bar:hover{background:#1a3d2f}
+  .v3-bar .v3-new{font-family:"SFMono-Regular",Consolas,monospace;font-size:9px;letter-spacing:.16em;border:1px solid #ffffff45;border-radius:4px;padding:2px 6px;color:#cfe3bb}
+  .v3-bar .v3-arrow{opacity:.75;font-size:13px}
+  @media(max-width:520px){.v3-bar{margin:0 -15px;font-size:11px;gap:8px;padding:10px 12px}}</style>
 </head>
 <body>
+<a class="v3-bar" href="./v3/"><span class="v3-new">NEW</span><span>新版 v3 已上线 · 先看介绍，再直接用</span><span class="v3-arrow">→</span></a>
 <div class="wrap">
   <header>
     <div class="brand">
