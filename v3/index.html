@@ -2193,6 +2193,12 @@ body{
   }
   /* 2) 报告导出区新增 PDF 按钮（走浏览器打印为 PDF，打印样式已就绪） */
   .export-actions #export-pdf{order:-1}
+  /* 3) 手机端：局面概览三栏太窄，改单列；顶栏状态字允许换行，不再被省略号截断 */
+  @media (max-width:680px){
+    .qv-grid{grid-template-columns:1fr!important}
+    .qv-col + .qv-col{margin-top:14px}
+    #model-status{max-width:none;white-space:normal;line-height:1.5;text-align:left}
+  }
 
   /* ---------- reveal ---------- */
   .lm-reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
@@ -2340,35 +2346,35 @@ body{
           <span class="lm-sec-no">02 / 一次真实的拆解</span>
           <h2>从一段大白话，<br>到一张<b>摊开的图</b>。</h2>
         </div>
-        <p>下面这段是用户真的写进来的话，没有人教他怎么组织语言。<br>左边是原文，右边是图里长出来的东西。</p>
+        <p>下面这段是一份完整示例里原样使用的输入——没人教它怎么组织语言。<br>左边是原文，右边是图里长出来的东西，每一格都能对回去。</p>
       </div>
 
       <div class="lm-ba lm-reveal">
         <div class="lm-ba-left">
           <div class="lm-ba-label">你写下的</div>
-          <p class="lm-ba-text">我在成都读软件工程，今年六月毕业。手里有两万存款，家里说能支持我一年。该去杭州还是回南充？</p>
-          <p class="lm-ba-meta">62 个字 · 没分段 · 想到哪写到哪</p>
+          <p class="lm-ba-text">我在成都读软件工程，今年六月毕业。老家在南充，父母希望我回去考事业单位，说这样稳定。我拿到了杭州一家公司的 offer，月薪 1.2 万，试用期三个月，房租大概 3500。家里说能支持我一年，可如果我坚持去杭州，父母不太高兴。我该去杭州，还是回南充？</p>
+          <p class="lm-ba-meta">125 个字 · 没分段 · 想到哪写到哪</p>
         </div>
         <div class="lm-ba-arrow" aria-hidden="true"><span>→</span></div>
         <div class="lm-ba-right">
           <div class="lm-ba-label">它还给你的</div>
           <div class="lm-ba-row">
-            <span class="lm-tag">事实 4</span>
-            <p>六月毕业；存款 2 万；家里能支持一年；<b>杭州 offer 已经到手</b>。
-              <small>其中「南充有具体岗位」还没确认——它被放进了缺口，而不是当成事实。</small></p>
+            <span class="lm-tag">事实 5</span>
+            <p>月薪 1.2 万、试用期三个月、房租约 3500；家里能支持一年；父母希望你回去考事业单位；父母只是不太高兴；应届身份有时限。
+              <small>五条全部逐字来自上面原文。「南充有具体岗位」不在原文里——它被放进缺口，而不是当成事实。</small></p>
           </div>
           <div class="lm-ba-row">
             <span class="lm-tag">缺口 3</span>
-            <p>南充那条路上，到底有没有具体岗位？杭州的房租会吃掉收入多少？试用期结束后还剩多少余地？</p>
+            <p>杭州 offer 试用期后的转正条件和薪资是什么？父母是要你参加考试，还是已经联系好了单位？回南充能报的岗位和考试时间具体是什么？</p>
           </div>
           <div class="lm-ba-row">
             <span class="lm-tag c">第三条路</span>
-            <p><b>先去杭州，同时保留南充的考试路径，以一年为期限。</b>
-              <small>比「二选一」多留了一个可撤回的窗口，代价是一年内要同时扛两份压力。</small></p>
+            <p><b>先去杭州，同时把南充的考试时间表摸清楚。</b>
+              <small>原来的二选一假设「去了杭州就不能考试」，但事业单位考试有固定时间表，入职后仍然可以报名。</small></p>
           </div>
           <div class="lm-ba-row">
             <span class="lm-tag">下一步</span>
-            <p>这周先做一件小事：问清楚南充那个机会今年到底招不招、什么时候截止。</p>
+            <p>未来 48 小时内：给父母打一次电话问清三件事（是要考试还是已联系单位、大概什么时候考、他们最担心什么），同时向 HR 确认试用期考核标准。</p>
           </div>
           <p class="lm-ba-foot">真正决定去留的，不是「稳不稳」，而是<b>南充到底有没有一个具体的岗位</b>，以及试用期后你还剩多少余地。</p>
         </div>
@@ -7490,6 +7496,16 @@ document.addEventListener("DOMContentLoaded",function(){
   var b=document.getElementById("export-pdf");
   if(b) b.addEventListener("click",function(){window.print();});
 });
+/* v3：看示例/演示前保护已写好的草稿，避免被静默覆盖 */
+document.addEventListener("click",function(e){
+  var t=e.target&&e.target.closest?e.target.closest("#welcome-example,#show-example,#demo-play,#demo-play-top"):null;
+  if(!t)return;
+  var d=document.getElementById("dilemma");
+  var v=d?d.value.trim():"";
+  if(!v)return;
+  var ok=window.confirm("看示例/演示会覆盖你现在写的内容（自动保存的草稿也会被替换）。\n\n要继续吗？点「取消」就保留你写的内容。");
+  if(!ok){e.preventDefault();e.stopImmediatePropagation();}
+},true);
 </script>
 </body>
 </html>
