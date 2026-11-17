@@ -2181,6 +2181,12 @@ body{
   }
   .lm-verse-hint{font-size:11px; color:var(--faint); letter-spacing:.3px}
 
+  /* 工作台顶栏：brand 与「你的个人决策工作台」之间补一条细分隔，避免两个词黏在一起 */
+  .topbar .local-label::before{
+    content:""; display:inline-block; width:1px; height:12px; margin-right:14px;
+    background:var(--line); vertical-align:-1px;
+  }
+
   /* ---------- 介绍页 → 工作台 的过渡 ---------- */
   .lm-bridge{background:var(--paper); border-top:1px solid var(--line); padding:70px 0 26px; scroll-margin-top:0}
   .lm-bridge .lm-wrap{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:end}
@@ -2300,7 +2306,7 @@ body{
     <figure class="lm-hero-shot lm-reveal in" style="margin:0">
       <div class="lm-shot-card">
         <div class="lm-shot-bar"><i></i><i></i><i></i><span class="lm-shot-url">ld007379.github.io/lucidmap</span></div>
-        <img src="../../assets/hero-report.jpg" alt="清醒地图示例报告：局面概览里 A / B / C 三条路的收益、代价与成立条件">
+        <img src="../../assets/hero-report.jpg" width="1600" height="1290" fetchpriority="high" decoding="async" alt="清醒地图示例报告：局面概览里 A / B / C 三条路的收益、代价与成立条件">
       </div>
       <figcaption class="lm-shot-cap"><i></i>真实输出，示例：毕业该去杭州还是回南充</figcaption>
     </figure>
@@ -2414,7 +2420,7 @@ body{
       </div>
       <figure class="lm-demo-frame lm-reveal" style="margin:0">
         <div class="lm-shot-bar"><i></i><i></i><i></i><span class="lm-shot-url">lucidmap · 全貌</span></div>
-        <img src="../../assets/report-map.png" alt="清醒地图全貌页：决策地图、三条路、你可能没注意到的盲点、建议与下一步">
+        <img src="../../assets/report-map.png" width="1400" height="579" loading="lazy" decoding="async" alt="清醒地图全貌页：决策地图、三条路、你可能没注意到的盲点、建议与下一步">
       </figure>
     </div>
   </section>
