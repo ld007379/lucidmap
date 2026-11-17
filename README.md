@@ -124,7 +124,7 @@
 
 | 版本 | 地址 | 适合 |
 | --- | --- | --- |
-| **v3 新版（推荐）** | https://ld007379.github.io/lucidmap/v3/ | 单文件：先落地页，往下滚就是工作台 |
+| **v3 新版（推荐）** | https://ld007379.github.io/lucidmap/v3/ | 落地页 + 工作台在同一页，往下滚就能直接用 |
 | 选择页 | https://ld007379.github.io/lucidmap/ | 旧版两套入口 |
 | 专业版 | https://ld007379.github.io/lucidmap/pro/ | 措辞克制、术语多、结构密 |
 | 人性版 | https://ld007379.github.io/lucidmap/human/ | 口语化、直接、给大众用户 |
@@ -138,7 +138,7 @@
 git clone https://github.com/ld007379/lucidmap.git
 ```
 
-然后用浏览器打开对应的 `index.html` 即可（也可以直接下载单个 HTML 双击）。
+然后用浏览器打开对应的 `index.html` 即可。`pro/`、`human/` 是纯单文件，可以单独下载双击；`v3/index.html` 的介绍页截图引用仓库里的 `assets/`，请整仓克隆或整目录部署，想离线分发就用单文件内嵌版。
 
 - **单文件、零依赖**：样式、脚本、Mermaid 渲染组件全部内联，没有构建步骤，不用 `npm install`，断网可打开（AI 引擎除外）。
 - **数据在本地**：Key 和草稿存在浏览器 localStorage，换浏览器就是一套新的空白数据，换目录/换盘不影响。
