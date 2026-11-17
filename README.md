@@ -122,15 +122,17 @@
 
 ### 在线（推荐）
 
-| 版本 | 地址 | 适合 |
+| 版本 | 地址 | 说明 |
 | --- | --- | --- |
-| **v3 新版（推荐）** | https://ld007379.github.io/lucidmap/v3/ | 落地页 + 工作台在同一页；专业版 / 人性版一键切换 |
-| 选择页 | https://ld007379.github.io/lucidmap/ | 旧版两套入口 |
-| 专业版 | https://ld007379.github.io/lucidmap/pro/ | 措辞克制、术语多、结构密 |
-| 人性版 | https://ld007379.github.io/lucidmap/human/ | 口语化、直接、给大众用户 |
+| **v3 主站（推荐先看）** | https://ld007379.github.io/lucidmap/v3/ | 选择页：这工具是干什么的 + 一份示例报告，先选「专业版 / 人性版」再进去 |
+| v3 专业版 | https://ld007379.github.io/lucidmap/v3/pro/ | 介绍页 + 工作台，措辞克制、结构密 |
+| v3 人性版 | https://ld007379.github.io/lucidmap/v3/human/ | 介绍页 + 工作台，口语、直接 |
+| 旧选择页 | https://ld007379.github.io/lucidmap/ | v3 之前的入口页：v3 / 专业版 / 人性版三个入口都还在 |
+| 专业版（旧） | https://ld007379.github.io/lucidmap/pro/ | 措辞克制、术语多、结构密 |
+| 人性版（旧） | https://ld007379.github.io/lucidmap/human/ | 口语化、直接、给大众用户 |
 | 正式版 v2 | https://ld007379.github.io/lucidmap/v2/ | 内容同上，另带版权与许可声明，对外发布用这个 |
 
-专业版和人性版**能力相同**，区别只在「说话方式」；所有旧版网址长期有效。
+v3 的专业版和人性版**能力完全相同**，区别只在「说话方式」；进去以后顶部可以随时换另一个版本，也能回主站重新选。所有旧版网址长期有效。
 
 ### 本地
 
@@ -138,9 +140,9 @@
 git clone https://github.com/ld007379/lucidmap.git
 ```
 
-然后用浏览器打开对应的 `index.html` 即可。`pro/`、`human/` 是纯单文件，可以单独下载双击；`v3/index.html` 的介绍页截图引用仓库里的 `assets/`，请整仓克隆或整目录部署，想离线分发就用单文件内嵌版。
+然后用浏览器打开对应的 `index.html` 即可。注意：**v3 的三个页面（`v3/index.html`、`v3/pro/index.html`、`v3/human/index.html`）都引用仓库里的 `assets/`**（og 封面和介绍页截图），要整仓克隆或整目录部署，只拷一个 HTML 会缺介绍页的图（工作台本身仍能用）；旧版 `pro/`、`human/` 是纯单文件，单独下载双击即可。
 
-- **单文件、零依赖**：样式、脚本、Mermaid 渲染组件全部内联，没有构建步骤，不用 `npm install`，断网可打开（AI 引擎除外）。
+- **单文件、零依赖**：应用本体（样式、脚本、Mermaid 渲染组件）全部内联，没有构建步骤，不用 `npm install`，断网可打开（AI 引擎除外）。
 - **数据在本地**：Key 和草稿存在浏览器 localStorage，换浏览器就是一套新的空白数据，换目录/换盘不影响。
 
 ## FAQ
@@ -170,7 +172,7 @@ git clone https://github.com/ld007379/lucidmap.git
 
 | 版本 | 时间 | 主要变化 |
 | --- | --- | --- |
-| **v3.0** | 2026-11 | 新介绍页 + 工作台合在一页：专业版 / 人性版一键切换（`/v3/` 与 `/v3/human/`）；首屏可直接看一份完整示例报告；方法说明写进页面（依据、边界、什么情况下该改主意）；旧版入口全部保留 |
+| **v3.0** | 2026-11 | v3 主站是选择页：先选「专业版 / 人性版」，再进各自的介绍页 + 工作台（`/v3/` → `/v3/pro/`、`/v3/human/`）；两版能力相同、随时切换；首屏可直接看一份完整示例报告；方法说明写进页面（依据、边界、什么情况下该改主意）；旧版入口全部保留 |
 | v2.3.0 | 2026-11 | 专业版 / 人性版最新：多轮更新、导出分享图 PNG / Mermaid / Markdown、支持 OpenRouter；`/v2/` 为带版权水印的正式发布版 |
 | v2.x / v1.x | 2026-10 | 早期迭代，已归档，不再发布 |
 
@@ -178,10 +180,11 @@ git clone https://github.com/ld007379/lucidmap.git
 
 ```
 .
-├── index.html          # 选择页：旧版两套入口
-├── v3/                 # v3 新版：介绍页 + 工作台（专业版 / 人性版可切换）
-│   ├── index.html      # 专业版措辞
-│   └── human/index.html# 人性版措辞
+├── index.html          # 旧入口页：v3 与旧版两套入口
+├── v3/                 # v3 新版
+│   ├── index.html      # 主站选择页：先选专业版 / 人性版
+│   ├── pro/index.html  # 专业版：介绍页 + 工作台
+│   └── human/index.html# 人性版：介绍页 + 工作台
 ├── pro/index.html      # 专业版（单文件）
 ├── human/index.html    # 人性版（单文件）
 ├── v2/                 # 正式版：内容同上，另加版权与许可声明
@@ -196,11 +199,11 @@ git clone https://github.com/ld007379/lucidmap.git
 
 ## 如何自行修改
 
-每个页面都是**自包含的单文件**，改完直接刷新就能看到效果，不需要任何构建工具。
+页面都是 HTML，改完直接刷新就能看到效果，不需要任何构建工具。v3 的介绍页截图是 `assets/` 外链，本地要整仓查看才有图；工作台本身仍在一个文件里。
 
 - **改文案 / 配色 / 追问逻辑**：在对应的 `index.html` 里搜中文关键词，改完保存刷新。
 - **加一个服务商**：在服务商配置表里加一条（接口地址 + 预置模型），界面上会自动多一个可选项。
-- **部署自己的副本**：fork 之后在仓库 Settings → Pages 里把 Source 设为 `main` / `/ (root)`，网址变成 `https://<你的账号>.github.io/lucidmap/`。
+- **部署自己的副本**：fork 之后在仓库 Settings → Pages 里把 Source 设为 `main` / `/ (root)`，网址变成 `https://<你的账号>.github.io/lucidmap/`。v3 三页都引用仓库 `assets/`，整仓部署即可，别只拷单个 HTML。
 - **改了要发布**：`git add -A && git commit -m "更新" && git push`，Pages 一两分钟后自动生效，网址不变。
 
 修改和再分发请保留原作者署名与 CC BY-NC-SA 4.0 协议——这是许可要求，不是请求。
