@@ -9,7 +9,7 @@
 不替你决定，只帮你看清。
 
 [![在线体验 v3](https://img.shields.io/badge/Live%20Demo-v3-2ea44f.svg)](https://ld007379.github.io/lucidmap/v3/)
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![纯前端](https://img.shields.io/badge/pure--frontend-no%20server-blue.svg)
 ![免登录](https://img.shields.io/badge/no%20signup-no%20login-green.svg)
 ![单文件](https://img.shields.io/badge/single--file-HTML-orange.svg)
@@ -166,12 +166,16 @@ git clone https://github.com/ld007379/lucidmap.git
 不在。数据按浏览器存在 localStorage 里，Edge 和 Chrome 是两套。
 
 **能商用吗？**
-不能。许可是 CC BY-NC-SA 4.0：需署名、非商业使用、修改后以相同协议共享。
+能。许可是 Apache-2.0，OSI 认证的正牌开源协议：使用、修改、分发、商用、闭源集成都可以，代价是必须保留版权声明与 [`NOTICE`](NOTICE)、并说明你改了什么。唯一不能用的是名字——「清醒地图」「LucidMap」和图标不在授权范围内，见 [`TRADEMARK.md`](TRADEMARK.md)。
+
+**那别人抄一个一模一样的去卖怎么办？**
+拦不住，也不该拦——这正是开源允许的事。能拦的是两件：抹掉你的署名（违反许可=侵犯版权，可以要求 GitHub 下架），和用你的名字招人（商标权，不随代码授权）。如果你的底线是"一行代码都不许被拿去赚钱"，那就不该开源，应该换成 [PolyForm Noncommercial](https://polyformproject.org/licenses/noncommercial/1.0.0/) 这类 source-available 协议。
 
 ## 版本与更新日志
 
 | 版本 | 时间 | 主要变化 |
 | --- | --- | --- |
+| 许可变更 | 2026-11 | 从 CC BY-NC-SA 4.0 换为 **Apache-2.0**：正式成为 OSI 认证的开源项目，开放商用；新增 `NOTICE` 与 `TRADEMARK.md`，把"必须署名"和"名字不能用"两条写成可执行的条款 |
 | **v3.0** | 2026-11 | v3 主站是选择页：先选「专业版 / 人性版」，再进各自的介绍页 + 工作台（`/v3/` → `/v3/pro/`、`/v3/human/`）；两版能力相同、随时切换；首屏可直接看一份完整示例报告；方法说明写进页面（依据、边界、什么情况下该改主意）；旧版入口全部保留 |
 | v2.3.0 | 2026-11 | 专业版 / 人性版最新：多轮更新、导出分享图 PNG / Mermaid / Markdown、支持 OpenRouter；`/v2/` 为带版权水印的正式发布版 |
 | v2.x / v1.x | 2026-10 | 早期迭代，已归档，不再发布 |
@@ -193,6 +197,9 @@ git clone https://github.com/ld007379/lucidmap.git
 │   ├── human/index.html
 │   └── LICENSE
 ├── assets/             # README 用的截图、封面、演示动图
+├── LICENSE             # Apache License 2.0 全文
+├── NOTICE              # 版权归属 + 第三方组件声明（Mermaid / MIT）
+├── TRADEMARK.md        # 名称与 Logo 的使用边界
 ├── .nojekyll           # 关掉 GitHub Pages 的 Jekyll，直接按静态文件发布
 └── README.md
 ```
@@ -206,18 +213,21 @@ git clone https://github.com/ld007379/lucidmap.git
 - **部署自己的副本**：fork 之后在仓库 Settings → Pages 里把 Source 设为 `main` / `/ (root)`，网址变成 `https://<你的账号>.github.io/lucidmap/`。v3 三页都引用仓库 `assets/`，整仓部署即可，别只拷单个 HTML。
 - **改了要发布**：`git add -A && git commit -m "更新" && git push`，Pages 一两分钟后自动生效，网址不变。
 
-修改和再分发请保留原作者署名与 CC BY-NC-SA 4.0 协议——这是许可要求，不是请求。
+修改和再分发请保留原作者署名与 [`NOTICE`](NOTICE) 文件，并说明你改了什么——这是 Apache-2.0 的许可要求，不是请求。
 
 ## License
 
-[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)（署名 - 非商业性使用 - 相同方式共享 4.0 国际）。
+代码、文案与图形素材统一采用 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 授权——OSI 认证的开源协议。
 
-- ✅ 可以免费使用、复制、分享、修改
-- ✅ 必须署名 **ld007379**，并附上许可协议链接
-- ⛔ 不得用于商业目的
-- 🔁 修改后的作品必须以相同协议分享
+- ✅ 可以商用、复制、修改、分发、私有化部署
+- ✅ 可以闭源使用，不必公开你的修改
+- ✅ 附赠明确的专利授权（第 3 条），这是它比 MIT 更适合企业场景的原因
+- 📌 **必须**保留版权声明与 [`NOTICE`](NOTICE)，并标注你做了哪些修改
+- 📌 **不得**用「清醒地图」「LucidMap」名称与图标给你的版本命名或背书
 
-完整条文见 [v2/LICENSE](v2/LICENSE)。
+去掉原作者署名、或换个名字冒充原创，属于违反许可（进而构成版权侵权），可以依法追责并要求 GitHub 下架。名称与 Logo 另有商标权，不随代码一起授权，详见 [`TRADEMARK.md`](TRADEMARK.md)。
+
+完整条文见 [LICENSE](LICENSE)。
 
 ---
 
