@@ -5841,7 +5841,7 @@ async function analyzeStandalone(payload, signal, rearmTimeout) {
   const key=getStandaloneKey(); if(!key) throw new Error('请先点击右上角“配置 API Key”，填入你自己的 API Key。');
   const start=Date.now(); let response;
   const sameQ=!!state.payload && state.payload.dilemma===payload.dilemma;
-  const userMsg={dilemma:payload.dilemma,context:composeContext(payload),answers:payload.answers||[],actionResult:payload.actionResult||{status:'todo',result:''},previousUnknowns:sameQ?(state.report?.unknowns||[]):[],usedGapIds:sameQ?[...gapUsedIds].slice(-200):[],history:Array.isArray(payload.history)?payload.history:[]};
+  const userMsg={repairNote:String(payload.__repairNote||''),dilemma:payload.dilemma,context:composeContext(payload),answers:payload.answers||[],actionResult:payload.actionResult||{status:'todo',result:''},previousUnknowns:sameQ?(state.report?.unknowns||[]):[],usedGapIds:sameQ?[...gapUsedIds].slice(-200):[],history:Array.isArray(payload.history)?payload.history:[]};
   try { response=await fetch(apiUrl(),{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:apiModel(),messages:[{role:'system',content:STANDALONE_SYSTEM_PROMPT},{role:'user',content:buildUserContent(userMsg,payload)}],temperature:0.35,max_tokens:8192,...apiExtra(),...(apiJSON()?{response_format:{type:'json_object'}}:{})}),signal}); }
   catch(e) {
     if(e.name==='AbortError') throw e;
@@ -6082,7 +6082,8 @@ function cloudErrorHint(raw){
   if(/401|403|invalid|authentication|unauthor|api\s*key|key\s*(无效|失效|拒绝|错误)|密钥|认证失败/i.test(m))return '看起来是 Key 无效或被拒绝：点右上角「配置 API Key」重新粘贴，并确认顶栏服务商和你配 Key 的那家是同一家。';
   if(/402|余额|额度|quota|insufficient|欠费|balance/i.test(m))return '看起来是账户余额或额度不够：去服务商控制台充值/提额后再点「用云端重试」。';
   if(/429|rate limit|限流|too many/i.test(m))return '被服务商限流了：等几十秒再点「用云端重试」。';
-  if(/404|model.*(not|不存在)|模型/i.test(m))return '当前模型名可能不对：点右上角「配置 API Key」换一个预置模型，或手打官方文档里的模型名。';
+  if(/未通过校验|逐字原文核验|校验/i.test(m))return '模型的回答里「已知事实/依据」没有逐字引用你的原话（改写、拼接、加省略号都会不通过）——这是产品故意的严格校验，保护你的事实不被脑补。我刚让它按原文重做过一次；还不行就点「用云端重试」，或换一个更稳的模型。';
+  if(/404|model.*(not|不存在)|模型名/i.test(m))return '当前模型名可能不对：点右上角「配置 API Key」换一个预置模型，或手打官方文档里的模型名。';
   if(/Failed to fetch|NetworkError|Load failed|ERR_|网络/i.test(m))return '浏览器没连上服务商：检查网络/代理，或换一家服务商再试。';
   if(/JSON|校验|缺了一截|结构/i.test(m))return '模型返回的结构不完整：点「用云端重试」通常就好。';
   return '点「用云端重试」可以再试一次；反复失败就检查 Key、服务商、模型名和账户余额。';
@@ -6142,7 +6143,26 @@ async function analyze(payload) {
       await new Promise(res=>setTimeout(res,320));
       envelope=localAnalyze(payload);
     }
-    else envelope=await analyzeStandalone(payload,controller.signal,rearmTimeout);
+    else {
+      let attempt=0;
+      while(true){
+        attempt++;
+        try{
+          envelope=await analyzeStandalone(payload,controller.signal,rearmTimeout);
+          break;
+        }catch(err){
+          const isValidation=/未通过校验|逐字原文核验/.test(String((err&&err.message)||''));
+          if(isValidation && attempt===1){
+            text('#loading-title','模型格式没对上，让它按原文重做一次');
+            text('#loading-note','把「已知事实」改成逐字引用你的原话，再校验一遍…');
+            try{rearmTimeout();}catch(e){}
+            payload=Object.assign({},payload,{__repairTried:true,__repairNote:'上一次输出未通过校验：'+String(err.message||'').slice(0,600)+'\n请重做：facts[].quote 与 blindspots[].evidence 必须是从用户原文里逐字复制的连续片段，不能改写、不能拼接、不能加省略号、不能是问句；不要把推测写成事实。仍然只输出 JSON。'});
+            continue;
+          }
+          throw err;
+        }
+      }
+    }
     text('#loading-title','已收到，正在校验');
     text('#loading-note','正在核对返回结构与原文引用，并绘制地图…');
     if(requestSeq!==state.requestSeq)return false;
