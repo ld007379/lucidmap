@@ -5901,7 +5901,7 @@ function paintEngineUI(){
       : '需要更细的证据和追问？配一个 Key 用云端 →';
   }
   text('#engine-hint',e==='local'?(getStandaloneKey()?'离线可用 · 不发送内容':'免配置 · 本地规则引擎 · 30 秒出图'):(getStandaloneKey()?('已选 '+provider().name+' · 用自己的 Key'):('还没配 '+provider().name+' 的 Key · 点下面的服务商配置')));
-  if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();
+  if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();if(typeof renderComposerPhotos==='function')renderComposerPhotos();
   const pn=$('#privacy-note');
   if(pn)pn.textContent=e==='local'
     ?'本地引擎模式：你写的东西只在浏览器里处理，不发给任何服务器。草稿和历史也只存本机，随时能删。'
@@ -6606,7 +6606,7 @@ function refreshStatus() {
 function resetAnalysisState(){
   state.report=null;state.payload=null;state.version=0;state.lastRequest=null;state.historyId=null;
   state.ownConditions=[];state.ownSeq=0;state.ownDirty=false;state.forceStale=false;
-  state.actionFeedback={status:'todo',result:''};state.followupImages=[];if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
+  state.actionFeedback={status:'todo',result:''};state.followupImages=[];if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();if(typeof renderComposerPhotos==='function')renderComposerPhotos();state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
   state.lastRawResponse=null;state.lastValidationErrors=null;
   gapUsedIds.clear();gapSequence=0;
 }
