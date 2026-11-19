@@ -6381,7 +6381,13 @@ function provider(){return PROVIDERS[providerId()];}
 function keyStorageName(pid){return 'lucidmap.api-key.'+(pid||providerId());}
 function modelStorageName(pid){return 'lucidmap.model.'+(pid||providerId());}
 function apiUrl(){return provider().url;}
-function apiModel(){try{return lsGet(modelStorageName())||provider().model;}catch{return provider().model;}}
+function migratedModel(pid, model){
+  if(!model)return '';
+  if(pid==='deepseek'&&(model==='deepseek-chat'||model==='deepseek-reasoner'))return 'deepseek-flash';
+  if(pid==='moonshot'&&(model==='kimi-latest'||model.indexOf('moonshot-v1')===0))return 'kimi-k3';
+  return model;
+}
+function apiModel(){try{const pid=providerId();const saved=lsGet(modelStorageName(pid))||'';const migrated=migratedModel(pid,saved);if(saved&&migrated&&migrated!==saved)lsSet(modelStorageName(pid),migrated);return migrated||provider().model;}catch{return provider().model;}}
 function apiExtra(){return provider().extra||{};}
 function apiJSON(){return !!provider().json;}
 // 模型名集中在此处：DeepSeek 当前为 deepseek-flash / deepseek-v4-pro；deepseek-chat 与 deepseek-reasoner 已于 2026-07-24 停用。
@@ -6436,7 +6442,7 @@ function providerRenderDialog(){
       +'<li><span class="ks-n">3</span><div>粘贴到下面，先点「测试连接」，通了再保存。</div></li>';
   }
   const modelInput=$('#key-model');
-  if(modelInput){modelInput.value=lsGet(modelStorageName())||p.model;modelInput.placeholder=p.model;}
+  if(modelInput){modelInput.value=apiModel();modelInput.placeholder=p.model;}
   paintModelChips();
   const keyInput=$('#api-key-input');
   if(keyInput){keyInput.value=getStandaloneKey();keyInput.placeholder='粘贴你自己的 '+p.name+' API Key';}
