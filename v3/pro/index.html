@@ -2687,6 +2687,7 @@ body{
         <div class="field-top"><label for="dilemma">你现在卡在什么决定上？</label><span id="char-count">0 / 1000</span></div>
         <textarea id="dilemma" name="dilemma" maxlength="1000" required placeholder="我在纠结 A 还是 B……&#10;目前已经知道的是……&#10;最怕的是……"></textarea>
         <details class="context-field"><summary>还有些背景想补充 <span>可选</span></summary><label class="sr-only" for="context">还有些背景想补充</label><textarea id="context" maxlength="12000" placeholder="比如：周五前必须答复、预算就这么多、之前试过什么方法……"></textarea></details>
+        <style>.composer-photos{margin:12px 0 14px}</style><div class="composer-photos" id="composer-photos"><div class="ap-head"><span class="ap-title">＋ 图片补充（可选）</span><small>可以把截图直接贴进来（Ctrl / ⌘ + V）、拖进来，或点下面选图；最多 3 张。图片会随问题一起发给你选的服务商（需要模型支持看图）。</small></div><div class="ap-drop" id="cp-drop" tabindex="0" role="button">把图片粘贴到这里，或点一下选图</div><input type="file" id="cp-file" accept="image/*" multiple hidden><div class="ap-thumbs" id="cp-thumbs" hidden></div><p class="ap-note" id="cp-note">图片只存在这台浏览器；切换专业版 / 人性版会保留，关掉标签页才消失。</p><p class="ap-warn" id="cp-warn" hidden></p></div>
         <div class="engine-row"><span class="engine-label">引擎</span><div class="engine-seg" role="group" aria-label="分析引擎"><button type="button" data-engine="local" aria-pressed="true">本地</button><button type="button" data-engine="model" aria-pressed="false" id="cloud-btn" title="用自己的 API Key 调云端模型">云端</button></div><span id="engine-hint">免配置 · 本地规则引擎 · 30 秒出图</span></div><div class="provider-row"><span class="engine-label">服务商</span><div class="provider-chips" id="provider-seg" role="group" aria-label="云端服务商"></div><button type="button" class="provider-collapse" id="provider-collapse">需要更细的证据和追问？配一个 Key 用云端 →</button></div>
         <button id="analyze-button" class="button primary" type="submit"><span>帮我理清楚</span><span aria-hidden="true">↗</span></button>
         <div class="keyboard-hint">Ctrl / ⌘ + Enter 直接出图</div>
@@ -5754,7 +5755,7 @@ const samples = {
   family: '我在上海工作，父母在成都，最近希望我回去。我每月可以回家一个周末，但成都还没有合适的 offer。我该现在回去还是先留在上海？',
   study: '我已经工作两年，想辞职考研换专业。目前只有晚间能学习，还没做过目标院校的真题。我该先辞职备考，还是边工作边准备？'
 };
-const state = {report:null,payload:null,source:'demo',model:'',createdAt:'',version:0,busy:false,controller:null,demoRunning:false,lastRequest:null,svg:'',mermaid:'',renderSequence:0,ownConditions:[],ownSeq:0,actionFeedback:{status:'todo',result:''},followupImages:[],selectedPath:null,switchChecks:{},tokenUsage:null,droppedGaps:0,historyId:null,ownDirty:false,forceStale:false,lastRawResponse:null,lastValidationErrors:null};
+const state = {report:null,payload:null,source:'demo',model:'',createdAt:'',version:0,busy:false,controller:null,demoRunning:false,lastRequest:null,svg:'',mermaid:'',renderSequence:0,ownConditions:[],ownSeq:0,actionFeedback:{status:'todo',result:''},followupImages:[],composerImages:[],selectedPath:null,switchChecks:{},tokenUsage:null,droppedGaps:0,historyId:null,ownDirty:false,forceStale:false,lastRawResponse:null,lastValidationErrors:null};
 
 // —— 本机持久化：草稿 + 历史（仅保存在此浏览器，不上传，不写入 HTML 文件） ——
 const DRAFT_KEY='lucidmap.draft.v2';
@@ -5929,7 +5930,7 @@ function scrollToReport(){
     window.scrollTo({top:Math.max(0,top),behavior:reducedMotion?'auto':'smooth'});
   });
 }
-function currentInput() { return {dilemma:$('#dilemma').value.trim(),context:$('#context').value.trim(),answers:[],ownConditions:state.ownConditions.map(c=>({id:c.id,text:c.text})),actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result},history:historyBrief(4)}; }
+function currentInput() { return {dilemma:$('#dilemma').value.trim(),context:$('#context').value.trim(),answers:[],ownConditions:state.ownConditions.map(c=>({id:c.id,text:c.text})),actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result},images:(state.composerImages||[]).slice(),history:historyBrief(4)}; }
 function updateInputState() {
   text('#char-count', `${$('#dilemma').value.length} / 1000`);
   const textChanged = !!state.payload && ($('#dilemma').value.trim() !== state.payload.dilemma || $('#context').value.trim() !== (state.payload.context||''));
@@ -6841,6 +6842,7 @@ async function analyze(payload) {
   state.lastRawResponse=null;state.lastValidationErrors=null;
   const requestSeq=(state.requestSeq=(state.requestSeq||0)+1);
   state.lastRequest=structuredClone(payload);
+  if(Array.isArray(payload.images)&&payload.images.length&&currentEngine()==='local'){toast('本地引擎看不了图：这次图片不会被使用，切到云端并选支持看图的模型再分析。');}
   $('#error-banner').hidden=true;setBusy(true);
   const controller=new AbortController();state.controller=controller;
   let timedOut=false;
@@ -6868,7 +6870,10 @@ async function analyze(payload) {
     text('#loading-note','正在核对返回结构与原文引用，并绘制地图…');
     if(requestSeq!==state.requestSeq)return false;
     validateEnvelope(envelope);
+    // 图片只用于本次请求，不写进草稿/历史（base64 太占 localStorage）
+    try{if(payload&&Array.isArray(payload.images)){delete payload.images;}}catch(e){}
     renderReport(envelope,payload);
+    try{if(state.payload&&Array.isArray(state.payload.images)){delete state.payload.images;}if(state.lastRequest&&Array.isArray(state.lastRequest.images)){delete state.lastRequest.images;}}catch(e){}
     text('#model-status',envelope.source==='local'?'本地引擎 · 未联网':`${envelope.model} · 已连接`);
     $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.toggle('offline',envelope.source==='local');
     if(innerWidth<850)scrollToReport();
@@ -6885,6 +6890,7 @@ async function analyze(payload) {
         env.fallbackReason=String(error.message||'');
         validateEnvelope(env);
         if(requestSeq!==state.requestSeq)return false;
+        try{if(payload&&Array.isArray(payload.images)){delete payload.images;}}catch(e){}
         renderReport(env,payload);
         text('#model-status','本地引擎 · 已兜底');
         $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.add('offline');
@@ -6952,6 +6958,94 @@ function bindAnswerPhotoUI(){
   const thumbs=$('#ap-thumbs');
   if(thumbs)thumbs.addEventListener('click',e=>{const b=e.target.closest('[data-photo-remove]');if(!b)return;state.followupImages.splice(Number(b.dataset.photoRemove),1);renderAnswerPhotos();});
   renderAnswerPhotos();
+}
+
+
+// —— 首屏问题也可以贴图：粘贴 / 拖拽 / 选图（最多 3 张；跨版本切换用 sessionStorage 保留） ——
+const COMPOSER_IMG_KEY='lucidmap.composer.images.v1';
+function loadComposerImages(){
+  try{const raw=sessionStorage.getItem(COMPOSER_IMG_KEY);const arr=raw?JSON.parse(raw):[];state.composerImages=Array.isArray(arr)?arr.filter(x=>typeof x==='string'&&x.indexOf('data:image/')===0).slice(0,3):[];}
+  catch(e){state.composerImages=[];}
+}
+function persistComposerImages(){try{sessionStorage.setItem(COMPOSER_IMG_KEY,JSON.stringify(state.composerImages||[]));}catch(e){}}
+function renderComposerPhotos(){
+  const list=state.composerImages||[];
+  const thumbs=$('#cp-thumbs'),warn=$('#cp-warn'),drop=$('#cp-drop');
+  if(thumbs){thumbs.hidden=!list.length;thumbs.innerHTML=list.map((src,i)=>'<div class="ap-thumb"><img src="'+src+'" alt="附图 '+(i+1)+'"><button type="button" data-cp-remove="'+i+'" aria-label="删除这张图">×</button></div>').join('');}
+  if(warn){
+    if(!list.length){warn.hidden=true;warn.textContent='';}
+    else{const vis=currentVisionModel();warn.hidden=false;warn.textContent=vis?('当前模型 '+apiModel()+' 支持看图：开始分析时会连同 '+list.length+' 张图一起发送（按 token 计费）。'):('当前模型 '+apiModel()+' 看不了图：图片只在本机预览、不会发送。想用图片提问，请换支持看图的模型（如 '+((visionModels()[0])||'qwen-vl-max')+'）。');}
+  }
+  if(drop)drop.textContent=list.length>=3?'最多 3 张，先删一张再加':'把图片粘贴到这里，或点一下选图';
+}
+function addComposerPhotos(files){
+  const arr=[...(files||[])].filter(f=>f&&/^image\//.test(f.type||''));
+  if(!arr.length)return;
+  const room=3-(state.composerImages||[]).length;
+  if(room<=0){toast('最多 3 张图，先删一张再加。');return;}
+  arr.slice(0,room).forEach(file=>{
+    if(file.size>12*1024*1024){toast('这张图太大了（超过 12MB），换一张小一点的。');return;}
+    const img=new Image();const objUrl=URL.createObjectURL(file);
+    img.onload=()=>{URL.revokeObjectURL(objUrl);
+      const max=1280;let w=img.naturalWidth,h=img.naturalHeight;
+      if(w>max||h>max){const s=Math.min(max/w,max/h);w=Math.round(w*s);h=Math.round(h*s);}
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      (state.composerImages=state.composerImages||[]).push(canvas.toDataURL('image/jpeg',0.82));
+      persistComposerImages();renderComposerPhotos();
+    };
+    img.onerror=()=>{URL.revokeObjectURL(objUrl);toast('这张图读不了，换一张试试。');};
+    img.src=objUrl;
+  });
+}
+function bindComposerPhotoUI(){
+  const dropEl=$('#cp-drop'),fileEl=$('#cp-file'),form=$('#decision-form');
+  if(dropEl){
+    dropEl.addEventListener('click',()=>fileEl&&fileEl.click());
+    dropEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileEl&&fileEl.click();}});
+  }
+  if(fileEl)fileEl.addEventListener('change',e=>{addComposerPhotos(e.target.files);e.target.value='';});
+  if(!form)return;
+  form.addEventListener('paste',e=>{const items=[...(e.clipboardData&&e.clipboardData.items||[])].filter(it=>it.kind==='file'&&/^image\//.test(it.type));if(!items.length)return;e.preventDefault();addComposerPhotos(items.map(it=>it.getAsFile()).filter(Boolean));});
+  ['dragover','dragenter'].forEach(t=>form.addEventListener(t,e=>{const types=[...(e.dataTransfer&&e.dataTransfer.types||[])];if(types.indexOf('Files')>=0){e.preventDefault();dropEl&&dropEl.classList.add('dragging');}}));
+  ['dragleave','dragend'].forEach(t=>form.addEventListener(t,()=>{dropEl&&dropEl.classList.remove('dragging');}));
+  form.addEventListener('drop',e=>{const files=[...(e.dataTransfer&&e.dataTransfer.files||[])];if(!files.length)return;e.preventDefault();dropEl&&dropEl.classList.remove('dragging');addComposerPhotos(files);});
+  const thumbs=$('#cp-thumbs');
+  if(thumbs)thumbs.addEventListener('click',e=>{const b=e.target.closest('[data-cp-remove]');if(!b)return;state.composerImages.splice(Number(b.dataset.cpRemove),1);persistComposerImages();renderComposerPhotos();});
+  loadComposerImages();renderComposerPhotos();
+}
+
+// —— 专业版 / 人性版互切：先落草稿并记一个标记，切过去后自动把话题和地图带过来 ——
+const CONTINUE_KEY='lucidmap.continue.next';
+function isVersionNavLink(a){
+  if(!a||!a.getAttribute)return false;
+  const h=String(a.getAttribute('href')||'');
+  if(!h||h.charAt(0)==='#')return false;
+  if(a.getAttribute('title')==='切换说话方式')return true;
+  if(/^清醒地图-.*\.html$/.test(h))return true;
+  if(h==='./'||h==='../'||h==='/lucidmap/v3/'||h==='/v3/')return true;
+  if(/^(\.\.\/)?(pro|human)\/$/.test(h))return true;
+  if(/\/v3\/(pro|human)\/$/.test(h))return true;
+  return false;
+}
+document.addEventListener('click',function(e){
+  const a=e.target&&e.target.closest?e.target.closest('a[href]'):null;
+  if(!isVersionNavLink(a))return;
+  if(state.busy)return;
+  try{saveDraft();}catch(err){}
+  try{sessionStorage.setItem(CONTINUE_KEY,'1');}catch(err){}
+},true);
+function continueAfterVersionSwitch(){
+  let flag=null;
+  try{flag=sessionStorage.getItem(CONTINUE_KEY);if(flag)sessionStorage.removeItem(CONTINUE_KEY);}catch(e){}
+  if(!flag)return;
+  const goApp=()=>{const rep=document.getElementById('report');const app=document.getElementById('app')||document.querySelector('.composer');const target=(rep&&!rep.hidden)?rep:app;if(target){try{document.documentElement.style.scrollBehavior='auto';target.scrollIntoView({block:'start'});}catch(e){}}};
+  const rd=document.getElementById('resume-draft');
+  if(rd&&!rd.hidden){
+    setTimeout(()=>{try{rd.click();}catch(e){}setTimeout(goApp,150);toast('已把上一个话题和地图带过来（只在本机）。');},120);
+  }else{
+    setTimeout(()=>{goApp();if(($('#dilemma').value||'').trim()||($('#context').value||'').trim())toast('已把上一个话题带过来（只在本机）。');},120);
+  }
 }
 
 async function refine(event) {
@@ -7320,6 +7414,7 @@ function resetAnalysisState(){
 function showExample() {
   if(state.busy){toast('请先取消当前分析，再查看示例。');return;}
   resetAnalysisState();
+  state.composerImages=[];try{sessionStorage.removeItem(COMPOSER_IMG_KEY);}catch(e){};if(typeof renderComposerPhotos==='function')renderComposerPhotos();
   $('#dilemma').value=exampleQuestion;$('#context').value='';$('#own-condition').value='';updateOwnCondition();$('#error-banner').hidden=true;
   renderReport({source:'demo',analysis:structuredClone(exampleAnalysis)},currentInput());$('#followup-panel').open=false;state.version=0;state.historyId=null;
   saveDraft();
@@ -7331,12 +7426,13 @@ function showWelcome(focus=true) {
   if($('#resume-draft'))$('#resume-draft').hidden=true;
   resumeDraft=null;
   $('#dilemma').value='';$('#context').value='';$('#own-condition').value='';
+  state.composerImages=[];if(typeof renderComposerPhotos==='function')renderComposerPhotos();
   updateOwnCondition();updateInputState();
   if(focus)$('#dilemma').focus();
 }
 function newDecision() {
   if(state.busy){toast('请先取消当前分析，再新建决定。');return;}
-  showWelcome();clearDraft();
+  showWelcome();clearDraft();try{sessionStorage.removeItem(COMPOSER_IMG_KEY);}catch(e){}
 }
 
 // —— P3-2 反转条件清单（三态勾选：已观察到/未观察到/不确定） ——
@@ -7546,7 +7642,7 @@ $$('[data-engine]').forEach(btn=>btn.addEventListener('click',()=>{
   lsSet(ENGINE_KEY,target);paintEngineUI();
 }));
 paintEngineUI();
-showWelcome(false);restoreDraft();refreshStatus();renderHistoryList();
+showWelcome(false);restoreDraft();refreshStatus();renderHistoryList();bindComposerPhotoUI();continueAfterVersionSwitch();
 
 // 配置 API Key 弹窗：file 与 http 模式都允许点击；http 模式下 Key 仅在本页内存生效，服务端由本地服务配置
 const keyDialog=$('#key-dialog'),keyInput=$('#api-key-input'),keyRemember=$('#remember-key');
