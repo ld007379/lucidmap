@@ -6567,6 +6567,96 @@ function repairDirectQuotes(a, payload){
   return repaired;
 }
 
+
+// —— 保底结构修复：把模型偶发的缺字段 / 超长 / 枚举非法 / 引文不合格就地修好，不再因此整份退回本地 ——
+function ensureValidAnalysis(a, payload){
+  if(!a||typeof a!=='object'||Array.isArray(a)) a={};
+  const clip=(v,n)=>{const s=String(v==null?'':v).trim();return s.length>n?s.slice(0,n):s;};
+  const fill=(v,dflt,n)=>clip(v,n)||clip(dflt,n);
+  const srcParts=[payload&&payload.dilemma,composeContext(payload||{}),...((payload&&payload.answers)||[]).map(x=>x&&x.answer)];
+  const srcText=srcParts.filter(Boolean).join('。');
+  const flat=s=>String(s==null?'':s).replace(/[\s\u00a0\u3000]+/g,'').replace(/[\u201c\u201d\u2018\u2019"'\u300c\u300d\u300e\u300f]/g,'');
+  const minQuote=(()=>{const n=flat(srcText).length;return n<24?2:(n<60?3:4);})();
+  const segs=srcText.split(/[。！？；;\n]+/).map(t=>t.trim()).filter(t=>t.length>=minQuote);
+  const isInt=t=>{const q=String(t||'').trim();return /[？?]/.test(q)||/^(我该|我应|我要不要|要不要|该不该|是否|能不能|可不可以|怎么办|如何|为什么|值不值)/.test(q);};
+  const declSegs=segs.filter(t=>!isInt(t));
+  const questionOnly=segs.length>0&&segs.every(isInt);
+  const firstGood=declSegs[0]||(segs[0]||'');
+  a.title=fill(a.title,'先把这件事拆开看',80);
+  a.summary=fill(a.summary,'这是按你写的原话整理的一版：先分清已知、未知，再看哪条路更值得走。',300);
+  a.conflict=(a.conflict&&typeof a.conflict==='object')?a.conflict:{};
+  a.conflict.left=fill(a.conflict.left,'维持现在的状态',60);
+  a.conflict.right=fill(a.conflict.right,'按你想做的改变',60);
+  a.facts=(Array.isArray(a.facts)?a.facts:[]).filter(x=>x&&typeof x==='object').slice(0,6).map(f=>({quote:clip(f.quote,240),implication:fill(f.implication,'这条来自你的原话，后面的判断都会以它为基础。',240)}));
+  if(typeof repairDirectQuotes==='function')repairDirectQuotes(a,payload);
+  if(!Array.isArray(a.facts))a.facts=[];
+  a.facts=a.facts.slice(0,6);
+  if(!a.facts.length&&!questionOnly&&firstGood){
+    a.facts.push({quote:clip(firstGood,240),implication:'这是你原文里的一句；后面的判断都以它为基础。'});
+  }
+  a.unknowns=(Array.isArray(a.unknowns)?a.unknowns:[]).filter(x=>x&&typeof x==='object').slice(0,MAX_GAPS).map(x=>{
+    const item={question:fill(x.question,'还有哪条信息没确认？',200),why:fill(x.why,'这一条不定，判断就只能停在假设上。',300),priority:['must','verify'].includes(x.priority)?x.priority:'verify'};
+    if(validGapId(x.id))item.id=x.id;
+    return item;
+  });
+  const defA={title:'维持现在的状态',gain:'保住眼前的确定性，不用马上承担改变的风险。',cost:'继续承受现在的处境；拖延本身也是一种成本。',condition:'如果现状不会变得更差，这个选项就成立。',reversible:true};
+  const defB={title:'按你想做的改变',gain:'直接朝你想要的方向走，省掉中间的时间。',cost:'需要承担一次性的转换成本和失败风险。',condition:'先确认钱、时间、关系这三项里至少两项是清楚的。',reversible:false};
+  const rawOpts=(Array.isArray(a.options)?a.options:[]).filter(x=>x&&typeof x==='object');
+  a.options=[0,1].map(i=>{
+    const s=rawOpts[i]||{};const d=i?defB:defA;
+    return {id:i?'B':'A',title:fill(s.title,d.title,80),gain:fill(s.gain,d.gain,240),cost:fill(s.cost,d.cost,240),condition:fill(s.condition,d.condition,300),reversible:(typeof s.reversible==='boolean')?s.reversible:d.reversible};
+  });
+  a.blindspots=(Array.isArray(a.blindspots)?a.blindspots:[]).filter(x=>x&&typeof x==='object').slice(0,3).map(x=>{
+    const item={claim:fill(x.claim,'有一条关键信息还没确认',240),evidence:clip(x.evidence,240),test:fill(x.test,'先想办法把这一条确认下来，再决定下一步。',300)};
+    if(x.evidenceType==='decision_question')item.evidenceType='decision_question';
+    return item;
+  });
+  if(typeof repairDirectQuotes==='function')repairDirectQuotes(a,payload);
+  a.blindspots=a.blindspots.slice(0,3);
+  if(!a.blindspots.length){
+    const ev=clip(firstGood,240);
+    const item={claim:a.unknowns[0]?fill(a.unknowns[0].question,'先把没确认的关键信息找出来',240):'有一条关键信息还没确认',evidence:ev,test:'先想办法把这一条确认下来，再决定下一步。'};
+    if(ev&&isInt(ev))item.evidenceType='decision_question';
+    a.blindspots=[item];
+  }
+  const ho=(a.hiddenOption&&typeof a.hiddenOption==='object')?a.hiddenOption:{};
+  a.hiddenOption={
+    title:fill(ho.title,'第三条路：先做一次低成本试探',100),
+    why:fill(ho.why,'两个选项都可能要你付出不小的代价；先用小成本换真实信息，能少交学费。',300),
+    experiment:fill(ho.experiment,'用两到四周做一次小规模试探，只投入你承受得起的时间、钱和精力。',400),
+    signal:fill(ho.signal,'如果试探里出现可重复的好转，就继续；如果没有，就及时收手。',300),
+    stopRule:fill(ho.stopRule,'一旦成本超出你能承受的上限，或情况明显变差，就停下来复盘。',300)
+  };
+  const rec=(a.recommendation&&typeof a.recommendation==='object')?a.recommendation:{};
+  const recNew={
+    direction:fill(rec.direction,'先别急着做不可逆的决定，用两周做一次小验证。',200),
+    basis:fill(rec.basis,'你写下的信息和还没确认的缺口都指向：现在更适合先换信息，再换状态。',400),
+    switchWhen:fill(rec.switchWhen,'如果验证结果和你的预期相反，或者关键缺口一直补不上，就换一条路。',350)
+  };
+  if(Array.isArray(rec.switchConditions)){
+    const conds=rec.switchConditions.filter(c=>c&&typeof c==='object'&&typeof c.condition==='string'&&c.condition.trim()).slice(0,5).map(c=>({condition:clip(c.condition,120),options:{yes:clip(c.options&&c.options.yes,40)||'已观察到',no:clip(c.options&&c.options.no,40)||'未观察到',unset:clip(c.options&&c.options.unset,40)||'不确定'}}));
+    if(conds.length>=2)recNew.switchConditions=conds;
+  }
+  a.recommendation=recNew;
+  const na=(a.nextAction&&typeof a.nextAction==='object')?a.nextAction:{};
+  a.nextAction={
+    within:fill(na.within,'这两天内',100),
+    action:fill(na.action,'把还没确认的关键信息列出来，挑一条最便宜的先去问清楚。',350),
+    deliverable:fill(na.deliverable,'一张写清楚“已确认 / 待确认”的清单。',200)
+  };
+  const sf=(a.safety&&typeof a.safety==='object')?a.safety:{};
+  const lvl=['normal','sensitive','urgent'].includes(sf.level)?sf.level:'normal';
+  a.safety={level:lvl,note:lvl==='normal'?clip(sf.note,400):fill(sf.note,'这次涉及安全风险，先把人身安全放在第一位；必要时联系身边可信的人或当地紧急服务。',400)};
+  if(lvl==='urgent'){
+    const txt=JSON.stringify({options:a.options,hiddenOption:a.hiddenOption,nextAction:a.nextAction}).toLowerCase();
+    const neg=/不要|别|避免|切勿|禁止|不能|请勿|不应|不应该|别去|先离开|远离/;
+    const kw=/对质|confrontation|报复|自残|伤害|危险实验|继续忍受/;
+    const unsafe=txt.split(/[，,。.；;、\n()（）]/).some(cl=>!neg.test(cl)&&kw.test(cl));
+    if(unsafe)a.safety={level:'sensitive',note:'这次涉及安全风险，先把人身安全放在第一位；必要时联系身边可信的人或当地紧急服务。'};
+  }
+  return a;
+}
+
 function validateDirectAnalysis(a, payload) {
   sanitizePathQuestions(a);
   const errors=[];
@@ -6724,7 +6814,7 @@ async function analyzeStandalone(payload, signal, rearmTimeout) {
     if(rec&&Array.isArray(rec.switchConditions))
       rec.switchConditions=rec.switchConditions.map(c=>typeof c==='string'?{condition:c,options:{yes:'已出现',no:'没出现',unset:'不确定'}}:c);
   }
-  try{ repairDirectQuotes(analysis,payload); }catch(e){}
+  try{ ensureValidAnalysis(analysis,payload); }catch(e){}
   validateDirectAnalysis(analysis,payload);
   const u=raw?.usage||{};
   return {source:'model',model:apiModel(),elapsedMs:Date.now()-start,analysis,droppedGaps,usage:{promptTokens:u.prompt_tokens??null,completionTokens:u.completion_tokens??null,totalTokens:u.total_tokens??null}};
@@ -6991,8 +7081,8 @@ async function analyze(payload) {
           envelope=await analyzeStandalone(payload,controller.signal,rearmTimeout);
           break;
         }catch(err){
-          const isValidation=/未通过校验|逐字原文核验/.test(String((err&&err.message)||''));
-          if(isValidation && attempt===1){
+          const isValidation=/未通过校验|逐字原文核验|没有返回有效的决策地图 JSON|被长度上限截断/.test(String((err&&err.message)||''));
+          if(isValidation && attempt<=2){
             text('#loading-title','模型格式没对上，让它按原文重做一次');
             text('#loading-note','把「已知事实」改成逐字引用你的原话，再校验一遍…');
             try{rearmTimeout();}catch(e){}
