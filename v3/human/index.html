@@ -7123,18 +7123,37 @@ document.addEventListener('click',function(e){
   try{saveDraft();}catch(err){}
   try{sessionStorage.setItem(CONTINUE_KEY,'1');}catch(err){}
 },true);
+function cameFromVersionPage(){
+  try{
+    const r=document.referrer||''; if(!r)return false;
+    const u=new URL(r); const p=decodeURIComponent(u.pathname);
+    const isVer=/\/v3\/(pro|human)\/?$/.test(p)||/清醒地图-(专业版|人性版)v3\.html$/.test(p)||/清醒地图-新版(-人性版)?\.html$/.test(p);
+    if(!isVer)return false;
+    const cur=decodeURIComponent(location.pathname);
+    return p!==cur;
+  }catch(e){return false;}
+}
 function continueAfterVersionSwitch(){
   let flag=null;
   try{flag=sessionStorage.getItem(CONTINUE_KEY);if(flag)sessionStorage.removeItem(CONTINUE_KEY);}catch(e){}
-  if(!flag)return;
-  const goApp=()=>{const rep=document.getElementById('report');const app=document.getElementById('app')||document.querySelector('.composer');const target=(rep&&!rep.hidden)?rep:app;if(target){try{document.documentElement.style.scrollBehavior='auto';target.scrollIntoView({block:'start'});}catch(e){}}};
+  if(!flag&&!cameFromVersionPage())return;
   const rd=document.getElementById('resume-draft');
-  if(rd&&!rd.hidden){
+  const hasText=!!((($('#dilemma')&&$('#dilemma').value)||'').trim()||(($('#context')&&$('#context').value)||'').trim());
+  const hasReport=!!(rd&&!rd.hidden);
+  if(!hasText&&!hasReport)return;
+  const goApp=()=>{const rep=document.getElementById('report');const app=document.getElementById('app')||document.querySelector('.composer');const target=(rep&&!rep.hidden)?rep:app;if(target){try{document.documentElement.style.scrollBehavior='auto';target.scrollIntoView({block:'start'});}catch(e){}}};
+  if(hasReport){
     setTimeout(()=>{try{rd.click();}catch(e){}setTimeout(goApp,150);toast('已把上一个话题和地图带过来（只在本机）。');},120);
   }else{
-    setTimeout(()=>{goApp();if(($('#dilemma').value||'').trim()||($('#context').value||'').trim())toast('已把上一个话题带过来（只在本机）。');},120);
+    setTimeout(()=>{goApp();toast('已把上一个话题带过来（只在本机）。');},120);
   }
 }
+window.addEventListener('pagehide',function(){
+  try{
+    const has=!!state.report||((($('#dilemma')&&$('#dilemma').value)||'').trim()||(($('#context')&&$('#context').value)||'').trim());
+    if(has){saveDraft();sessionStorage.setItem(CONTINUE_KEY,'1');}
+  }catch(e){}
+});
 
 async function refine(event) {
   event.preventDefault();if(state.busy||!state.report)return;
