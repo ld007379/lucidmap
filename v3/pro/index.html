@@ -2705,7 +2705,9 @@ body{
       <div id="error-banner" class="error-banner" role="alert" hidden><div><strong id="error-title">哎呀，没跑通</strong><p id="error-message"></p></div><button type="button" class="button" id="download-diagnostics" hidden>下载诊断信息</button><button type="button" class="button" id="retry-button">再试一次</button></div>
       <div id="loading-panel" class="loading-panel" role="status" aria-live="polite" hidden><span class="spinner"></span><div><strong id="loading-title">正在帮你想清楚…</strong><p id="loading-note">模型在梳理你的条件和选项，稍等一下</p></div><span id="elapsed">0s</span><button id="cancel-button" class="button quiet" type="button">算了不等了</button></div>
       <section id="welcome" class="welcome"><div class="welcome-map" aria-hidden="true"><svg viewBox="0 0 360 260" width="100%" height="100%"><defs><linearGradient id="wmL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9fbd8f"/><stop offset="1" stop-color="#c9dabd"/></linearGradient></defs><path d="M96 130 H144" stroke="url(#wmL)" stroke-width="2" stroke-dasharray="5 5" fill="none"/><path d="M144 130 C176 130 168 40 210 40" stroke="#c3d6b5" stroke-width="2" fill="none"/><path d="M144 130 H210" stroke="#c3d6b5" stroke-width="2" fill="none"/><path d="M144 130 C176 130 168 220 210 220" stroke="#c3d6b5" stroke-width="2" fill="none"/><rect x="8" y="104" width="88" height="52" rx="14" fill="#ffffff" stroke="#cfe0bf" stroke-width="2"/><text x="52" y="128" text-anchor="middle" font-size="13" fill="#5f7a58" font-family="Microsoft YaHei,sans-serif">你的问题</text><text x="52" y="145" text-anchor="middle" font-size="11" fill="#9aab90" font-family="Microsoft YaHei,sans-serif">在纠结什么</text><rect x="210" y="16" width="140" height="48" rx="13" fill="#ffffff" stroke="#dbe6d0" stroke-width="2"/><text x="228" y="45" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">A</text><text x="248" y="45" font-size="13" fill="#6c8364" font-family="Microsoft YaHei,sans-serif">维持现状</text><rect x="210" y="106" width="140" height="48" rx="13" fill="#ffffff" stroke="#dbe6d0" stroke-width="2"/><text x="228" y="135" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">B</text><text x="248" y="135" font-size="13" fill="#6c8364" font-family="Microsoft YaHei,sans-serif">做出改变</text><rect x="210" y="196" width="140" height="48" rx="13" fill="#f2f8ea" stroke="#c3d8b0" stroke-width="2"/><text x="228" y="225" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">C</text><text x="248" y="225" font-size="13" fill="#5f7a58" font-family="Microsoft YaHei,sans-serif">第三种做法</text></svg></div><span class="eyebrow">从一团乱麻，到看清全貌</span><h2>别急着做决定，<br>先看看地图。</h2><p>把你脑子里那些绕来绕去的想法写下来。我帮你把已知的事实、还没底的部分、和你可能没想到的第三条路，全摊开。</p><button class="button demo-play" id="demo-play" type="button" aria-pressed="false">▶ 不想打字？看我演示一遍</button><button class="button" id="resume-draft" type="button" hidden>接着上次没想完的 ↗</button><button class="button" id="welcome-example" type="button">直接看个真实案例 ↗</button><div class="welcome-flow" aria-hidden="true"><span>你的纠结</span><i>↳</i><span>摊开来看</span><i>↳</i><span>知道下一步</span></div></section>
-      <section id="report" aria-label="决策分析结果" hidden>
+      <style>.cloud-fallback-note{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin:0 0 14px;padding:13px 16px;border:1px solid #eccdbf;border-radius:10px;background:#fbeee7;color:#8c5038}.cloud-fallback-note[hidden]{display:none}.cloud-fallback-note b{font-size:12px;font-weight:600;color:#84462f}.cloud-fallback-note p{margin:5px 0 0;font-size:11.5px;line-height:1.8;color:#9a6248;word-break:break-all}.cloud-fallback-note .cfn-hint{color:#a5765f}.cloud-fallback-note .cfn-actions{display:flex;gap:8px;flex-wrap:wrap}</style>
+        <div class="cloud-fallback-note" id="cloud-fallback-note" hidden><div class="cfn-body"><b id="cfn-title">云端这次没跑通，先用本地引擎给你出一版</b><p id="cfn-msg"></p><p class="cfn-hint" id="cfn-hint"></p></div><div class="cfn-actions"><button class="button quiet" id="cfn-retry" type="button">用云端重试</button><button class="button quiet" id="cfn-diag" type="button">复制诊断信息</button></div></div>
+        <section id="report" aria-label="决策分析结果" hidden>
         <div class="quick-verdict" id="quick-verdict">
           <div class="qv-head"><span class="qv-kicker">局面概览</span><button type="button" class="qv-toggle" id="qv-toggle" aria-expanded="false">展开全部细节 ↓</button></div>
           <div class="qv-stakes"><span class="qv-stakes-label">真正的赌注</span><p id="qv-stakes"></p></div>
@@ -6836,6 +6838,44 @@ async function runDemo(){
   if(my===demoToken)toast('演示完了 · 这是预置案例，点「换个话题」开始你自己的。');
 }
 
+
+// —— 云端失败兜底：把原因留在页面上，并提供重试 / 诊断 ——
+function cloudErrorHint(raw){
+  const m=String(raw||'');
+  if(/401|403|invalid|authentication|unauthor|api\s*key|key\s*(无效|失效|拒绝|错误)|密钥|认证失败/i.test(m))return '看起来是 Key 无效或被拒绝：点右上角「配置 API Key」重新粘贴，并确认顶栏服务商和你配 Key 的那家是同一家。';
+  if(/402|余额|额度|quota|insufficient|欠费|balance/i.test(m))return '看起来是账户余额或额度不够：去服务商控制台充值/提额后再点「用云端重试」。';
+  if(/429|rate limit|限流|too many/i.test(m))return '被服务商限流了：等几十秒再点「用云端重试」。';
+  if(/404|model.*(not|不存在)|模型/i.test(m))return '当前模型名可能不对：点右上角「配置 API Key」换一个预置模型，或手打官方文档里的模型名。';
+  if(/Failed to fetch|NetworkError|Load failed|ERR_|网络/i.test(m))return '浏览器没连上服务商：检查网络/代理，或换一家服务商再试。';
+  if(/JSON|校验|缺了一截|结构/i.test(m))return '模型返回的结构不完整：点「用云端重试」通常就好。';
+  return '点「用云端重试」可以再试一次；反复失败就检查 Key、服务商、模型名和账户余额。';
+}
+function showCloudFallback(reason){
+  const box=$('#cloud-fallback-note');if(!box)return;
+  const msg=String(reason||'').trim()||'没有拿到具体原因';
+  state.lastCloudError=msg;
+  const title=$('#cfn-title');if(title)title.textContent='云端这次没跑通，先用本地引擎给你出一版（当前：'+provider().name+' · '+apiModel()+'）';
+  const msgEl=$('#cfn-msg');if(msgEl)msgEl.textContent='原因：'+msg;
+  const hint=$('#cfn-hint');if(hint)hint.textContent=cloudErrorHint(msg);
+  box.hidden=false;
+}
+function hideCloudFallback(){const box=document.getElementById('cloud-fallback-note');if(box)box.hidden=true;}
+function bindCloudFallbackUI(){
+  const retry=document.getElementById('cfn-retry');
+  if(retry&&!retry.dataset.bound){retry.dataset.bound='1';retry.addEventListener('click',()=>{
+    if(state.busy)return;
+    const req=state.lastRequest?structuredClone(state.lastRequest):null;
+    if(!req){toast('没有可重试的请求，重新点一次「帮我理清楚」吧。');return;}
+    hideCloudFallback();analyze(req);
+  });}
+  const diag=document.getElementById('cfn-diag');
+  if(diag&&!diag.dataset.bound){diag.dataset.bound='1';diag.addEventListener('click',()=>{
+    const info={provider:provider(),model:apiModel(),engine:currentEngine(),hasKey:!!getStandaloneKey(),reason:state.lastCloudError||'',page:location.href,at:new Date().toISOString()};
+    try{navigator.clipboard.writeText(JSON.stringify(info,null,2));toast('诊断信息已复制，可以直接发给作者。');}
+    catch(e){toast('复制失败：可以截一下这块橙色提示发给作者。');}
+  });}
+}
+
 async function analyze(payload) {
   if(state.busy)return false;
   if(!payload.dilemma.trim()){ $('#dilemma').focus();return false; }
@@ -6874,6 +6914,7 @@ async function analyze(payload) {
     try{if(payload&&Array.isArray(payload.images)){delete payload.images;}}catch(e){}
     renderReport(envelope,payload);
     try{if(state.payload&&Array.isArray(state.payload.images)){delete state.payload.images;}if(state.lastRequest&&Array.isArray(state.lastRequest.images)){delete state.lastRequest.images;}}catch(e){}
+    try{hideCloudFallback();}catch(e){}
     text('#model-status',envelope.source==='local'?'本地引擎 · 未联网':`${envelope.model} · 已连接`);
     $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.toggle('offline',envelope.source==='local');
     if(innerWidth<850)scrollToReport();
@@ -6896,7 +6937,7 @@ async function analyze(payload) {
         $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.add('offline');
         const note=$('#source-badge');
         if(note){note.classList.remove('live');}
-        toast(provider().name+' 这次没跑通（'+(env.fallbackReason.slice(0,40)||'连不上')+'），先用本地引擎给你出一版。');
+        showCloudFallback(env.fallbackReason);
         if(innerWidth<850)scrollToReport();
         return true;
       }catch(e2){}
@@ -7407,7 +7448,7 @@ function refreshStatus() {
 function resetAnalysisState(){
   state.report=null;state.payload=null;state.version=0;state.lastRequest=null;state.historyId=null;
   state.ownConditions=[];state.ownSeq=0;state.ownDirty=false;state.forceStale=false;
-  state.actionFeedback={status:'todo',result:''};state.followupImages=[];if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();if(typeof renderComposerPhotos==='function')renderComposerPhotos();state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
+  state.actionFeedback={status:'todo',result:''};state.followupImages=[];if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();if(typeof renderComposerPhotos==='function')renderComposerPhotos();try{hideCloudFallback();}catch(e){}state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
   state.lastRawResponse=null;state.lastValidationErrors=null;
   gapUsedIds.clear();gapSequence=0;
 }
@@ -7642,7 +7683,7 @@ $$('[data-engine]').forEach(btn=>btn.addEventListener('click',()=>{
   lsSet(ENGINE_KEY,target);paintEngineUI();
 }));
 paintEngineUI();
-showWelcome(false);restoreDraft();refreshStatus();renderHistoryList();bindComposerPhotoUI();continueAfterVersionSwitch();
+showWelcome(false);restoreDraft();refreshStatus();renderHistoryList();bindComposerPhotoUI();continueAfterVersionSwitch();bindCloudFallbackUI();
 
 // 配置 API Key 弹窗：file 与 http 模式都允许点击；http 模式下 Key 仅在本页内存生效，服务端由本地服务配置
 const keyDialog=$('#key-dialog'),keyInput=$('#api-key-input'),keyRemember=$('#remember-key');
