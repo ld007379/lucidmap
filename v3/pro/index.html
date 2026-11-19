@@ -1831,6 +1831,7 @@ body{
 }
 </style><style>
 #report.quick-only > *:not(.quick-verdict){display:none !important;}
+#report.quick-only > #safety-note:not([hidden]){display:block !important;}
 .quick-verdict{border:1px solid #d8ded6;border-radius:16px;background:#fff;padding:22px 24px;margin:0 0 20px;box-shadow:0 8px 26px rgba(28,52,42,.09);}
 .qv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .qv-kicker{font-size:13px;letter-spacing:.14em;color:#1f6b52;font-weight:700;}
@@ -2708,6 +2709,7 @@ body{
       <style>.cloud-fallback-note{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin:0 0 14px;padding:13px 16px;border:1px solid #eccdbf;border-radius:10px;background:#fbeee7;color:#8c5038}.cloud-fallback-note[hidden]{display:none}.cloud-fallback-note b{font-size:12px;font-weight:600;color:#84462f}.cloud-fallback-note p{margin:5px 0 0;font-size:11.5px;line-height:1.8;color:#9a6248;word-break:break-all}.cloud-fallback-note .cfn-hint{color:#a5765f}.cloud-fallback-note .cfn-actions{display:flex;gap:8px;flex-wrap:wrap}</style>
         <div class="cloud-fallback-note" id="cloud-fallback-note" hidden><div class="cfn-body"><b id="cfn-title">云端这次没跑通，先用本地引擎给你出一版</b><p id="cfn-msg"></p><p class="cfn-hint" id="cfn-hint"></p></div><div class="cfn-actions"><button class="button quiet" id="cfn-retry" type="button">用云端重试</button><button class="button quiet" id="cfn-diag" type="button">复制诊断信息</button></div></div>
         <section id="report" aria-label="决策分析结果" hidden>
+        <div id="safety-note" class="safety-note" role="alert" aria-live="assertive" hidden></div>
         <div class="quick-verdict" id="quick-verdict">
           <div class="qv-head"><span class="qv-kicker">局面概览</span><button type="button" class="qv-toggle" id="qv-toggle" aria-expanded="false">展开全部细节 ↓</button></div>
           <div class="qv-stakes"><span class="qv-stakes-label">真正的赌注</span><p id="qv-stakes"></p></div>
@@ -2735,7 +2737,6 @@ body{
           <div class="report-meta"><span id="source-badge" class="source-badge">示例地图</span><span id="report-time">固定案例 · 未调用模型</span><span id="token-usage" class="token-usage" hidden></span><span id="stale-label" class="stale-label" hidden>输入已修改 · 当前仍为上一张地图</span></div>
           <h3 id="report-title"></h3><p id="report-summary"></p>
           <div class="conflict-pills"><span id="conflict-left"></span><i>↔</i><span id="conflict-right"></span><span class="facts-count" id="facts-count"></span></div>
-          <div id="safety-note" class="safety-note" hidden></div>
         </div>
         <section class="reading-panel" id="reading-panel" hidden>
           <div class="reading-head"><span class="reading-kicker">我猜你心里在想</span><h4 id="reading-underneath"></h4></div>
@@ -6385,13 +6386,14 @@ function apiExtra(){return provider().extra||{};}
 function apiJSON(){return !!provider().json;}
 // 模型名集中在此处：DeepSeek 已停用 deepseek-chat / deepseek-reasoner，如需更强推理可改为 deepseek-v4-pro
 const DS_MODEL = 'deepseek-flash';
-let inMemoryKey = '';
-function getStandaloneKey() {
-  if (inMemoryKey) return inMemoryKey;
-  const name = keyStorageName();
+const inMemoryKeys = Object.create(null);
+function getStandaloneKey(pid) {
+  const id = pid || providerId();
+  if (inMemoryKeys[id]) return inMemoryKeys[id];
+  const name = keyStorageName(id);
   try {
     let v = localStorage.getItem(name) || '';
-    if (!v && providerId() === 'deepseek') {
+    if (!v && id === 'deepseek') {
       const legacy = localStorage.getItem(KEY_STORAGE) || '';
       if (legacy) { localStorage.setItem(name, legacy); v = legacy; }
     }
@@ -6437,7 +6439,7 @@ function providerRenderDialog(){
   if(modelInput){modelInput.value=lsGet(modelStorageName())||p.model;modelInput.placeholder=p.model;}
   paintModelChips();
   const keyInput=$('#api-key-input');
-  if(keyInput){keyInput.value='';keyInput.placeholder='粘贴你自己的 '+p.name+' API Key';}
+  if(keyInput){keyInput.value=getStandaloneKey();keyInput.placeholder='粘贴你自己的 '+p.name+' API Key';}
 }
 function setKeyTestStatus(text,kind){
   const el=$('#key-test-status');if(!el)return;
@@ -6799,7 +6801,7 @@ function currentEngine(){
   return lsGet(ENGINE_KEY)==='local'?'local':'model';
 }
 function hasKeyFor(pid){
-  try{return Boolean(localStorage.getItem(keyStorageName(pid))||'');}catch{return false;}
+  return Boolean(getStandaloneKey(pid));
 }
 function paintEngineUI(){
   const e=currentEngine();
@@ -6865,7 +6867,7 @@ function localAnalyze(payload){
   for(const item of declarative){ if(quotes.length>=3)break; if(!quotes.includes(item))quotes.push(item); }
   if(!quotes.length)quotes.push(raw.slice(0,Math.min(40,raw.length)));
   const facts=quotes.map(q=>({quote:q,implication:(/[？?]\s*$/.test(q)||/^(我该|我应|我要不要|要不要|该不该|是否|能不能|可不可以)/.test(q))?'这是你的提问本身，不是已确认的事实；它只界定了要判断的问题。':(/\d/.test(q)?'这条里有具体数字，是可以拿来算可行性的依据。':/(父母|家里|家人|对象|老公|老婆|孩子)/.test(q)?'这条涉及家人或关系方的态度，会改变你能承受的代价。':'这是你已经给出的现实条件，会限制可选项。')}));
-  const ab=raw.match(/([^，。；！？?]{2,14}?)(?:还是|，或者)([^，。；！？?]{2,14})[？?]?/);
+  const ab=raw.match(/([^，,。；！？?]{2,14}?)(?:[，,]\s*还是|[，,]\s*或者|还是|或者)([^，,。；！？?]{2,14})[？?]?/);
   const clean=s=>String(s||'').replace(/^(那我|我)(该|要|应该)?/,'').replace(/^(该|要|是)/,'').trim();
   const left=clean(ab&&ab[1])||'维持现在的状态';
   const right=clean(ab&&ab[2])||'按你想做的改变';
@@ -7873,7 +7875,7 @@ $('#lu-config')?.addEventListener('click',()=>{const d=$('#key-dialog');if(d&&ty
 $('#lu-dismiss')?.addEventListener('click',()=>{lsSet('lucidmap.upsell.dismissed.v1','1');$('#local-upsell').hidden=true;});
 $('#key-form').addEventListener('submit',event=>{
   event.preventDefault();const key=keyInput.value.trim();if(!key){$('#key-error').hidden=false;text('#key-error','请先粘贴 API Key。');return;}
-  inMemoryKey=key;let stored=false;
+  inMemoryKeys[providerId()]=key;let stored=false;
   const modelInput=$('#key-model');const modelVal=(modelInput&&modelInput.value||'').trim();if(modelVal){try{localStorage.setItem(modelStorageName(),modelVal);}catch{}}else{try{localStorage.removeItem(modelStorageName());}catch{}}
   if(keyRemember.checked){try{localStorage.setItem(keyStorageName(),key);stored=localStorage.getItem(keyStorageName())===key;}catch{}}
   else{try{localStorage.removeItem(keyStorageName());if(localStorage.getItem(keyStorageName())!==null){$('#key-error').hidden=false;text('#key-error','无法清除已保存的 Key，请检查浏览器存储权限。');return;}}catch{$('#key-error').hidden=false;text('#key-error','无法清除已保存的 Key，请检查浏览器存储权限。');return;}} // P1-4：取消勾选即清除旧的持久存储，仅保留当前页面内存中的 Key
@@ -7881,7 +7883,7 @@ $('#key-form').addEventListener('submit',event=>{
   $('#key-error').hidden=true;refreshKeyStatus();paintEngineUI();keyDialog.close();keyInput.value='';
   toast(keyRemember.checked?'Key 已保存在此浏览器。':'Key 仅在当前页面有效；此浏览器之前保存的 Key 已清除。');
 });
-$('#forget-key').addEventListener('click',()=>{inMemoryKey='';try{localStorage.removeItem(keyStorageName());}catch{}keyInput.value='';refreshKeyStatus();$('#key-error').hidden=true;});
+$('#forget-key').addEventListener('click',()=>{delete inMemoryKeys[providerId()];try{localStorage.removeItem(keyStorageName());}catch{}keyInput.value='';refreshKeyStatus();$('#key-error').hidden=true;});
 refreshKeyStatus();
 
 </script>
@@ -7909,7 +7911,7 @@ refreshKeyStatus();
       <div class="lm-foot-links">
         <a href="../">所有版本 · 重新选</a>
         <a href="https://github.com/ld007379/lucidmap" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">许可 Apache-2.0</a>
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">许可 CC BY-NC-SA 4.0</a>
         <a href="#top">回到顶部 ↑</a>
       </div>
     </div>
