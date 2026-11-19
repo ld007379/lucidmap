@@ -2771,7 +2771,7 @@ body{
           </div>
           <section class="next-action-bar"><span class="action-symbol">↳</span><div><span class="mini-label" id="action-within"></span><h4 id="action-title"></h4><p id="action-deliverable"></p></div><button class="button" id="see-plan" type="button">看完整计划 ↗</button></section>
           <div class="action-feedback" id="action-feedback" hidden>
-            <div class="af-head"><span class="af-icon" aria-hidden="true">✓</span><div><strong>这步你动了没？</strong><small>随便写两句实际发生了什么，下次我会参考真实结果，不会只盯着原计划。</small></div></div>
+            <div class="af-head"><span class="af-icon" aria-hidden="true">✓</span><div><strong>上一步做了吗？结果怎么样？</strong><small>记一笔实际发生的（可不写）。下次重新分析时，我会拿它当依据，而不是继续假设你还没动。</small></div></div>
             <div class="af-status" id="af-status" role="group" aria-label="行动状态"><button type="button" class="af-chip" data-af-status="todo" aria-pressed="true">还没动</button><button type="button" class="af-chip" data-af-status="tried" aria-pressed="false">试了一下</button><button type="button" class="af-chip" data-af-status="done" aria-pressed="false">搞定了</button></div>
             <textarea id="af-result" maxlength="500" placeholder="随便写两句：实际咋样了、对方什么反应、跟你想的有什么不一样……（不写也行）"></textarea>
           </div>
@@ -2779,7 +2779,7 @@ body{
         <div id="pane-evidence" role="tabpanel" aria-labelledby="tab-evidence" hidden><div class="evidence-grid"><section class="white-panel"><div class="panel-title"><h4>你自己说过的</h4><span>原话 → 所以呢</span></div><div id="fact-list"></div></section><section class="white-panel"><div class="panel-title"><h4>还没底的部分</h4><span>我先猜了，你看看对不对</span></div><div id="unknown-list"></div></section></div><div class="evidence-footnote">原话是你自己写的；后面的分析是我帮你推的。最终判断权在你手里，别全信我。</div></div>
         <div id="pane-action" role="tabpanel" aria-labelledby="tab-action" hidden><div class="action-choice-list" id="action-choice-list" aria-label="三个决策选项"></div><div class="action-plan"><div class="plan-heading"><span class="path-letter c-letter" id="plan-path-letter">C</span><div><span class="mini-label" id="plan-kicker">先小试一把，别梭哈</span><h4 id="experiment-title"></h4><p id="experiment-why"></p></div></div><div class="plan-steps" id="plan-steps"></div></div><div class="white-panel condition-panel"><span class="section-kicker">什么时候该改主意</span><h4 id="condition-direction"></h4><p id="condition-switch"></p><div id="switch-checks" class="switch-checks" hidden></div></div></div>
         <button type="button" class="button mobile-edit-conditions" id="mobile-edit-conditions">＋ 改条件 / 补信息</button>
-        <details class="followup-panel" id="followup-panel"><summary><span class="followup-icon">＋</span><span><strong id="followup-title">我先猜了你的情况，看看准不准</strong><small id="followup-sub">猜对了直接提交，猜错了随手写一句就行。</small></span><span class="summary-arrow">⌄</span></summary><form id="followup-form"><div id="followup-fields"></div><div class="own-condition" id="own-condition-wrap"><div class="own-condition-head"><span class="own-condition-plus" aria-hidden="true">＋</span><div><label for="own-condition">它没问到的，我自己说</label><small>钱、时间、身体、家里人的态度……想到什么写什么</small></div></div><textarea id="own-condition" maxlength="300" placeholder="比如：这笔钱三个月内必须还"></textarea><div class="own-condition-meta"><span id="own-condition-count">0 / 300</span><span id="own-condition-added"></span></div><div class="own-cond-list" id="own-cond-list" hidden></div></div><div class="followup-actions"><span id="followup-hint">会综合你原来写的和这次补的，重新出一版。</span><button class="button primary" id="refine-button" type="submit">没问题，更新 ↗</button></div></form></details>
+        <details class="followup-panel" id="followup-panel"><summary><span class="followup-icon">＋</span><span><strong id="followup-title">我先猜了你的情况，看看准不准</strong><small id="followup-sub">猜对了直接提交，猜错了随手写一句就行。</small></span><span class="summary-arrow">⌄</span></summary><form id="followup-form"><div id="followup-fields"></div><div class="own-condition" id="own-condition-wrap"><div class="own-condition-head"><span class="own-condition-plus" aria-hidden="true">＋</span><div><label for="own-condition">它没问到的，我自己说</label><small>钱、时间、身体、家里人的态度……想到什么写什么</small></div></div><textarea id="own-condition" maxlength="300" placeholder="比如：这笔钱三个月内必须还"></textarea><div class="own-condition-meta"><span id="own-condition-count">0 / 300</span><span id="own-condition-added"></span></div><div class="own-cond-list" id="own-cond-list" hidden></div></div><style>.answer-photos{margin-top:18px;border-top:1px dashed #e0e6d8;padding-top:14px}.ap-head{display:flex;align-items:flex-start;gap:9px;flex-wrap:wrap;margin-bottom:9px}.ap-title{font-size:11px;font-weight:600;color:#40584a;letter-spacing:.3px}.ap-head small{font-size:10px;line-height:1.7;color:#94a084}.ap-drop{border:1px dashed #cddbbf;background:#fbfdf8;border-radius:8px;padding:12px 14px;font-size:11px;color:#7d9070;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}.ap-drop:hover,.ap-drop:focus-visible{border-color:#a9c494;background:#f6fbf0;outline:none}.ap-drop.dragging{border-color:#6f9a5c;background:#eef6e6}.ap-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ap-thumb{position:relative;width:82px;height:82px;border:1px solid #dbe4d2;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 3px 8px #33452f0d}.ap-thumb img{width:100%;height:100%;object-fit:cover;display:block}.ap-thumb button{position:absolute;top:3px;right:3px;width:18px;height:18px;border:0;border-radius:50%;background:#243d2fcc;color:#fff;font-size:11px;line-height:1;cursor:pointer;display:grid;place-items:center}.ap-note{margin:8px 0 0;font-size:10px;line-height:1.7;color:#94a084}.ap-warn{margin:6px 0 0;font-size:10.5px;line-height:1.7;color:#9f6a45;background:#fbf3ea;border:1px solid #f0e2cd;border-radius:6px;padding:7px 9px}</style><div class="answer-photos" id="answer-photos"><div class="ap-head"><span class="ap-title">＋ 图片补充（可选）</span><small>可以用截图回答上面的问题：直接粘贴（Ctrl / ⌘ + V）、拖进来，或点下面的按钮选图。最多 3 张。</small></div><div class="ap-drop" id="ap-drop" tabindex="0" role="button">把图片粘贴到这里，或点一下选图</div><input type="file" id="ap-file" accept="image/*" multiple hidden><div class="ap-thumbs" id="ap-thumbs" hidden></div><p class="ap-note" id="ap-note">图片只存在这台浏览器里；点「更新」时才会随请求发给你选的服务商。能不能看图取决于当前模型。</p><p class="ap-warn" id="ap-warn" hidden></p></div><div class="followup-actions"><span id="followup-hint">会综合你原来写的和这次补的，重新出一版。</span><button class="button primary" id="refine-button" type="submit">没问题，更新 ↗</button></div></form></details>
         <p class="report-footnote">这张图会跟着你的新信息变。拿它当讨论的起点就行，最后拍板的永远是你。</p>
       </section>
       <footer><span>LucidMap · 清醒地图 <span class="footer-version" title="专业版">整合版 · v3.0</span></span><span>少一点混乱，多一点清醒。</span></footer>
@@ -5754,7 +5754,7 @@ const samples = {
   family: '我在上海工作，父母在成都，最近希望我回去。我每月可以回家一个周末，但成都还没有合适的 offer。我该现在回去还是先留在上海？',
   study: '我已经工作两年，想辞职考研换专业。目前只有晚间能学习，还没做过目标院校的真题。我该先辞职备考，还是边工作边准备？'
 };
-const state = {report:null,payload:null,source:'demo',model:'',createdAt:'',version:0,busy:false,controller:null,demoRunning:false,lastRequest:null,svg:'',mermaid:'',renderSequence:0,ownConditions:[],ownSeq:0,actionFeedback:{status:'todo',result:''},selectedPath:null,switchChecks:{},tokenUsage:null,droppedGaps:0,historyId:null,ownDirty:false,forceStale:false,lastRawResponse:null,lastValidationErrors:null};
+const state = {report:null,payload:null,source:'demo',model:'',createdAt:'',version:0,busy:false,controller:null,demoRunning:false,lastRequest:null,svg:'',mermaid:'',renderSequence:0,ownConditions:[],ownSeq:0,actionFeedback:{status:'todo',result:''},followupImages:[],selectedPath:null,switchChecks:{},tokenUsage:null,droppedGaps:0,historyId:null,ownDirty:false,forceStale:false,lastRawResponse:null,lastValidationErrors:null};
 
 // —— 本机持久化：草稿 + 历史（仅保存在此浏览器，不上传，不写入 HTML 文件） ——
 const DRAFT_KEY='lucidmap.draft.v2';
@@ -6366,10 +6366,10 @@ const KEY_STORAGE = 'lucidmap.deepseek.api-key.v1';
 /* ---- 多服务商：同一套 OpenAI 兼容协议，Key/模型各存各的 ---- */
 const PROVIDERS = {
   deepseek:   {name:'DeepSeek',  short:'DeepSeek', url:'https://api.deepseek.com/chat/completions', model:'deepseek-flash', models:["deepseek-flash","deepseek-chat","deepseek-reasoner"], keyPage:'https://platform.deepseek.com/api_keys', json:true, extra:{thinking:{type:'disabled'}}},
-  qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model:'qwen-plus', models:["qwen-plus","qwen-max","qwen-turbo","qwen-long"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
-  moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', model:'moonshot-v1-8k', models:["moonshot-v1-8k","moonshot-v1-32k","moonshot-v1-128k","kimi-latest"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
-  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', model:'deepseek-ai/DeepSeek-V3', models:["deepseek-ai/DeepSeek-V3","deepseek-ai/DeepSeek-R1","Qwen/Qwen2.5-72B-Instruct","Qwen/Qwen2.5-7B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
-  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', model:'openai/gpt-4o-mini', models:["openai/gpt-4o-mini","openai/gpt-4o","anthropic/claude-3.5-sonnet","google/gemini-2.0-flash-001","deepseek/deepseek-chat"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
+  qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model:'qwen-plus', models:["qwen-plus","qwen-max","qwen-turbo","qwen-long","qwen-vl-max","qwen-vl-plus"], vision:["qwen-vl-max","qwen-vl-plus"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
+  moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', model:'moonshot-v1-8k', models:["moonshot-v1-8k","moonshot-v1-32k","moonshot-v1-128k","kimi-latest","moonshot-v1-8k-vision-preview","moonshot-v1-32k-vision-preview"], vision:["moonshot-v1-8k-vision-preview","moonshot-v1-32k-vision-preview"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
+  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', model:'deepseek-ai/DeepSeek-V3', models:["deepseek-ai/DeepSeek-V3","deepseek-ai/DeepSeek-R1","Qwen/Qwen2.5-72B-Instruct","Qwen/Qwen2.5-7B-Instruct","Qwen/Qwen2.5-VL-72B-Instruct","Qwen/Qwen2.5-VL-7B-Instruct"], vision:["Qwen/Qwen2.5-VL-72B-Instruct","Qwen/Qwen2.5-VL-7B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
+  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', model:'openai/gpt-4o-mini', models:["openai/gpt-4o-mini","openai/gpt-4o","anthropic/claude-3.5-sonnet","google/gemini-2.0-flash-001","deepseek/deepseek-chat"], vision:["openai/gpt-4o","openai/gpt-4o-mini","anthropic/claude-3.5-sonnet","google/gemini-2.0-flash-001"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
 };
 const PROVIDER_KEY='lucidmap.provider.v1';
 function providerId(){const p=lsGet(PROVIDER_KEY);return PROVIDERS[p]?p:'deepseek';}
@@ -6586,12 +6586,23 @@ async function generateSwitchLabels(analysis,payload,signal){
     rec.switchConditions=mapped;
   }catch(e){ if(e&&e.name==='AbortError')throw e; fallback(); }
 }
+
+// —— 仅当模型支持看图时，才把图片按 OpenAI 兼容 image_url 格式发出去 ——
+function buildUserContent(userMsg,payload){
+  const raw=(payload&&Array.isArray(payload.images))?payload.images.filter(x=>typeof x==='string'&&x.indexOf('data:image/')===0):[];
+  if(!raw.length)return JSON.stringify(userMsg);
+  const imgs=raw.slice(0,3);
+  if(!currentVisionModel())return JSON.stringify(userMsg);
+  userMsg.imageNote='用户额外贴了 '+imgs.length+' 张图片作为补充证据（可能是聊天截图、单据、合同等）。能看清的内容当作「用户自述 + 图片证据」使用；看不清或与文字冲突的地方要明确说不确定，不要编造图片里没有的内容。';
+  return [{type:'text',text:JSON.stringify(userMsg)}].concat(imgs.map(u=>({type:'image_url',image_url:{url:u}})));
+}
+
 async function analyzeStandalone(payload, signal, rearmTimeout) {
   const key=getStandaloneKey(); if(!key) throw new Error('请先点击右上角“配置 API Key”，填入你自己的 API Key。');
   const start=Date.now(); let response;
   const sameQ=!!state.payload && state.payload.dilemma===payload.dilemma;
   const userMsg={dilemma:payload.dilemma,context:composeContext(payload),answers:payload.answers||[],actionResult:payload.actionResult||{status:'todo',result:''},previousUnknowns:sameQ?(state.report?.unknowns||[]):[],usedGapIds:sameQ?[...gapUsedIds].slice(-200):[],history:Array.isArray(payload.history)?payload.history:[]};
-  try { response=await fetch(apiUrl(),{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:apiModel(),messages:[{role:'system',content:STANDALONE_SYSTEM_PROMPT},{role:'user',content:JSON.stringify(userMsg)}],temperature:0.35,max_tokens:8192,...apiExtra(),...(apiJSON()?{response_format:{type:'json_object'}}:{})}),signal}); }
+  try { response=await fetch(apiUrl(),{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:apiModel(),messages:[{role:'system',content:STANDALONE_SYSTEM_PROMPT},{role:'user',content:buildUserContent(userMsg,payload)}],temperature:0.35,max_tokens:8192,...apiExtra(),...(apiJSON()?{response_format:{type:'json_object'}}:{})}),signal}); }
   catch(e) {
     if(e.name==='AbortError') throw e;
     // v2：按错误类型细分，避免一律"无法连接"让评委误判
@@ -6690,6 +6701,7 @@ function paintEngineUI(){
       : '需要更细的证据和追问？配一个 Key 用云端 →';
   }
   text('#engine-hint',e==='local'?(getStandaloneKey()?'离线可用 · 不发送内容':'免配置 · 本地规则引擎 · 30 秒出图'):(getStandaloneKey()?('已选 '+provider().name+' · 用自己的 Key'):('还没配 '+provider().name+' 的 Key · 点下面的服务商配置')));
+  if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();
   const pn=$('#privacy-note');
   if(pn)pn.textContent=e==='local'
     ?'本地引擎模式：你写的东西只在浏览器里处理，不发给任何服务器。草稿和历史也只存本机，随时能删。'
@@ -6890,6 +6902,58 @@ async function analyze(payload) {
     if(requestSeq===state.requestSeq){state.controller=null;setBusy(false);updateInputState();}
   }
 }
+
+// —— 回答追问时贴图：粘贴 / 拖拽 / 选图（最多 3 张，自动压缩，仅在本机预览，发送与否取决于模型是否支持看图） ——
+const PHOTO_MAX=3;
+function visionModels(){const p=PROVIDERS[providerId()];return (p&&Array.isArray(p.vision))?p.vision:[];}
+function currentVisionModel(){const m=String(apiModel()||'');return visionModels().find(v=>v===m||m.indexOf(v)>=0)||'';}
+function renderAnswerPhotos(){
+  const list=state.followupImages||[];
+  const thumbs=$('#ap-thumbs'),warn=$('#ap-warn'),drop=$('#ap-drop');
+  if(thumbs){thumbs.hidden=!list.length;thumbs.innerHTML=list.map((src,i)=>'<div class="ap-thumb"><img src="'+src+'" alt="附图 '+(i+1)+'"><button type="button" data-photo-remove="'+i+'" aria-label="删除这张图">×</button></div>').join('');}
+  if(warn){
+    if(!list.length){warn.hidden=true;warn.textContent='';}
+    else{const vis=currentVisionModel();warn.hidden=false;warn.textContent=vis?('当前模型 '+apiModel()+' 支持看图：点「更新」会连同 '+list.length+' 张图一起发送（按 token 计费）。'):('当前模型 '+apiModel()+' 看不了图：点「更新」时图片不会发送。想用图片回答，请换支持看图的模型（如 '+((visionModels()[0])||'qwen-vl-max')+'）。');}
+  }
+  if(drop)drop.textContent=list.length>=PHOTO_MAX?'最多 3 张，先删一张再加':'把图片粘贴到这里，或点一下选图';
+}
+function addAnswerPhotos(files){
+  const arr=[...(files||[])].filter(f=>f&&/^image\//.test(f.type||''));
+  if(!arr.length)return;
+  const room=PHOTO_MAX-(state.followupImages||[]).length;
+  if(room<=0){toast('最多 3 张图，先删一张再加。');return;}
+  arr.slice(0,room).forEach(file=>{
+    if(file.size>12*1024*1024){toast('这张图太大了（超过 12MB），换一张小一点的。');return;}
+    const img=new Image();const objUrl=URL.createObjectURL(file);
+    img.onload=()=>{URL.revokeObjectURL(objUrl);
+      const max=1280;let w=img.naturalWidth,h=img.naturalHeight;
+      if(w>max||h>max){const s=Math.min(max/w,max/h);w=Math.round(w*s);h=Math.round(h*s);}
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      (state.followupImages=state.followupImages||[]).push(canvas.toDataURL('image/jpeg',0.82));
+      renderAnswerPhotos();
+    };
+    img.onerror=()=>{URL.revokeObjectURL(objUrl);toast('这张图读不了，换一张试试。');};
+    img.src=objUrl;
+  });
+}
+function bindAnswerPhotoUI(){
+  const dropEl=$('#ap-drop'),fileEl=$('#ap-file');
+  if(dropEl){
+    dropEl.addEventListener('click',()=>fileEl&&fileEl.click());
+    dropEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileEl&&fileEl.click();}});
+  }
+  if(fileEl)fileEl.addEventListener('change',e=>{addAnswerPhotos(e.target.files);e.target.value='';});
+  const form=$('#followup-form'); if(!form)return;
+  form.addEventListener('paste',e=>{const items=[...(e.clipboardData&&e.clipboardData.items||[])].filter(it=>it.kind==='file'&&/^image\//.test(it.type));if(!items.length)return;e.preventDefault();addAnswerPhotos(items.map(it=>it.getAsFile()).filter(Boolean));});
+  ['dragover','dragenter'].forEach(t=>form.addEventListener(t,e=>{const types=[...(e.dataTransfer&&e.dataTransfer.types||[])];if(types.indexOf('Files')>=0){e.preventDefault();dropEl&&dropEl.classList.add('dragging');}}));
+  ['dragleave','dragend'].forEach(t=>form.addEventListener(t,()=>{dropEl&&dropEl.classList.remove('dragging');}));
+  form.addEventListener('drop',e=>{const files=[...(e.dataTransfer&&e.dataTransfer.files||[])];if(!files.length)return;e.preventDefault();dropEl&&dropEl.classList.remove('dragging');addAnswerPhotos(files);});
+  const thumbs=$('#ap-thumbs');
+  if(thumbs)thumbs.addEventListener('click',e=>{const b=e.target.closest('[data-photo-remove]');if(!b)return;state.followupImages.splice(Number(b.dataset.photoRemove),1);renderAnswerPhotos();});
+  renderAnswerPhotos();
+}
+
 async function refine(event) {
   event.preventDefault();if(state.busy||!state.report)return;
   const prev=state.payload;
@@ -6906,12 +6970,13 @@ async function refine(event) {
   const answers=mergeAnswers(prev.answers,fresh);
   const baseContext=$('#context').value.trim();
   const switchContext=Object.entries(state.switchChecks||{}).filter(([,v])=>v&&v!=='unset').map(([k,v])=>`反转条件 ${k} 的状态：${v}`).join('\n');
-   const request={dilemma:prev.dilemma,context:[baseContext,switchContext].filter(Boolean).join('\n'),answers,ownConditions,actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result}};
+   const engineNow=currentEngine();const usedImages=(engineNow!=='local')&&!!currentVisionModel()&&state.followupImages.length>0;if(state.followupImages.length&&!usedImages){toast(engineNow==='local'?'本地引擎看不了图：图片这次用不上，切到云端并选支持看图的模型再更新。':'当前模型看不了图：图片这次不会发送，换支持看图的模型再更新。');}const request={dilemma:prev.dilemma,context:[baseContext,switchContext].filter(Boolean).join('\n'),answers,ownConditions,actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result},images:state.followupImages.slice()};
   if(composeContext(request).length>12000){toast('补充的信息太长了，去左边精简一下关键条件再重新跑。');return;}
   const done=await analyze(request);
   if(done){
     // 成功后才把草稿提升为已加入条件，并清空输入框
     state.ownConditions=ownConditions;state.ownDirty=false;state.forceStale=false;
+    if(usedImages){state.followupImages=[];renderAnswerPhotos();}
     $('#own-condition').value='';updateOwnCondition();
   }
   // 失败：答案文本框、own-condition、条件列表均原样保留，可修改后直接重提
@@ -7248,7 +7313,7 @@ function refreshStatus() {
 function resetAnalysisState(){
   state.report=null;state.payload=null;state.version=0;state.lastRequest=null;state.historyId=null;
   state.ownConditions=[];state.ownSeq=0;state.ownDirty=false;state.forceStale=false;
-  state.actionFeedback={status:'todo',result:''};state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
+  state.actionFeedback={status:'todo',result:''};state.followupImages=[];if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();state.switchChecks={};state.tokenUsage=null;state.droppedGaps=0;
   state.lastRawResponse=null;state.lastValidationErrors=null;
   gapUsedIds.clear();gapSequence=0;
 }
@@ -7382,7 +7447,7 @@ $('#resume-draft')?.addEventListener('click',()=>{
 $('#decision-form').addEventListener('submit',event=>{event.preventDefault();analyze(currentInput());});
 $('#dilemma').addEventListener('input',updateInputState);$('#context').addEventListener('input',updateInputState);
 $('#decision-form').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();$('#decision-form').requestSubmit();}});
-$('#followup-form').addEventListener('submit',refine);
+$('#followup-form').addEventListener('submit',refine);bindAnswerPhotoUI();
 $('#own-condition').addEventListener('input',()=>{updateOwnCondition();schedulePersist();});
 $('#own-condition').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();$('#followup-form').requestSubmit();}});
 $('#own-cond-list').addEventListener('click',event=>{const btn=event.target.closest('[data-own-id]');if(!btn)return;removeOwnCondition(btn.dataset.ownId);});
