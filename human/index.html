@@ -5717,6 +5717,55 @@ function sanitizePathQuestions(a){
   });
   a.pathQuestions=out;
 }
+
+// —— 逐字引用修复：模型偶发改写时，从用户原文里找最接近的整句替换；实在找不到就丢掉这一条 ——
+function repairDirectQuotes(a, payload){
+  if(!a||typeof a!=='object')return 0;
+  const flat=s=>String(s==null?'':s).replace(/[\s\u00a0\u3000]+/g,'').replace(/[\u201c\u201d\u2018\u2019"'\u300c\u300d\u300e\u300f]/g,'');
+  const rawSources=[payload.dilemma||'',composeContext(payload),...(payload.answers||[]).map(x=>String(x.answer||''))].filter(Boolean);
+  const normSources=rawSources.map(flat);
+  const inputLen=normSources.reduce((s,x)=>s+x.length,0);
+  const minQuote=inputLen<24?2:(inputLen<60?3:4);
+  const isInt=q=>{const t=String(q||'').trim();return /[？?]\s*$/.test(t)||/^(我该|我应|要不要|该不该|是否|能不能|可不可以)/.test(t);};
+  const bigrams=s=>{const set=new Set();for(let i=0;i<s.length-1;i++)set.add(s.slice(i,i+2));return set;};
+  const units=[];
+  rawSources.forEach(raw=>{String(raw).split(/[。！？；;\n]+/).forEach(cl=>{const t=cl.trim();if(t)units.push(t);});});
+  const score=(q,u)=>{const nq=flat(q),nu=flat(u);if(!nq||!nu)return 0;const A=bigrams(nq),B=bigrams(nu);let inter=0;A.forEach(x=>{if(B.has(x))inter++;});return inter/Math.max(1,Math.min(A.size,B.size));};
+  const bestFor=(q,allowQuestion)=>{
+    let best=null,bestScore=0;
+    units.forEach(u=>{
+      if(!allowQuestion&&isInt(u))return;
+      const s=score(q,u);
+      if(s>bestScore){bestScore=s;best=u;}
+    });
+    return {unit:best,score:bestScore};
+  };
+  let repaired=0;
+  const fix=(obj,key,allowQuestion)=>{
+    const q=obj[key];
+    if(typeof q!=='string'||!q.trim())return;
+    const nq=flat(q);
+    const okLen=nq.length>=minQuote&&nq.length<=240;
+    const okSrc=normSources.some(s=>s.includes(nq));
+    const okInt=allowQuestion||!isInt(q);
+    if(okLen&&okSrc&&okInt)return;
+    const b=bestFor(q,allowQuestion);
+    if(b.unit&&b.score>=0.34){
+      obj[key]=b.unit.length>240?b.unit.slice(0,240):b.unit;
+      repaired++;
+    }else{
+      obj.__dropQuote=true;
+    }
+  };
+  if(Array.isArray(a.facts)){
+    a.facts=a.facts.filter(f=>{if(!f||typeof f!=='object')return true;fix(f,'quote',false);return !f.__dropQuote;});
+  }
+  if(Array.isArray(a.blindspots)){
+    a.blindspots=a.blindspots.filter(b=>{if(!b||typeof b!=='object')return true;fix(b,'evidence',true);return !b.__dropQuote;});
+  }
+  return repaired;
+}
+
 function validateDirectAnalysis(a, payload) {
   sanitizePathQuestions(a);
   const errors=[];
@@ -5874,6 +5923,7 @@ async function analyzeStandalone(payload, signal, rearmTimeout) {
     if(rec&&Array.isArray(rec.switchConditions))
       rec.switchConditions=rec.switchConditions.map(c=>typeof c==='string'?{condition:c,options:{yes:'已出现',no:'没出现',unset:'不确定'}}:c);
   }
+  try{ repairDirectQuotes(analysis,payload); }catch(e){}
   validateDirectAnalysis(analysis,payload);
   const u=raw?.usage||{};
   return {source:'model',model:apiModel(),elapsedMs:Date.now()-start,analysis,droppedGaps,usage:{promptTokens:u.prompt_tokens??null,completionTokens:u.completion_tokens??null,totalTokens:u.total_tokens??null}};
