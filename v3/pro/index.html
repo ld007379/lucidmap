@@ -1908,6 +1908,13 @@ body{
 .model-chips button{border:1px solid #e2e8db;background:#fff;color:#5f7565;border-radius:8px;padding:4px 9px;font-size:11.5px;line-height:1.6;cursor:pointer;font-family:var(--mono)}
 .model-chips button:hover{border-color:#a9c494;color:#2f5b45}
 .model-chips button[aria-pressed="true"]{background:#e8f1e0;border-color:#92b47f;color:#2f5139}
+.model-auto-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 0;font-size:11.5px;color:#6d7d68}
+.model-auto-row label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.model-auto-row input{accent-color:#2f5b45}
+.model-auto-status{font-size:11px;line-height:1.7;color:#8a9a85}
+.model-auto-status.ok{color:#3f7a58}
+.model-auto-status.warn{color:#a5763f}
+.model-auto-status.bad{color:#a54f43}
 .model-note{margin:6px 0 0;font-size:11px;color:#9aa68d}
 </style>
 <style id="lm-mobile-pwa">
@@ -2844,6 +2851,7 @@ html{-webkit-tap-highlight-color:transparent}
       <input id="key-model" type="text" autocomplete="off" spellcheck="false" placeholder="例如 deepseek-flash">
       <div class="model-chips" id="model-chips" role="group" aria-label="常用模型"></div>
 <p class="model-note">模型名会随平台更新：点「刷新模型列表」拉当前可用模型，默认隐藏旧模型；需要旧模型可直接在输入框手打名字，再「测试连接」。</p>
+<div class="model-auto-row"><label><input id="auto-models" type="checkbox" checked> 自动更新模型列表（每天一次）</label><span id="model-auto-status" class="model-auto-status"></span></div>
       <label for="api-key-input" class="key-label">API Key</label>
       <input id="api-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="粘贴你自己的 API Key（DeepSeek / 通义 / Kimi / 硅基流动 / OpenRouter）" required>
       <label class="remember-key"><input id="remember-key" type="checkbox" checked>在此浏览器记住 Key（保存在本机浏览器存储中）</label>
@@ -3626,6 +3634,35 @@ function keyStorageName(pid){return 'lucidmap.api-key.'+(pid||providerId());}
 function modelStorageName(pid){return 'lucidmap.model.'+(pid||providerId());}
 function apiUrl(){return provider().url;}
 function modelsUrl(){return provider().modelsUrl||apiUrl().replace(/\/chat\/completions(?:\?.*)?$/,'/models');}
+const MODELS_CACHE_PREFIX='lucidmap.models.v1.';
+const AUTO_MODELS_KEY='lucidmap.models.auto.v1';
+const MODELS_TTL=24*60*60*1000;
+function autoModelsOn(){return lsGet(AUTO_MODELS_KEY)!=='0';}
+function readModelCache(pid){
+  try{const o=JSON.parse(localStorage.getItem(MODELS_CACHE_PREFIX+pid)||'null');return (o&&Array.isArray(o.ids)&&o.ids.length)?o:null;}catch{return null;}
+}
+function writeModelCache(pid,ids){
+  try{localStorage.setItem(MODELS_CACHE_PREFIX+pid,JSON.stringify({ids:ids.slice(0,40),at:Date.now()}));}catch{}
+}
+function loadModelCaches(){
+  Object.keys(PROVIDERS).forEach(pid=>{
+    const c=readModelCache(pid);
+    if(c&&c.ids.length)PROVIDERS[pid].models=c.ids.slice(0,40);
+  });
+}
+function setModelAutoStatus(text,kind){
+  const el=$('#model-auto-status');if(!el)return;
+  el.textContent=text||'';el.className='model-auto-status'+(kind?' '+kind:'');
+}
+function maybeAutoRefreshModels(){
+  if(!autoModelsOn())return;
+  const pid=providerId();
+  if(!getStandaloneKey(pid))return;
+  const c=readModelCache(pid);
+  if(c&&Date.now()-c.at<MODELS_TTL)return;
+  refreshModelList(true);
+}
+loadModelCaches();
 function migratedModel(pid, model){
   if(!model)return '';
   if(pid==='deepseek'&&(model==='deepseek-chat'||model==='deepseek-reasoner'))return 'deepseek-flash';
@@ -3691,6 +3728,8 @@ function providerRenderDialog(){
   paintModelChips();
   const keyInput=$('#api-key-input');
   if(keyInput){keyInput.value=getStandaloneKey();keyInput.placeholder='粘贴你自己的 '+p.name+' API Key';}
+  const autoBox=$('#auto-models');if(autoBox)autoBox.checked=autoModelsOn();
+  setTimeout(maybeAutoRefreshModels,300);
 }
 function setKeyTestStatus(text,kind){
   const el=$('#key-test-status');if(!el)return;
@@ -3722,21 +3761,32 @@ async function testKeyConnection(){
   }finally{ btn.disabled=false; }
 }
 
-async function refreshModelList(){
-  const btn=$('#refresh-models'), input=$('#api-key-input');
+async function refreshModelList(auto){
+  const pid=providerId(),p=PROVIDERS[pid];
+  const input=$('#api-key-input');
   const typed=(input&&input.value||'').trim();
-  const key=typed||getStandaloneKey();
-  if(!key){setKeyTestStatus('先粘贴 Key，再刷新模型列表','warn');input&&input.focus();return;}
-  const url=modelsUrl();
-  if(!url){setKeyTestStatus('这个服务商不支持自动列模型，请手动输入模型名','warn');return;}
+  const key=typed||getStandaloneKey(pid);
+  if(!key){
+    if(auto)setModelAutoStatus('自动更新需要先配置 Key','warn');
+    else{setKeyTestStatus('先粘贴 Key，再刷新模型列表','warn');input&&input.focus();}
+    return;
+  }
+  const url=p.modelsUrl||apiUrl().replace(/\/chat\/completions(?:\?.*)?$/,'/models');
+  if(!url){if(auto)setModelAutoStatus('该服务商不支持自动列模型','warn');else setKeyTestStatus('这个服务商不支持自动列模型，请手动输入模型名','warn');return;}
+  if(p._modelsFetching)return;
+  p._modelsFetching=true;
+  const btn=auto?null:$('#refresh-models');
   if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent='正在拉取…';}
-  setKeyTestStatus('正在从 '+provider().name+' 拉取模型列表…','wait');
+  if(auto)setModelAutoStatus('正在自动更新模型列表…','wait');
+  else setKeyTestStatus('正在从 '+p.name+' 拉取模型列表…','wait');
   try{
     const res=await fetch(url,{headers:{'Authorization':'Bearer '+key}});
-    if(res.status===401||res.status===403){setKeyTestStatus('Key 无效或没有权限，先检查 Key','bad');return;}
-    if(res.status===404||res.status===405){setKeyTestStatus('该服务商不支持自动列模型；请手动输入官方文档里的模型名','warn');return;}
-    if(res.status===429){setKeyTestStatus('被限流了，等一分钟再刷新','warn');return;}
-    if(!res.ok){setKeyTestStatus('接口返回 HTTP '+res.status+'，暂时读不到模型列表','warn');return;}
+    if(!res.ok){
+      const why=res.status===401||res.status===403?'Key 无效或没有权限':res.status===404||res.status===405?'该服务商不支持自动列模型':res.status===429?'被限流了':'接口返回 HTTP '+res.status;
+      if(auto)setModelAutoStatus('自动更新失败：'+why+'；先用本地列表','warn');
+      else setKeyTestStatus(why,'bad');
+      return;
+    }
     const data=await res.json();
     const raw=Array.isArray(data.data)?data.data:(Array.isArray(data.models)?data.models:[]);
     const meta=new Map();
@@ -3749,7 +3799,7 @@ async function refreshModelList(){
     const hidden=allIds.length-kept.length;
     if(!kept.length)kept=allIds;
     const cur=((($('#key-model')||{}).value)||'').trim()||apiModel();
-    const curated=provider().models.slice();
+    const curated=p.models.slice();
     kept.sort((a,b)=>{
       if(a===cur)return -1;if(b===cur)return 1;
       const ca=meta.get(a)||0,cb=meta.get(b)||0;
@@ -3759,13 +3809,19 @@ async function refreshModelList(){
       if(ia>=0)return -1;if(ib>=0)return 1;
       return a.localeCompare(b);
     });
-    if(!kept.length){setKeyTestStatus('服务商没有返回可用聊天模型；请手动输入模型名','warn');return;}
-    provider().models=kept.slice(0,40);
-    paintModelChips();
-    setKeyTestStatus('已获取 '+kept.length+' 个模型'+(hidden?'（已隐藏 '+hidden+' 个旧模型，可在输入框手打旧模型名）':'')+(kept.length>40?'（显示前 40 个）':'')+'；点一个再「测试连接」','ok');
+    if(!kept.length){if(auto)setModelAutoStatus('服务商没有返回可用聊天模型','warn');else setKeyTestStatus('服务商没有返回可用聊天模型；请手动输入模型名','warn');return;}
+    p.models=kept.slice(0,40);
+    writeModelCache(pid,p.models);
+    if(pid===providerId())paintModelChips();
+    const info=' · '+kept.length+' 个模型'+(hidden?'（隐藏 '+hidden+' 个旧模型）':'')+(kept.length>40?'（显示前 40 个）':'');
+    if(auto)setModelAutoStatus('已自动更新'+info+' · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}),'ok');
+    else{setKeyTestStatus('已获取 '+kept.length+' 个模型'+(hidden?'（已隐藏 '+hidden+' 个旧模型，可在输入框手打旧模型名）':'')+'；点一个再「测试连接」','ok');setModelAutoStatus('手动刷新'+info,'ok');}
+    if(cur&&!p.models.includes(cur))setModelAutoStatus('已更新，但当前模型不在最新列表：'+cur+'；建议换一个或手动确认','warn');
   }catch(e){
-    setKeyTestStatus('浏览器没能读取模型列表（可能是 CORS 或网络）；手动输入模型名，仍可用「测试连接」验证','warn');
+    if(auto)setModelAutoStatus('自动更新失败（可能是 CORS 或网络）；先用本地列表','warn');
+    else setKeyTestStatus('浏览器没能读取模型列表（可能是 CORS 或网络）；手动输入模型名，仍可用「测试连接」验证','warn');
   }finally{
+    p._modelsFetching=false;
     if(btn){btn.disabled=false;if(btn.dataset.label)btn.textContent=btn.dataset.label;}
   }
 }
@@ -5553,7 +5609,8 @@ const keyDialog=$('#key-dialog'),keyInput=$('#api-key-input'),keyRemember=$('#re
 $('#key-settings').addEventListener('click',()=>{providerRenderDialog();keyInput.value=getStandaloneKey();keyDialog.showModal();keyInput.focus();});
 $('#close-key').addEventListener('click',()=>keyDialog.close());
 $('#test-key')?.addEventListener('click',testKeyConnection);
-$('#refresh-models')?.addEventListener('click',refreshModelList);
+$('#refresh-models')?.addEventListener('click',()=>refreshModelList(false));
+$('#auto-models')?.addEventListener('change',e=>{lsSet(AUTO_MODELS_KEY,e.target.checked?'1':'0');if(e.target.checked){setModelAutoStatus('正在自动更新模型列表…','wait');refreshModelList(true);}else setModelAutoStatus('自动更新已关闭','');});
 $('#lu-config')?.addEventListener('click',()=>{providerRenderDialog();keyInput.value=getStandaloneKey();keyDialog.showModal();keyInput.focus();});
 $('#lu-dismiss')?.addEventListener('click',()=>{lsSet('lucidmap.upsell.dismissed.v1','1');$('#local-upsell').hidden=true;});
 $('#key-form').addEventListener('submit',event=>{
@@ -5565,9 +5622,11 @@ $('#key-form').addEventListener('submit',event=>{
   if(keyRemember.checked&&!stored){$('#key-error').hidden=false;text('#key-error','浏览器禁止在此文件页面保存本地存储。请取消勾选“记住 Key”后再保存；Key 仅在当前页面打开期间有效。');return;}
   $('#key-error').hidden=true;refreshKeyStatus();paintEngineUI();keyDialog.close();keyInput.value='';
   toast(keyRemember.checked?'Key 已保存在此浏览器。':'Key 仅在当前页面有效；此浏览器之前保存的 Key 已清除。');
+  setTimeout(()=>refreshModelList(true),300);
 });
 $('#forget-key').addEventListener('click',()=>{delete inMemoryKeys[providerId()];try{localStorage.removeItem(keyStorageName());}catch{}keyInput.value='';refreshKeyStatus();paintEngineUI();setKeyTestStatus('');$('#key-error').hidden=true;if(keyDialog.open)keyDialog.close();});
 refreshKeyStatus();
+setTimeout(maybeAutoRefreshModels,1200);
 
 </script>
 <script>
