@@ -3617,7 +3617,7 @@ const PROVIDERS = {
   qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', modelsUrl:'https://dashscope.aliyuncs.com/compatible-mode/v1/models', model:'qwen4-max', models:["qwen4-max","qwen3.8-flash","qwen3.8-max","qwen3.5-flash","qwen3.5-plus"], vision:["qwen4-max","qwen3.8-flash","qwen3.8-max","qwen3.5-flash","qwen3.5-plus"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
   moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', modelsUrl:'https://api.moonshot.cn/v1/models', model:'kimi-k3', models:["kimi-k3","kimi-k3.1-pro"], vision:["kimi-k3","kimi-k3.1-pro"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
   siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', modelsUrl:'https://api.siliconflow.cn/v1/models', model:'deepseek-ai/DeepSeek-V3.2', models:["deepseek-ai/DeepSeek-V3.2","Qwen/Qwen3-235B-A22B-Thinking-2507","Qwen/Qwen3-VL-235B-A22B-Instruct"], vision:["Qwen/Qwen3-VL-235B-A22B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
-  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', modelsUrl:'https://openrouter.ai/api/v1/models', model:'openai/gpt-5.6-luna', models:["openai/gpt-5.6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], vision:["openai/gpt-5.6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
+  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', modelsUrl:'https://openrouter.ai/api/v1/models', model:'openai/gpt-6.2-sol', models:["openai/gpt-6.2-astra","openai/gpt-6.2-sol","openai/gpt-6.1-terra","openai/gpt-6.1-sol","openai/gpt-6-astra","openai/gpt-6-sol","openai/gpt-6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], vision:["openai/gpt-6.2-astra","openai/gpt-6.2-sol","openai/gpt-6.1-terra","openai/gpt-6.1-sol","openai/gpt-6-astra","openai/gpt-6-sol","openai/gpt-6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
 };
 const PROVIDER_KEY='lucidmap.provider.v1';
 function providerId(){const p=lsGet(PROVIDER_KEY);return PROVIDERS[p]?p:'deepseek';}
@@ -3743,7 +3743,7 @@ async function refreshModelList(){
     raw.forEach(x=>{const id=String((x&&x.id)||(x&&x.name)||x||'');if(id)meta.set(id,Number((x&&(x.created||x.created_at))||0)||0);});
     let ids=Array.from(new Set(raw.map(x=>String((x&&x.id)||(x&&x.name)||x||'')).filter(Boolean)));
     ids=ids.filter(m=>!/embedding|embed-|whisper|tts|dall-e|moderation|rerank|bge-|stable-diffusion|text-to-speech|speech|audio|image-generation/i.test(m));
-    const legacy=/(qwen-(plus|max|turbo)|qwen2(\.|$)|deepseek-v3(\.1)?($|-)|gpt-4o|gpt-4(\.|$)|claude-3|gemini-1(\.|$)|moonshot-v1|kimi-latest|deepseek-chat|deepseek-reasoner|-terminus)/i;
+    const legacy=/(qwen-(plus|max|turbo)|qwen2(\.|$)|deepseek-v3(\.1)?($|-)|gpt-5(\.|$)|gpt-4o|gpt-4(\.|$)|claude-3|gemini-1(\.|$)|moonshot-v1|kimi-latest|deepseek-chat|deepseek-reasoner|-terminus)/i;
     const allIds=ids.slice();
     let kept=ids.filter(m=>!legacy.test(m));
     const hidden=allIds.length-kept.length;

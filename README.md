@@ -114,11 +114,13 @@
 | 通义千问 | `dashscope.aliyuncs.com`（兼容模式） |
 | Kimi / 月之暗面 | `api.moonshot.cn` |
 | 硅基流动 | `api.siliconflow.cn` |
-| OpenRouter | `openrouter.ai`（一把 Key 调 GPT / Claude / Gemini） |
+| OpenRouter | `openrouter.ai`（一把 Key 调 GPT-6.2 / Claude 5.5 / Gemini 3.8） |
 
 每家的 Key 和模型分开存，切换不会互相覆盖。为什么不直接接 OpenAI 官方：国内浏览器连 `api.openai.com` 经常超时，OpenRouter 是同一套协议、同一批模型且国内可达，所以用它代替。豆包、智谱的接口不允许浏览器直连（跨域被拦），要接得自己搭代理，暂时没做。
 
 > 通义默认已切到 **Qwen4-Max**（API 模型名 `qwen4-max`，2026-11 发布）；想控制成本可在模型 chip 里切回 `qwen3.8-flash`。中小尺寸 Qwen4 模型上线后，点「刷新模型列表」即可看到。
+>
+> OpenRouter 预置已更新到 **GPT-6.2 Astra / Sol**、GPT-6.1 Terra / Sol、GPT-6 系列，以及 Claude Sonnet 5.5、Gemini 3.8 Flash；旧 GPT-5 默认隐藏，需要可在输入框手打。
 
 ### 怎么确认 Key 和模型能用
 
