@@ -127,12 +127,8 @@
 | **v3 主站（推荐先看）** | https://ld007379.github.io/lucidmap/v3/ | 选择页：这工具是干什么的 + 一份示例报告，先选「专业版 / 人性版」再进去 |
 | v3 专业版 | https://ld007379.github.io/lucidmap/v3/pro/ | 介绍页 + 工作台，措辞克制、结构密 |
 | v3 人性版 | https://ld007379.github.io/lucidmap/v3/human/ | 介绍页 + 工作台，口语、直接 |
-| 旧选择页 | https://ld007379.github.io/lucidmap/ | v3 之前的入口页：v3 / 专业版 / 人性版三个入口都还在 |
-| 专业版（旧） | https://ld007379.github.io/lucidmap/pro/ | 措辞克制、术语多、结构密 |
-| 人性版（旧） | https://ld007379.github.io/lucidmap/human/ | 口语化、直接、给大众用户 |
-| 正式版 v2 | https://ld007379.github.io/lucidmap/v2/ | 内容同上，另带版权与许可声明，对外发布用这个 |
 
-v3 的专业版和人性版**能力完全相同**，区别只在「说话方式」；进去以后顶部可以随时换另一个版本，也能回主站重新选。所有旧版网址长期有效。
+v3 的专业版和人性版**能力完全相同**，区别只在「说话方式」；进去以后顶部可以随时换另一个版本，也能回主站重新选。旧版入口已下线，旧网址会自动跳转到 v3。
 
 ### 本地
 
@@ -140,7 +136,7 @@ v3 的专业版和人性版**能力完全相同**，区别只在「说话方式�
 git clone https://github.com/ld007379/lucidmap.git
 ```
 
-然后用浏览器打开对应的 `index.html` 即可。注意：**v3 的三个页面（`v3/index.html`、`v3/pro/index.html`、`v3/human/index.html`）都引用仓库里的 `assets/`**（og 封面和介绍页截图），要整仓克隆或整目录部署，只拷一个 HTML 会缺介绍页的图（工作台本身仍能用）；旧版 `pro/`、`human/` 是纯单文件，单独下载双击即可。
+然后用浏览器打开对应的 `index.html` 即可。注意：**v3 的三个页面（`v3/index.html`、`v3/pro/index.html`、`v3/human/index.html`）都引用仓库里的 `assets/`**（og 封面和介绍页截图），要整仓克隆或整目录部署，只拷一个 HTML 会缺介绍页的图（工作台本身仍能用）；旧版入口已改为跳转页，不再提供旧版工作台。
 
 - **单文件、零依赖**：应用本体（样式、脚本、Mermaid 渲染组件）全部内联，没有构建步骤，不用 `npm install`，断网可打开（AI 引擎除外）。
 - **数据在本地**：Key 和草稿存在浏览器 localStorage，换浏览器就是一套新的空白数据，换目录/换盘不影响。
@@ -176,7 +172,7 @@ git clone https://github.com/ld007379/lucidmap.git
 | 版本 | 时间 | 主要变化 |
 | --- | --- | --- |
 | 许可变更 | 2026-11 | 从 CC BY-NC-SA 4.0 换为 **Apache-2.0**：正式成为 OSI 认证的开源项目，开放商用；新增 `NOTICE` 与 `TRADEMARK.md`，把"必须署名"和"名字不能用"两条写成可执行的条款 |
-| **v3.0** | 2026-11 | v3 主站是选择页：先选「专业版 / 人性版」，再进各自的介绍页 + 工作台（`/v3/` → `/v3/pro/`、`/v3/human/`）；两版能力相同、随时切换；首屏可直接看一份完整示例报告；方法说明写进页面（依据、边界、什么情况下该改主意）；旧版入口全部保留 |
+| **v3.0** | 2026-11 | v3 主站是选择页：先选「专业版 / 人性版」，再进各自的介绍页 + 工作台（`/v3/` → `/v3/pro/`、`/v3/human/`）；两版能力相同、随时切换；首屏可直接看一份完整示例报告；方法说明写进页面（依据、边界、什么情况下该改主意）；旧版入口已下线，旧网址统一跳转 v3 |
 | v2.3.0 | 2026-11 | 专业版 / 人性版最新：多轮更新、导出分享图 PNG / Mermaid / Markdown、支持 OpenRouter；`/v2/` 为带版权水印的正式发布版 |
 | v2.x / v1.x | 2026-10 | 早期迭代，已归档，不再发布 |
 
@@ -184,18 +180,18 @@ git clone https://github.com/ld007379/lucidmap.git
 
 ```
 .
-├── index.html          # 旧入口页：v3 与旧版两套入口
+├── index.html          # 旧入口：自动跳转到 /v3/
 ├── v3/                 # v3 新版
 │   ├── index.html      # 主站选择页：先选专业版 / 人性版
 │   ├── pro/index.html  # 专业版：介绍页 + 工作台
 │   └── human/index.html# 人性版：介绍页 + 工作台
-├── pro/index.html      # 专业版（单文件）
-├── human/index.html    # 人性版（单文件）
-├── v2/                 # 正式版：内容同上，另加版权与许可声明
+├── pro/index.html      # 旧入口：自动跳转到 /v3/pro/
+├── human/index.html    # 旧入口：自动跳转到 /v3/human/
+├── v2/                 # 旧入口：自动跳转到 /v3/（不再提供旧版内容）
 │   ├── index.html
 │   ├── pro/index.html
-│   ├── human/index.html
-│   └── LICENSE
+│   └── human/index.html
+├── 404.html            # 未知路径：跳转到 /v3/
 ├── assets/             # README 用的截图、封面、演示动图
 ├── LICENSE             # Apache License 2.0 全文
 ├── NOTICE              # 版权归属 + 第三方组件声明（Mermaid / MIT）
