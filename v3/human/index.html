@@ -2750,7 +2750,7 @@ html{-webkit-tap-highlight-color:transparent}
       <div id="loading-panel" class="loading-panel" role="status" aria-live="polite" hidden><span class="spinner"></span><div><strong id="loading-title">正在帮你想清楚…</strong><p id="loading-note">模型在推每个人的算盘，稍等一下</p></div><span id="elapsed">0s</span><button id="cancel-button" class="button quiet" type="button">算了不等了</button></div>
       <section id="welcome" class="welcome"><div class="welcome-map" aria-hidden="true"><svg viewBox="0 0 360 260" width="100%" height="100%"><defs><linearGradient id="wmL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9fbd8f"/><stop offset="1" stop-color="#c9dabd"/></linearGradient></defs><path d="M96 130 H144" stroke="url(#wmL)" stroke-width="2" stroke-dasharray="5 5" fill="none"/><path d="M144 130 C176 130 168 40 210 40" stroke="#c3d6b5" stroke-width="2" fill="none"/><path d="M144 130 H210" stroke="#c3d6b5" stroke-width="2" fill="none"/><path d="M144 130 C176 130 168 220 210 220" stroke="#c3d6b5" stroke-width="2" fill="none"/><rect x="8" y="104" width="88" height="52" rx="14" fill="#ffffff" stroke="#cfe0bf" stroke-width="2"/><text x="52" y="128" text-anchor="middle" font-size="13" fill="#5f7a58" font-family="Microsoft YaHei,sans-serif">你的问题</text><text x="52" y="145" text-anchor="middle" font-size="11" fill="#9aab90" font-family="Microsoft YaHei,sans-serif">在纠结什么</text><rect x="210" y="16" width="140" height="48" rx="13" fill="#ffffff" stroke="#dbe6d0" stroke-width="2"/><text x="228" y="45" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">A</text><text x="248" y="45" font-size="13" fill="#6c8364" font-family="Microsoft YaHei,sans-serif">维持现状</text><rect x="210" y="106" width="140" height="48" rx="13" fill="#ffffff" stroke="#dbe6d0" stroke-width="2"/><text x="228" y="135" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">B</text><text x="248" y="135" font-size="13" fill="#6c8364" font-family="Microsoft YaHei,sans-serif">做出改变</text><rect x="210" y="196" width="140" height="48" rx="13" fill="#f2f8ea" stroke="#c3d8b0" stroke-width="2"/><text x="228" y="225" font-size="14" fill="#4d6a4a" font-family="Microsoft YaHei,sans-serif">C</text><text x="248" y="225" font-size="13" fill="#5f7a58" font-family="Microsoft YaHei,sans-serif">第三种做法</text></svg></div><span class="eyebrow">从一团乱麻，到看清全貌</span><h2>别急着做决定，<br>先看看地图。</h2><p>把你脑子里那些绕来绕去的想法写下来。我帮你把每个人嘴上说的和心里要的、你自己那点说不出口的怕、还有一条更省力的打法，全摊开。</p><button class="button demo-play" id="demo-play" type="button" aria-pressed="false">▶ 不想打字？看我演示一遍</button><button class="button" id="resume-draft" type="button" hidden>接着上次没想完的 ↗</button><button class="button" id="welcome-example" type="button">直接看个真实案例 ↗</button><div class="welcome-flow" aria-hidden="true"><span>你的纠结</span><i>↳</i><span>摊开来看</span><i>↳</i><span>知道下一步</span></div></section>
       <style>.cloud-fallback-note{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin:0 0 14px;padding:13px 16px;border:1px solid #eccdbf;border-radius:10px;background:#fbeee7;color:#8c5038}.cloud-fallback-note[hidden]{display:none}.cloud-fallback-note b{font-size:12px;font-weight:600;color:#84462f}.cloud-fallback-note p{margin:5px 0 0;font-size:11.5px;line-height:1.8;color:#9a6248;word-break:break-all}.cloud-fallback-note .cfn-hint{color:#a5765f}.cloud-fallback-note .cfn-actions{display:flex;gap:8px;flex-wrap:wrap}</style>
-        <div class="cloud-fallback-note" id="cloud-fallback-note" hidden><div class="cfn-body"><b id="cfn-title">云端这次没跑通，先用本地引擎给你出一版</b><p id="cfn-msg"></p><p class="cfn-hint" id="cfn-hint"></p></div><div class="cfn-actions"><button class="button quiet" id="cfn-retry" type="button">用云端重试</button><button class="button quiet" id="cfn-diag" type="button">复制诊断信息</button></div></div>
+        <div class="cloud-fallback-note" id="cloud-fallback-note" hidden><div class="cfn-body"><b id="cfn-title">云端这次没跑通，先用本地规则版给你出一版</b><p id="cfn-msg"></p><p class="cfn-hint" id="cfn-hint"></p></div><div class="cfn-actions"><button class="button quiet" id="cfn-retry" type="button">用云端重试</button><button class="button quiet" id="cfn-diag" type="button">复制诊断信息</button></div></div>
         <section id="report" aria-label="决策分析结果" hidden>
         <div id="safety-note" class="safety-note" role="alert" aria-live="assertive" hidden></div>
         <div class="quick-verdict" id="quick-verdict">
@@ -2789,7 +2789,7 @@ html{-webkit-tap-highlight-color:transparent}
           <div class="reading-foot"><span id="reading-check"></span><button type="button" class="reading-fix" id="reading-fix">全猜歪了？我来说 ↗</button><button type="button" class="reading-apply" id="reading-apply" hidden>就按我选的重新算 ↻</button></div>
         </section>
         <div class="local-upsell" id="local-upsell" hidden>
-          <div class="lu-body"><b>这是本地引擎按规则整理的结果</b><span>只做粗拆，读不出人心。配一个自己的 Key，才能看清各方真实动机、要付的代价和下一步。</span></div>
+          <div class="lu-body"><b>这是本地规则版按题型整理的结果</b><span>只做结构拆解，不理解开放问题；如果答非所问，配一个 Key 用云端更稳。</span></div>
           <div class="lu-actions"><button class="button" id="lu-config" type="button">去配置 Key</button><button class="button quiet" id="lu-dismiss" type="button">先这样</button></div>
         </div>
         <div class="report-toolbar">
@@ -2911,7 +2911,7 @@ html{-webkit-tap-highlight-color:transparent}
         <ul>
           <li>不问法律，不讲合规，也不劝你“放下”——这些都不在这一版的尺子里。</li>
           <li>想报复谁可以问：给你算代价，也给能真让对方付代价的路，但不写具体伤害手段——那会让你付的价比他高。</li><li>出现自伤、伤人、被虐待的即时危险时，自动切到安全模式，先保现实里的安全。</li>
-          <li>默认本地引擎不联网；配自己的云端 Key 后才实时分析，请求从浏览器直发你选的服务商。</li>
+          <li>默认本地规则版不联网；配自己的云端 Key 后才实时分析，请求从浏览器直发你选的服务商。</li>
         </ul>
       </section>
       <section class="wn-section">
@@ -3518,7 +3518,7 @@ const qvBtn=$('#qv-toggle');if(qvBtn){qvBtn.textContent='展开全部细节 ↓'
   const isModel=envelope.source==='model', isLocal=envelope.source==='local';
   text('#source-badge',isModel?'实时模型分析':isLocal?'本地分析 · 未调用模型':'示例地图 · 非实时分析');
   $('#source-badge').classList.toggle('live',isModel);
-  text('#report-time',isModel?`${state.model} · ${Math.round(envelope.elapsedMs/1000)} 秒 · 第 ${state.version} 版`:isLocal?`本地引擎 · ${envelope.elapsedMs<300?'即时':Math.round(envelope.elapsedMs)+' 毫秒'} · 第 ${state.version} 版`:'固定案例 · 未发送输入');
+  text('#report-time',isModel?`${state.model} · ${Math.round(envelope.elapsedMs/1000)} 秒 · 第 ${state.version} 版`:isLocal?`本地规则版 · ${envelope.elapsedMs<300?'即时':Math.round(envelope.elapsedMs)+' 毫秒'} · 第 ${state.version} 版`:'固定案例 · 未发送输入');
   state.tokenUsage=envelope.usage||null;
   const tuEl=$('#token-usage');
   if(tuEl){
@@ -4121,102 +4121,463 @@ function paintEngineUI(){
       ? ('切到云端 · 用 '+provider().name+' 分析 →')
       : '需要更细的证据和追问？配一个 Key 用云端 →';
   }
-  text('#engine-hint',e==='local'?(getStandaloneKey()?'离线可用 · 不发送内容':'免配置 · 本地规则引擎 · 30 秒出图'):(getStandaloneKey()?('已选 '+provider().name+' · 用自己的 Key'):('还没配 '+provider().name+' 的 Key · 点下面的服务商配置')));
+  text('#engine-hint',e==='local'?(getStandaloneKey()?'离线规则版 · 只做结构整理':'免配置 · 本地规则版 · 只做结构整理，复杂问题用云端'):(getStandaloneKey()?('已选 '+provider().name+' · 用自己的 Key'):('还没配 '+provider().name+' 的 Key · 点下面的服务商配置')));
   if(typeof renderAnswerPhotos==='function')renderAnswerPhotos();if(typeof renderComposerPhotos==='function')renderComposerPhotos();
   const pn=$('#privacy-note');
   if(pn)pn.textContent=e==='local'
-    ?'本地引擎模式：你写的东西只在浏览器里处理，不发给任何服务器。草稿和历史也只存本机，随时能删。'
+    ?'本地规则版模式：你写的东西只在浏览器里处理，不发给任何服务器。草稿和历史也只存本机，随时能删。'
     :'你写的内容会直接从浏览器发给 '+provider().name+'，不经过别的服务器。草稿和历史只存在本机浏览器里，不上传、不写进文件。';
 }
 /* —— 本地结构化引擎：不联网，只做拆解与追问，不编造事实 —— */
-function localYesNoAction(raw){
-  const t=String(raw||'').replace(/[？?]\s*$/,'').trim();
-  let m=t.match(/^(?:我)?(?:该不该|应不应该|是否应该|要不要|能不能|可不可以|是否)\s*(.+)$/);
-  if(m){const x=m[1].trim().replace(/^[，,、]\s*/,'');if(x)return x;}
-  m=t.match(/^(?:我)?(?:该|要|应该|应)?\s*(.+?)吗$/);
-  if(m&&m[1].trim())return m[1].trim();
+/* —— 本地规则引擎 v2：按题型拆，不硬编；规则版只做结构整理 —— */
+const LOCAL_TOPICS = {
+  relationship: {
+    label: '关系',
+    gaps: [
+      { question: '这段关系里，让你最难受的具体行为是什么？发生过几次？', why: '具体行为比“性格不合”更能判断是偶发还是模式。', priority: 'must' },
+      { question: '你跟他明确谈过这条底线吗？他当时的反应是什么？', why: '愿意具体改变，和只道歉、回避，是两种关系。', priority: 'must' },
+      { question: '如果三个月后还是现在这样，你能接受吗？', why: '用时间窗检验“再等等”是不是无限拖延。', priority: 'verify' }
+    ],
+    statusRole: 'stay',
+    changeRole: 'leave',
+    roles: {
+      stay: { gain: '保留熟悉感、共同回忆和已有的生活安排。', cost: '继续承受现在的消耗；如果对方不改变，时间成本会累积。', condition: '对方愿意具体改变，并且你能说出可观察的验证信号。' },
+      leave: { gain: '停止当前的消耗，把时间和选择权拿回来。', cost: '分离痛苦、住处、经济和社交圈的现实调整。', condition: '安全、住处和至少一个可求助的人有安排。' }
+    },
+    blindspot: { claim: '你可能把“舍不得过去”当成“这段关系还值得继续”。', test: '写下他最近一次让你难受的具体行为，以及他之后做了什么改变；如果只有道歉没有行动，别把道歉当改变。' },
+    hidden: { title: '先做一次边界沟通 + 两周观察', why: '用具体行为验证对方是否愿意改变，而不是继续猜。', experiment: '选一个具体行为（失联、贬低、冷暴力等），明确说“再发生我会怎么做”，观察两周。', signal: '对方能否说出具体改法并做到一次；如果继续回避或越界，就是答案。', stopRule: '两周内再出现同类行为，停止加码，优先保护自己。' },
+    rec: { direction: '先确认安全和底线，再做一次明确沟通；如果对方持续回避或越界，优先考虑离开。', basis: '关系问题最怕把“偶尔好转”当成“已经改变”；用具体行为和时间窗验证。', switchWhen: '如果对方愿意具体改变并持续做到，可以再给一个观察期；如果出现威胁、控制、暴力，直接进入安全计划。' },
+    next: { within: '未来 48 小时内', action: '写下一条不可接受的具体行为，并想好如果再发生你怎么做。', deliverable: '一句话底线 + 一个可执行的应对动作。' },
+    switches: [
+      { condition: '对方愿意具体改变，并做到一次', options: { yes: '愿意并做到', no: '只道歉没行动', unset: '还没谈过' } },
+      { condition: '出现过威胁、控制或暴力', options: { yes: '出现过', no: '没有', unset: '不确定' } }
+    ]
+  },
+  job: {
+    label: '工作',
+    gaps: [
+      { question: '你现在的现金能覆盖几个月不领工资？', why: '现金决定你能不能试错，不是勇气。', priority: 'must' },
+      { question: '你想离开的是工作内容、领导环境，还是整个行业？', why: '换公司能解决前两个，换行业才解决第三个。', priority: 'must' },
+      { question: '下家或副业有没有验证过的收入、明确 offer？', why: '“有希望”和“已经有人愿意付钱”是两回事。', priority: 'verify' }
+    ],
+    statusRole: 'stay',
+    changeRole: 'change',
+    roles: {
+      stay: { gain: '稳定收入、熟悉流程和现有资源。', cost: '继续消耗；如果问题在行业，换公司也可能重复。', condition: '问题能在现公司内部解决（转岗、换领导、调职责）。' },
+      change: { gain: '换掉不适合的环境，获得新的成长和收入可能。', cost: '收入空窗、试用期失败、重新积累。', condition: '6 到 12 个月现金，加上一个验证过的机会或技能。' }
+    },
+    blindspot: { claim: '你可能把“讨厌现在的工作”当成“知道下一步做什么”。', test: '写下下一份工作必须满足的三个条件；如果写不出，先补条件，不要用辞职逃避。' },
+    hidden: { title: '先内部转岗或接一个付费小单', why: '用最小成本验证新方向，不用先赌上全部收入。', experiment: '两周内：约一个目标岗位的人聊 30 分钟，或接一个可交付的小单、兼职。', signal: '有人愿意给你机会、付钱，或明确告诉你缺什么。', stopRule: '两周没有任何外部信号，先别裸辞。' },
+    rec: { direction: '先算现金和验证机会，再决定；不要裸辞。', basis: '工作问题最怕把“想走”当成“有地方去”；现金和外部机会是两个硬条件。', switchWhen: '如果现金少于 6 个月且没有验证机会，先留在现职补条件；如果 offer 或副业收入稳定，再走。' },
+    next: { within: '未来 48 小时内', action: '算出可支撑月数，列出下一份工作的三个必须条件，约一个内行聊。', deliverable: '一张现金月数表 + 三个必须条件。' },
+    switches: [
+      { condition: '现金能覆盖 6 个月以上', options: { yes: '能', no: '不能', unset: '还没算' } },
+      { condition: '有验证过的机会或收入', options: { yes: '有', no: '没有', unset: '还不确定' } }
+    ]
+  },
+  city: {
+    label: '城市',
+    gaps: [
+      { question: '回去或留下后的收入来源具体是什么？有 offer 或岗位吗？', why: '城市选择最后要落到工作和收入，不是只选生活方式。', priority: 'must' },
+      { question: '房租、房贷、通勤、父母照顾，哪一项是硬约束？', why: '硬约束决定你实际能选哪座城市。', priority: 'must' },
+      { question: '你更怕错过什么：机会、家人，还是某种生活方式？', why: '把“怕错过”写具体，才知道哪边代价更不能接受。', priority: 'verify' }
+    ],
+    statusRole: 'stay',
+    changeRole: 'move',
+    roles: {
+      stay: { gain: '现有工作、收入、社交圈和熟悉的生活节奏。', cost: '房租、距离、孤独或持续的压力。', condition: '工作能持续，且你能接受当前生活成本。' },
+      move: { gain: '离家近、生活成本低，或更强的支持系统。', cost: '收入、岗位机会和重新适应的成本。', condition: '有具体工作或收入来源，住处也能安排。' }
+    },
+    blindspot: { claim: '你可能把“逃离现在的压力”当成“回去就会更好”。', test: '写下回去后第一个月具体住哪、做什么工作、收入多少；写不出就是还没准备好。' },
+    hidden: { title: '先短住 7 到 30 天，或远程试住', why: '用真实生活成本验证想象，而不是只看节假日的感觉。', experiment: '请一周假或远程，按回去的节奏住 7 到 30 天，记通勤、开销和情绪。', signal: '你愿不愿意继续；有没有具体工作线索。', stopRule: '试住后更焦虑且没有工作线索，先别搬。' },
+    rec: { direction: '先确认工作和住处，再搬；不要只因为情绪做迁移。', basis: '城市问题最怕把“回家”当成“问题自动解决”；收入、住处、支持系统要分别确认。', switchWhen: '如果工作或收入来源确定、住处能安排，再考虑搬；如果只是累了想逃，先休假或短住。' },
+    next: { within: '未来 48 小时内', action: '写下回去第一个月住哪、做什么、收入多少，约一个当地朋友或前同事聊。', deliverable: '一页纸：住处、收入、支持系统。' },
+    switches: [
+      { condition: '有确定的工作或收入来源', options: { yes: '有', no: '没有', unset: '还在谈' } },
+      { condition: '住处能安排', options: { yes: '能', no: '不能', unset: '还没看' } }
+    ]
+  },
+  study: {
+    label: '学习',
+    gaps: [
+      { question: '目标岗位或考试，是否真的要求这个学历、证书？', why: '先确认投入能换到什么，而不是先投入再找理由。', priority: 'must' },
+      { question: '学费、脱产成本、时间，由谁承担？', why: '钱和时间决定你能不能撑到结果。', priority: 'must' },
+      { question: '如果考不上或读完没转成，Plan B 是什么？', why: '有退路才敢投入。', priority: 'verify' }
+    ],
+    statusRole: 'work',
+    changeRole: 'study',
+    roles: {
+      study: { gain: '学历、证书、转行门票，或一段系统学习的时间。', cost: '学费、机会成本、考试和毕业风险。', condition: '目标岗位明确要求，且资金和时间能覆盖。' },
+      work: { gain: '收入、经验和行业信息。', cost: '可能遇到学历天花板；边工作边考会更累。', condition: '当前岗位能积累目标能力，或你需要先赚钱。' }
+    },
+    blindspot: { claim: '你可能把“想读书”当成“需要这个学历”。', test: '找 3 个目标岗位的招聘要求，看学历是硬门槛还是加分项。' },
+    hidden: { title: '先读一门课、做一个小项目，或边工作边准备', why: '先用低成本验证自己是否真的适合，而不是直接脱产。', experiment: '选一门目标专业的公开课或一个小项目，两周内完成一次真实产出。', signal: '你能不能坚持、是否真的喜欢；目标岗位是否认这段经历。', stopRule: '两周都坚持不了，先别脱产。' },
+    rec: { direction: '先确认目标岗位是否真的卡学历，再决定是否脱产。', basis: '学习问题最怕把“提升自己”当成“逃避工作”；先确认回报和成本。', switchWhen: '如果目标岗位明确卡学历且资金够，可以考虑投入；如果只是焦虑，先边工作边学。' },
+    next: { within: '未来 48 小时内', action: '找 3 个目标岗位 JD，标出学历是硬门槛还是加分项。', deliverable: '3 条 JD 截图 + 一句结论。' },
+    switches: [
+      { condition: '目标岗位明确卡这个学历', options: { yes: '明确要求', no: '只是加分', unset: '还没查' } },
+      { condition: '资金和时间能覆盖', options: { yes: '能', no: '不能', unset: '还没算' } }
+    ]
+  },
+  money: {
+    label: '钱',
+    gaps: [
+      { question: '这笔钱占你可动用存款的多少？', why: '占比决定它是不是伤筋动骨。', priority: 'must' },
+      { question: '使用频率或回报周期是多少？', why: '高频使用和一次性想要，是两种决定。', priority: 'must' },
+      { question: '不买或不投的替代方案是什么？', why: '有替代方案，才不会被“现在不买就没了”推着走。', priority: 'verify' }
+    ],
+    statusRole: 'save',
+    changeRole: 'spend',
+    roles: {
+      spend: { gain: '解决当前的居住、使用或体验需求，减少等待和不确定性。', cost: '现金减少、月供或维护成本，以及机会成本。', condition: '不影响 3 到 6 个月生活费，且后续成本能承受。' },
+      save: { gain: '保留现金和选择权。', cost: '继续不方便，或错过当前机会。', condition: '有替代方案，而且不是无限期拖延。' }
+    },
+    blindspot: { claim: '你可能把“想要”当成“需要”。', test: '等 72 小时再决定；写下预计使用频率或回报，如果写不出具体数字，先别买。' },
+    hidden: { title: '先租、借、二手或小额试水', why: '用更低成本验证它是不是真的有用。', experiment: '先租或借两周，记录使用次数；或只投入计划金额的 10% 试水。', signal: '两周内使用次数是否达到你预期。', stopRule: '两周用不到三次，就不买。' },
+    rec: { direction: '先算占比和替代方案，再决定。', basis: '钱的问题最怕用“喜欢”跳过预算；占比和替代方案是两个硬指标。', switchWhen: '如果这笔钱不影响 3 到 6 个月生活费，且替代方案更差，再考虑；否则先等。' },
+    next: { within: '未来 48 小时内', action: '算这笔钱占可动用存款的比例，写下使用频率或回报。', deliverable: '一个比例 + 一个使用频率。' },
+    switches: [
+      { condition: '不影响 3 到 6 个月生活费', options: { yes: '不影响', no: '会影响', unset: '还没算' } },
+      { condition: '有更差的替代方案', options: { yes: '有', no: '没有', unset: '还不确定' } }
+    ]
+  },
+  health: {
+    label: '健康',
+    gaps: [
+      { question: '医生怎么说的？有没有明确诊断或治疗方案？', why: '健康问题要以专业诊断为准，不能靠猜。', priority: 'must' },
+      { question: '如果不处理，最坏会怎样？', why: '风险大小决定能不能观察等待。', priority: 'must' },
+      { question: '治疗费用、时间、谁照顾，能安排吗？', why: '现实资源决定治疗方案能不能落地。', priority: 'verify' }
+    ],
+    statusRole: 'wait',
+    changeRole: 'treat',
+    roles: {
+      treat: { gain: '控制病情、降低风险。', cost: '费用、时间、副作用。', condition: '专业医生评估后建议治疗。' },
+      wait: { gain: '避免过度治疗，保留时间和选择。', cost: '病情进展的风险。', condition: '医生认为可以观察，并且有明确复查计划。' }
+    },
+    blindspot: { claim: '你可能把“害怕”当成“不能治”，或把网上说的当成诊断。', test: '只信主治医生的明确诊断；把问题写成三个问句去问医生。' },
+    hidden: { title: '先做一次正规检查或第二意见', why: '用专业信息替代想象，再决定治疗方案。', experiment: '预约主治医生或第二意见，带上三个具体问题：诊断、风险、方案。', signal: '医生给出明确诊断、风险等级和可选方案。', stopRule: '不要用规则版替代医生建议；出现急症直接就医。' },
+    rec: { direction: '先看专业医生，别用规则版替代医疗建议。', basis: '健康问题不适合用规则模板做判断；诊断、风险和资源要由医生确认。', switchWhen: '医生明确建议治疗且资源能安排，就按医嘱；如果医生认为可观察，再制定复查计划。' },
+    next: { within: '未来 48 小时内', action: '把问题写成三个问句，预约主治医生或第二意见。', deliverable: '三个问题 + 一次预约。' },
+    switches: [
+      { condition: '医生明确建议治疗', options: { yes: '建议', no: '可观察', unset: '还没问' } },
+      { condition: '费用和时间能安排', options: { yes: '能', no: '不能', unset: '还没算' } }
+    ]
+  },
+  family: {
+    label: '家庭',
+    gaps: [
+      { question: '这件事会影响家里的谁？他们实际能提供什么、不能接受什么？', why: '家人的真实态度和资源，比“他们应该支持我”更重要。', priority: 'must' },
+      { question: '钱、时间、住处，哪一项需要家里配合？', why: '需要配合的那一项，往往决定方案能不能成。', priority: 'must' },
+      { question: '如果家里暂时不同意，你能独立推进到哪一步？', why: '先确认自己的独立空间，再谈说服。', priority: 'verify' }
+    ],
+    statusRole: 'wait',
+    changeRole: 'act',
+    roles: {
+      act: { gain: '回应家庭需要或期待，减少长期压力。', cost: '钱、时间、关系冲突。', condition: '关键家人达成一致，资源也能安排。' },
+      wait: { gain: '保留现在的节奏，避免仓促改变。', cost: '家庭压力继续，机会可能错过。', condition: '没有不可逆的损害，并且有明确的时间窗。' }
+    },
+    blindspot: { claim: '你可能把“家人的期待”当成“自己的决定”。', test: '分别问两个关键家人：他们能提供什么、不能接受什么；把他们的态度和你的选择分开写。' },
+    hidden: { title: '先开一次家庭会议，或试一个月', why: '把模糊的期待变成具体分工，再决定要不要改变。', experiment: '约一次 30 分钟家庭会议，只谈三件事：谁出钱、谁出力、谁承担后果。', signal: '能不能形成一条具体分工，而不是只表态。', stopRule: '如果只谈情绪、不谈分工，先别做不可逆决定。' },
+    rec: { direction: '先确认各方真实态度和资源，再决定。', basis: '家庭问题最怕把“为你好”当成“已经安排好”；分工和资源要写下来。', switchWhen: '如果关键家人能形成具体分工，再推进；如果只是口头支持，先按自己的资源做小规模尝试。' },
+    next: { within: '未来 48 小时内', action: '分别问两个关键家人：他们能提供什么、不能接受什么。', deliverable: '两条具体态度 + 一条分工。' },
+    switches: [
+      { condition: '关键家人能形成具体分工', options: { yes: '能', no: '不能', unset: '还没谈' } },
+      { condition: '你自己能独立推进一部分', options: { yes: '能', no: '不能', unset: '还不确定' } }
+    ]
+  },
+  other: {
+    label: '其他',
+    generic: true,
+    gaps: [
+      { question: '你实际在比较的两个选择，分别最坏会怎样？', why: '先把最坏结果写出来，比泛泛地焦虑更有用。', priority: 'must' },
+      { question: '如果三个月后什么都不变，你会更后悔哪一边？', why: '时间窗能帮你分辨“暂时难受”和“长期不能接受”。', priority: 'must' },
+      { question: '有哪个条件一确认，你就能做决定？', why: '找到那个关键条件，先补它。', priority: 'verify' }
+    ],
+    blindspot: { claim: '你可能把“想做”当成“必须现在决定”。', test: '写下两个选项各自的最坏结果；如果写不出，先补信息，不要用行动逃避思考。' },
+    hidden: { title: '先补一条你还没写出来的第三条路', why: '规则版不替你编；第三条路要来自你自己的现实。', experiment: '写下第三个选项：有没有一种做法能同时保留两边的一部分？', signal: '这个选项有没有具体的第一步。', stopRule: '如果只是“再等等”，就不算第三条路。' },
+    rec: { direction: '先补两边的代价和条件，再决定。', basis: '规则版没有理解你的具体处境；它只能提醒你补信息，不能替你判断。', switchWhen: '如果两边的最坏结果你都能接受，再选；如果有一边不能接受，先排除它。' },
+    next: { within: '未来 48 小时内', action: '用两句话写：A 的最坏结果，B 的最坏结果。', deliverable: '两句话，不要写形容词。' },
+    switches: [
+      { condition: 'A 的最坏结果你能接受', options: { yes: '能', no: '不能', unset: '还没写' } },
+      { condition: 'B 的最坏结果你能接受', options: { yes: '能', no: '不能', unset: '还没写' } }
+    ]
+  }
+};
+
+const LOCAL_OPEN_GAPS = [
+  { question: '你实际在比较的两个选择，分别是什么？', why: '没有两个具体选项，规则版没法比较收益和代价。', priority: 'must' },
+  { question: '哪个条件一确认，你就能做决定？', why: '先找那个最关键的条件，不要一次补完所有信息。', priority: 'must' },
+  { question: '如果现在不做决定，最坏会发生什么？', why: '确认“等”是不是也有代价。', priority: 'verify' }
+];
+
+function localYesNoAction(raw) {
+  const t = String(raw || '').replace(/[？?]\s*$/, '').trim();
+  let m = t.match(/(?:该不该|应不应该|是否应该|是不是该|是不是要|要不要|能不能|可不可以|是否)\s*([^，,。；！？?]+)/);
+  if (m) { const x = m[1].trim().replace(/^[，,、]\s*/, ''); if (x) return x; }
+  m = t.match(/^(?:我)?(?:该|要|应该|应)?\s*(.+?)吗$/);
+  if (m && m[1].trim()) return m[1].trim();
   return '';
 }
-function localAnalyze(payload){
-  const t0=Date.now();
-  const raw=String(payload.dilemma||'').trim();
-  const extra=[payload.context||''].concat((payload.answers||[]).map(a=>a.answer||''), (payload.ownConditions||[]).map(c=>c.text||'')).filter(Boolean).join('；');
-  const all=(raw+(extra?'；'+extra:'')).trim();
-  const crisis=/(自杀|自残|不想活|活不下去|伤害自己|结束生命)/.test(all);
-  const sensitive=/(离婚|手术|癌症|抑郁|官司|诉讼|借条|担保|遗产)/.test(all);
-  const flatAll=String(all).replace(/[\r\n]+/g,'。');
-  const sentencesAll=(flatAll.match(/[^。！？!?；;]+[。！？!?；;]?/g)||[]).map(x=>x.trim()).filter(x=>x.length>=6);
-  const declarative=sentencesAll.filter(x=>!/[？?]$/.test(x)&&!/^(我该|我要不要|该不该|是否)/.test(x));
-  const quotes=[];
-  for(const item of declarative){ if(quotes.length>=3)break; if(!quotes.includes(item))quotes.push(item); }
-  if(!quotes.length)quotes.push(raw.slice(0,Math.min(40,raw.length)));
-  const facts=quotes.map(q=>({quote:q,implication:(/[？?]\s*$/.test(q)||/^(我该|我应|我要不要|要不要|该不该|是否|能不能|可不可以)/.test(q))?'这是你的提问本身，不是已确认的事实；它只界定了要判断的问题。':(/\d/.test(q)?'这条里有具体数字，是可以拿来算可行性的依据。':/(父母|家里|家人|对象|老公|老婆|孩子)/.test(q)?'这条涉及家人或关系方的态度，会改变你能承受的代价。':'这是你已经给出的现实条件，会限制可选项。')}));
-  const ab=raw.match(/([^，,。；！？?]{2,14}?)(?:[，,]\s*还是|[，,]\s*或者|还是|或者)([^，,。；！？?]{2,14})[？?]?/);
-  const clean=s=>String(s||'').replace(/^(那我|我)(该|要|应该)?/,'').replace(/^(该|要|是)/,'').trim();
-  const yn=localYesNoAction(raw);
-  const left=clean(ab&&ab[1])||(yn?('暂不'+yn):'维持现在的状态');
-  const right=clean(ab&&ab[2])||(yn||'按你想做的改变');
-  const hasMoney=/(\d|[一二三四五六七八九十百千万两])\s*(万|千|百|元|块|k|K|w|W)/.test(all)||/(存款|积蓄|工资|月薪|收入|房贷|房租)/.test(all), hasDeadline=/(月底|年底|下周|期限|截止|之前)/.test(all), hasFamily=/(父母|家里|家人|对象|老公|老婆)/.test(all);
-  const gaps=[];
-  if(!hasMoney)gaps.push({question:'这件事具体需要多少钱，你能动用的是多少？',why:'若金额可承受，选项立刻变多；若超出，任何计划都要先缩规模。',priority:'must'});
-  else gaps.push({question:'这些数字里，真正可以动用、不会影响日常生活的是多少？',why:'能动用的钱决定你能撑多久，也决定试错空间。',priority:'must'});
-  if(!hasDeadline)gaps.push({question:'最晚什么时候必须给出答复？',why:'时间窗决定验证来不来得及；若只剩几天，只能做最小验证。',priority:'must'});
-  else gaps.push({question:'这个期限是硬性的，还是可以谈的？',why:'可谈的期限能换来一次小范围验证的机会。',priority:'verify'});
-  if(!hasFamily)gaps.push({question:'这件事会影响谁？他们的真实态度你确认过吗？',why:'关系成本如果被低估，回退时会更贵。',priority:'verify'});
-  else gaps.push({question:'家人的态度是"不支持"，还是"已经替你做了安排"？',why:'前者可以沟通，后者会直接改变可选项。',priority:'verify'});
-  const blindspots=[{claim:'你可能把"想做这件事"和"必须现在决定"绑在一起了。',evidence:quotes[0],test:'把决定拆成两步：先做一次两周的小验证，再决定要不要加大投入。',evidenceType:'statement'}];
-  const readingGuesses=[];
-  const hist=(payload&&Array.isArray(payload.history))?payload.history:[];
-  let histUsed=0;
-  if(hist.length){
-    const themes=[{label:'稳定还是改变',kw:['稳定','编制','考编','铁饭碗','体制']},{label:'家人',kw:['家里','父母','家人','老家','亲戚']},{label:'钱',kw:['存款','积蓄','钱','工资','收入','房贷','房租']},{label:'城市',kw:['城市','大城市','回老家','留在家']},{label:'要不要读书',kw:['考研','读书','上学','考证']}];
-    let hit=null;
-    for(const t of themes){
-      const inNow=t.kw.some(k=>raw.includes(k));
-      const inHist=hist.some(h=>{const ti=String(h&&h.title||'');return t.kw.some(k=>ti.includes(k));});
-      if(inNow&&inHist){hit=t.label;break;}
+
+function localTopicOf(text) {
+  const t = String(text || '');
+  if (/(分手|男朋友|女朋友|对象|老公|老婆|结婚|离婚|复婚|暧昧|相亲|感情|喜欢|不爱|出轨|冷暴力|家暴|打我|威胁|伴侣|恋人|回消息|关系)/.test(t)) return 'relationship';
+  if (/(考研|读研|留学|读书|上学|考公|考编|考证|读博|硕士|进修|学历)/.test(t)) return 'study';
+  if (/(回老家|大城市|北漂|沪漂|搬家|搬去|换城市|异地|留在.{0,6}(杭州|上海|北京|深圳|广州|成都|老家)|去.{0,6}(杭州|上海|北京|深圳|广州|成都|老家))/.test(t)) return 'city';
+  if (/(辞职|离职|跳槽|换工作|工作|公司|老板|领导|同事|offer|转行|创业|加班|薪资|工资|编制|体制|上班|职业|裸辞)/.test(t)) return 'job';
+  if (/(买房|买车|投资|理财|贷款|借钱|存款|积蓄|花钱|消费|预算|房租|房贷)/.test(t)) return 'money';
+  if (/(父母|家里|家人|孩子|二胎|养老|照顾|亲戚)/.test(t)) return 'family';
+  if (/(手术|癌症|抑郁|焦虑|生病|住院|吃药|治疗|医院|医生|身体|化疗|怀孕|流产|失眠)/.test(t)) return 'health';
+  return 'other';
+}
+
+function localRoleOf(text, topic) {
+  const t = String(text || '');
+  if (topic === 'relationship') {
+    if (/(不.{0,4}继续)/.test(t)) return 'leave';
+    if (/(不.{0,8}(分手|离开|离婚)|不要分手|不想分手|继续|留下|复合|再试|修复)/.test(t)) return 'stay';
+    if (/(分手|离开|离婚|分开|断联|搬走|结束)/.test(t)) return 'leave';
+    return '';
+  }
+  if (topic === 'job') {
+    if (/(不辞职|不离职|不换|留在|留|继续|现公司|原公司|保住)/.test(t)) return 'stay';
+    if (/(辞职|离职|跳槽|换工作|转行|创业|裸辞|离开|接受.{0,6}offer|去.{0,8}(公司|大厂))/.test(t)) return 'change';
+    return '';
+  }
+  if (topic === 'city') {
+    if (/(留在|留|不回|不搬|继续.{0,8}(杭州|上海|北京|深圳|广州|成都|老家))/.test(t)) return 'stay';
+    if (/(回老家|回.{0,6}(老家|南充|成都)|搬|离开|换城市|去.{0,6}(杭州|上海|北京|深圳|广州|成都))/.test(t)) return 'move';
+    return '';
+  }
+  if (topic === 'study') {
+    if (/(考研|读研|留学|读书|上学|考公|考编|考证|读博|硕士|进修)/.test(t)) return 'study';
+    if (/(工作|上班|就业|不考|先赚钱)/.test(t)) return 'work';
+    return '';
+  }
+  if (topic === 'money') {
+    if (/(不买|不花|存|省|租|观望|继续用|不投资)/.test(t)) return 'save';
+    if (/(买|花|投资|贷|借|消费|换新)/.test(t)) return 'spend';
+    return '';
+  }
+  if (topic === 'health') {
+    if (/(不手术|不治疗|观察|保守|再等|不做)/.test(t)) return 'wait';
+    if (/(手术|治疗|吃药|去医院|检查|化疗|住院|做)/.test(t)) return 'treat';
+    return '';
+  }
+  if (topic === 'family') {
+    if (/(不要|不生|暂不|拒绝|再等|不接)/.test(t)) return 'wait';
+    if (/(要孩子|生孩子|生二胎|接.{0,6}来|搬.{0,6}一起|答应)/.test(t)) return 'act';
+    return '';
+  }
+  return '';
+}
+
+function localOtherRole(data, role) {
+  const keys = Object.keys(data.roles || {});
+  if (keys.length !== 2) return '';
+  if (keys[0] === role) return keys[1];
+  if (keys[1] === role) return keys[0];
+  return '';
+}
+
+function localOption(data, role, title, id) {
+  const r = role && data.roles ? data.roles[role] : null;
+  if (!r) {
+    return { id: id, title: title, gain: '选「' + title + '」的收益，先由你补一条；规则版不替你编。', cost: '选「' + title + '」的代价，也请先补一条；不要用模板代替真实成本。', condition: '先补：什么条件下你才会选它？', reversible: id === 'A' };
+  }
+  return { id: id, title: title, gain: r.gain, cost: r.cost, condition: r.condition, reversible: id === 'A' };
+}
+
+function localSafety(all, topic) {
+  if (/(自杀|自残|不想活|活不下去|伤害自己|结束生命)/.test(all)) {
+    return { level: 'urgent', note: '你提到的情况可能涉及人身安全。请先联系身边可信任的人，或当地急救、心理援助渠道，把安全放在决定之前。' };
+  }
+  if (/(家暴|打我|动手|威胁|控制我|跟踪|暴力|人身安全)/.test(all)) {
+    return { level: 'urgent', note: '你提到暴力或威胁。请优先保护自己，联系可信任的人或当地援助渠道；不要独自面对，也不要在不安全时激化冲突。' };
+  }
+  if (topic === 'health' || /(离婚|手术|癌症|抑郁|官司|诉讼|借条|担保|遗产)/.test(all)) {
+    return { level: 'sensitive', note: '这件事涉及专业领域或重大关系，建议同时咨询对应专业人士；这里只帮你整理问题，不替代专业意见。' };
+  }
+  return { level: 'normal', note: '' };
+}
+
+function localAnalyze(payload) {
+  const t0 = Date.now();
+  const raw = String(payload.dilemma || '').trim();
+  const extra = [payload.context || ''].concat((payload.answers || []).map(a => a.answer || ''), (payload.ownConditions || []).map(c => c.text || '')).filter(Boolean).join('；');
+  const all = (raw + (extra ? '；' + extra : '')).trim();
+  const flatAll = String(all).replace(/[\r\n]+/g, '。');
+  const sentencesAll = (flatAll.match(/[^。！？!?；;]+[。！？!?；;]?/g) || []).map(x => x.trim()).filter(x => x.length >= 6);
+  const declarative = sentencesAll.filter(x => !/[？?]$/.test(x) && !/^(我该|我要不要|该不该|是否)/.test(x));
+  const quotes = [];
+  for (const item of declarative) { if (quotes.length >= 3) break; if (!quotes.includes(item)) quotes.push(item); }
+  if (!quotes.length) quotes.push(raw.slice(0, Math.min(40, raw.length)));
+
+  const topic = localTopicOf(all);
+  const data = LOCAL_TOPICS[topic] || LOCAL_TOPICS.other;
+  const hasMoney = /(\d|[一二三四五六七八九十百千万两])\s*(万|千|百|元|块|k|K|w|W)/.test(all) || /(存款|积蓄|工资|月薪|收入|房贷|房租)/.test(all);
+  const hasDeadline = /(月底|年底|下周|期限|截止|之前)/.test(all);
+  const hasFamily = /(父母|家里|家人|对象|老公|老婆)/.test(all);
+  const violence = /(家暴|打我|动手|威胁|控制我|跟踪|暴力|人身安全)/.test(all);
+  const crisis = /(自杀|自残|不想活|活不下去|伤害自己|结束生命)/.test(all);
+
+  const facts = quotes.map(q => {
+    let implication = '这是你已经给出的现实条件，会限制可选项。';
+    if (/[？?]\s*$/.test(q) || /^(我该|我应|我要不要|要不要|该不该|是否|能不能|可不可以)/.test(q)) implication = '这是你的提问本身，不是已确认的事实；它只界定了要判断的问题。';
+    else if (/\d/.test(q)) implication = '这条里有具体数字，是可以拿来算可行性的依据。';
+    else if (topic === 'relationship' && /(不回|冷暴力|难受|分手|吵)/.test(q)) implication = '这条是关系里的具体行为，比“性格不合”更能判断模式。';
+    else if (topic === 'job' && /(领导|老板|加班|PUA|内耗|同事)/.test(q)) implication = '这条指向工作环境，不一定是职业方向本身。';
+    return { quote: q, implication: implication };
+  });
+
+  const clean = s => String(s || '').replace(/^(那我|我|在|到底|究竟|应该|该|要|是|想|纠结)+/, '').replace(/^(该|要|是)/, '').trim();
+  const ab = raw.match(/([^，,。；！？?\n]{2,30}?)\s*(?:，|,)?\s*(?:还是|或者|or|VS|vs)\s*([^，,。；！？?\n]{2,30})[？?]?/);
+  const yn = localYesNoAction(raw);
+  let left = ab ? clean(ab[1]) : '';
+  let right = ab ? clean(ab[2]) : '';
+  if (yn) { right = clean(yn); left = '暂不' + right; }
+  const isAB = !!(!yn && ab && left && right && left !== right);
+  const isYN = !!yn;
+  const open = !isAB && !isYN;
+
+  const readingGuesses = [];
+  const hist = (payload && Array.isArray(payload.history)) ? payload.history : [];
+  let histUsed = 0;
+  if (hist.length) {
+    const themes = [{ label: '稳定还是改变', kw: ['稳定', '编制', '考编', '铁饭碗', '体制'] }, { label: '家人', kw: ['家里', '父母', '家人', '老家', '亲戚'] }, { label: '钱', kw: ['存款', '积蓄', '钱', '工资', '收入', '房贷', '房租'] }, { label: '城市', kw: ['城市', '大城市', '回老家', '留在家'] }, { label: '要不要读书', kw: ['考研', '读书', '上学', '考证'] }];
+    let hit = null;
+    for (const t of themes) {
+      const inNow = t.kw.some(k => raw.includes(k));
+      const inHist = hist.some(h => { const ti = String(h && h.title || ''); return t.kw.some(k => ti.includes(k)); });
+      if (inNow && inHist) { hit = t.label; break; }
     }
-    if(!hit&&hist.length>=2)hit='同一类处境';
-    if(hit){
-      readingGuesses.unshift({claim:'这已经是你第 '+(hist.length+1)+' 次围绕「'+hit+'」做决定了。',basis:'你过去 '+hist.length+' 次提问里出现过同一类纠结，这次可能还是同一个顾虑换了说法。'});
-      histUsed=hist.length;
+    if (!hit && hist.length >= 2) hit = '同一类处境';
+    if (hit) {
+      readingGuesses.unshift({ claim: '这已经是你第 ' + (hist.length + 1) + ' 次围绕「' + hit + '」做决定了。', basis: '你过去 ' + hist.length + ' 次提问里出现过同一类纠结，这次可能还是同一个顾虑换了说法。' });
+      histUsed = hist.length;
     }
   }
-  if(hasMoney)readingGuesses.push({claim:'你担心的其实是钱能撑多久，而不是选哪边。',basis:'你写到了金额，这通常是最硬的约束。'});
-  if(hasFamily)readingGuesses.push({claim:'家里人的态度，可能比你自己承认的更影响你。',basis:'你提到了家人，但没写他们具体怎么说。'});
-  const hasPersonalClue=hasMoney||hasFamily||hasDeadline||hist.length>0;
-  if(!readingGuesses.length)readingGuesses.push({claim:'这次输入里没有足够线索，我先不猜你的动机。',basis:'你只写了选择本身，没有金额、家人态度或期限等能指向动机的信息；补一句会更有针对性。'});
-  const noPersonal=!hasPersonalClue;
-  const a={
-    reading:{underneath:noPersonal?'这次先不猜你的动机：输入里还没有足够线索。':readingGuesses[0].claim,surface:'你写的是：'+raw.slice(0,60),guesses:readingGuesses,check:'如果这条不准，直接补一句真实顾虑即可。',histUsed:histUsed},
-    title:'先把「'+left+'」和「'+right+'」拆开看。',
-    summary:'这是本地引擎按规则整理的结构：只做拆解与追问，不替你判断真假。你写下的内容里有 '+facts.length+' 条可以逐字引用，另有 '+gaps.length+' 个关键条件还没确认。',
-    conflict:{left:left,right:right},
-    facts:facts,
-    unknowns:gaps,
-    options:[
-      {id:'A',title:left,gain:'保住你现在的确定性，不用马上承担改变的风险。',cost:'继续承受现在的处境；拖延本身也是一种成本。',condition:'如果现状不会变得更差，这个选项才成立。',reversible:true},
-      {id:'B',title:right,gain:'直接朝你想要的方向走，省掉中间的时间。',cost:'需要承担一次性的转换成本和失败风险。',condition:'先确认钱、时间、关系这三项里至少两项是清楚的。',reversible:false}
-    ],
-    blindspots:blindspots,
-    hiddenOption:{title:'先做一次两周的小验证',why:'用最小代价换真实信息，再决定要不要投入。',experiment:'两周内，用不超过每周几小时做一次小范围尝试，对象从你已经接触过的人里选。',signal:'至少一条真实反馈：愿意继续、愿意付费，或明确拒绝。',stopRule:'两周后如果没有新证据，先停下，不要加大投入。'},
-    recommendation:{direction:'先别做不可逆的决定，用两周做一次小验证。',basis:'你给出的条件里还有 '+gaps.length+' 项没确认；在没有这些信息前，任何大动作都是在赌。',switchWhen:'如果关键条件都确认了，再按 A / B 重新评估一次。',switchConditions:[
-      {condition:'这笔钱能覆盖你设定的时间窗',options:{yes:'能覆盖',no:'覆盖不了',unset:'还没算过'}},
-      {condition:'最晚答复期限在本月内',options:{yes:'就在本月',no:'还有时间',unset:'不清楚'}}
-    ]},
-    nextAction:{within:'未来 48 小时内',action:'把待确认的三件事写下来，先问最容易得到答案的那一件。',deliverable:'一页纸：三件事的当前答案，以及还缺什么。'},
-    safety:crisis?{level:'urgent',note:'你提到的情况可能涉及人身安全。请先联系身边可信任的人或当地急救、心理援助渠道，把安全放在决定之前。'}:sensitive?{level:'sensitive',note:'这件事涉及专业领域，建议同时咨询对应专业人士；这里只帮你整理问题。'}:{level:'normal',note:''}
+  if (topic === 'relationship' && /(不回消息|冷暴力|难受|忽视|敷衍|不在乎)/.test(all)) {
+    readingGuesses.push({ claim: '你可能更在意被认真对待，而不只是分不分手。', basis: '你写到了对方的具体行为；规则版只能把它当作线索，具体还要你确认。' });
+  } else if (topic === 'job' && /(领导|老板|加班|PUA|内耗|环境)/.test(all)) {
+    readingGuesses.push({ claim: '你想离开的可能是环境，不一定是这份职业。', basis: '你写到了领导或环境；换公司能不能解决，要看问题在环境还是在行业。' });
+  } else if (topic === 'city' && /(房租|父母|累|孤独|压力)/.test(all)) {
+    readingGuesses.push({ claim: '你真正权衡的可能是生活成本和支持系统。', basis: '你写到了房租、父母或压力；这些比“喜欢哪座城市”更硬。' });
+  } else if (topic === 'study' && /(学历|门槛|考不上|时间)/.test(all)) {
+    readingGuesses.push({ claim: '你担心的可能是投入之后没有回报。', basis: '你写到了学历或时间；先确认目标岗位是否真的卡这个门槛。' });
+  } else if (topic === 'money' && /(存款|房贷|房租|工资)/.test(all)) {
+    readingGuesses.push({ claim: '你担心的其实是这笔钱花出去之后还能不能撑住。', basis: '你写到了金额或固定支出；占比比总额更重要。' });
+  } else if (topic === 'health' && /(害怕|疼|严重|医生)/.test(all)) {
+    readingGuesses.push({ claim: '你可能在“害怕”和“不知道该信谁”之间打转。', basis: '健康问题要先回到专业诊断，规则版不替你判断。' });
+  } else if (topic === 'family' && /(父母|催|家里)/.test(all)) {
+    readingGuesses.push({ claim: '家里人的态度，可能比你自己承认的更影响你。', basis: '你提到了家人；但他们的真实态度和能提供的资源还需要确认。' });
+  }
+  if (!readingGuesses.length && topic !== 'other') {
+    readingGuesses.push({ claim: '你已经在用「' + data.label + '」的框架看这件事，但真实顾虑还需要你补一句。', basis: '规则版只能按题型归类，不能替你读出真实动机。' });
+  }
+  const hasPersonalClue = hasMoney || hasFamily || hasDeadline || hist.length > 0 || topic !== 'other';
+  const noPersonal = !hasPersonalClue;
+
+  let title, summary, conflict, options, blindspots, hiddenOption, recommendation, nextAction;
+  if (open) {
+    title = '先补一个能比较的选择，再谈怎么选。';
+    summary = '【本地规则版】只做结构整理，不理解你的具体处境。你写的是开放式问题，硬编 A/B 会答非所问；先补下面 3 件事，或配 Key 用云端。';
+    conflict = { left: '先补一个具体选择', right: '用云端模型读完整原话' };
+    options = [
+      { id: 'A', title: '先补一个具体选择', gain: '补完后才能比较两边的收益和代价。', cost: '多花几分钟把问题写具体。', condition: '你能写出两个具体选项，或写成“要不要 X”。', reversible: true },
+      { id: 'B', title: '用云端模型读完整原话', gain: '模型能理解开放问题，给出更贴题的拆解。', cost: '需要自己的 API Key，按服务商计费。', condition: '你有可用的 Key。', reversible: true }
+    ];
+    blindspots = [{ claim: '你现在缺的不是分析，而是一个能比较的选择。', evidence: quotes[0], test: '用一句话写出 A/B，或写成“要不要 X”；写不出时，先别做重大决定。', evidenceType: 'statement' }];
+    hiddenOption = { title: '先不动，继续观察', why: '信息不足时，不动也是一种选择，但要有观察期限。', experiment: '给自己 7 天，写下每天出现的新信息；7 天后回头看看有没有变化。', signal: '出现一个能改变判断的新事实，而不是情绪反复。', stopRule: '7 天后仍然没有新信息，就不要用“再等等”继续拖。' };
+    recommendation = { direction: '先补一个具体选择，再分析；不要在没有比较对象时硬做决定。', basis: '规则版没有理解开放问题的能力；它不会替你编 A/B。', switchWhen: '补出 A/B 或“要不要 X”后，本地规则版可以按题型拆；有 Key 可直接用云端。', switchConditions: [{ condition: '你能写出两个具体选项', options: { yes: '能', no: '不能', unset: '还没写' } }, { condition: '你有可用的云端 Key', options: { yes: '有', no: '没有', unset: '不确定' } }] };
+    nextAction = { within: '未来 48 小时内', action: '用一句话写出你在比较的两个选择，或写成“要不要 X”。', deliverable: '一句可分析的问题。' };
+  } else {
+    let aRole = '', bRole = '';
+    if (isAB) {
+      aRole = localRoleOf(left, topic);
+      bRole = localRoleOf(right, topic);
+      if (aRole && !bRole) bRole = localOtherRole(data, aRole);
+      if (bRole && !aRole) aRole = localOtherRole(data, bRole);
+      if (aRole === bRole) { aRole = ''; bRole = ''; }
+    } else {
+      bRole = localRoleOf(right, topic) || data.changeRole;
+      aRole = localRoleOf(left, topic) || localOtherRole(data, bRole) || data.statusRole;
+    }
+    const gaps = (data.generic ? LOCAL_OPEN_GAPS : data.gaps).map(g => ({ question: g.question, why: g.why, priority: g.priority || 'must' }));
+    let optA = localOption(data, aRole, left, 'A');
+    let optB = localOption(data, bRole, right, 'B');
+    let localHidden = data.hidden;
+    let localRec = { direction: data.rec.direction, basis: data.rec.basis + ' 规则版只做结构整理，下面 ' + gaps.length + ' 个条件没确认前，别把它当结论。', switchWhen: data.rec.switchWhen, switchConditions: data.switches || [] };
+    let localNext = data.next;
+    let localBlind = [{ claim: data.blindspot.claim, evidence: quotes[0], test: data.blindspot.test, evidenceType: 'statement' }];
+    const safety = localSafety(all, topic);
+    if (violence) {
+      const stayHard = { gain: '暂时维持现状，争取时间联系可信任的人或当地援助。', cost: '继续暴露在暴力或威胁中；这不是安全方案。', condition: '只有在你能确保安全、并有外部支持时才考虑；否则优先离开或求助。' };
+      if (aRole === 'stay') optA = Object.assign({}, optA, stayHard);
+      if (bRole === 'stay') optB = Object.assign({}, optB, stayHard);
+      localHidden = { title: '先做安全计划，而不是沟通实验', why: '暴力或威胁下，单独沟通可能升级风险；先确保安全。', experiment: '联系一个可信任的人，准备住处、证件、钱和紧急联系人；必要时联系当地援助。', signal: '你能安全离开，或获得一个可靠的落脚点和支持。', stopRule: '不要在没有安全计划时单独对峙。' };
+      localRec = { direction: '先确保安全，联系可信任的人或当地援助；不要在暴力或威胁下继续单独沟通。', basis: '暴力或威胁不是普通的沟通问题；安全优先于“选哪边”。', switchWhen: '如果你能安全离开或获得支持，再考虑后续决定；不要在没有安全计划时单独对峙。', switchConditions: [{ condition: '你有可立刻联系的人', options: { yes: '有', no: '没有', unset: '不确定' } }, { condition: '你有安全的去处', options: { yes: '有', no: '没有', unset: '还没准备' } }] };
+      localNext = { within: '未来 24 小时内', action: '联系一个可信任的人，准备安全计划：住处、证件、钱、紧急联系人。', deliverable: '一个能立刻联系的人 + 一个安全去处。' };
+      localBlind = [{ claim: '现在不是“选不选分手”，而是“怎样先安全”。', evidence: quotes[0], test: '把证件、钱、去处和一个可信任的人列出来；不要在没有安全计划时单独对峙。', evidenceType: 'statement' }];
+    }
+    if (crisis) {
+      localHidden = { title: '先联系可信任的人或急救、心理援助', why: '现在最重要的是人身安全，不是把决定想清楚。', experiment: '联系一个可信任的人，直接说你现在不太好；如果可能有立即危险，拨打当地急救电话。', signal: '有人知道你的状态，并陪着你。', stopRule: '不要独自待着，也不要用规则版替代紧急求助。' };
+      localRec = { direction: '先把安全放在决定之前，联系身边可信任的人或当地急救、心理援助渠道。', basis: '你提到的情况可能涉及人身安全；这份规则版报告不适用于危机状态。', switchWhen: '等你安全、有人陪着之后，再决定要不要继续分析这件事。', switchConditions: [] };
+      localNext = { within: '现在就做', action: '联系一个可信任的人，告诉对方你现在的状态；如果可能有立即危险，拨打当地急救电话。', deliverable: '一个正在陪你的人，或一次已拨出的求助。' };
+      localBlind = [{ claim: '现在不需要一张决策图，需要先让自己安全。', evidence: quotes[0], test: '把“联系谁、去哪里、怎么去”写成三步，现在就做第一步。', evidenceType: 'statement' }];
+    }
+    const a = {
+      localKind: 'analysis',
+      localTopic: topic,
+      localLabel: data.label,
+      reading: { underneath: noPersonal ? '这次先不猜你的动机：输入里还没有足够线索。' : readingGuesses[0].claim, surface: '你写的是：' + raw.slice(0, 60), guesses: readingGuesses, check: '如果这条不准，直接补一句真实顾虑即可。', histUsed: histUsed },
+      title: '先把「' + left + '」和「' + right + '」拆开看。',
+      summary: '【本地规则版】按「' + data.label + '」整理：只做结构拆解，不理解你的具体处境；下面的收益和代价是待你核对的模板，不是事实。你写下的内容里有 ' + facts.length + ' 条可引用，另有 ' + gaps.length + ' 个关键条件没确认。',
+      conflict: { left: left, right: right },
+      facts: facts,
+      unknowns: gaps,
+      options: [optA, optB],
+      blindspots: localBlind,
+      hiddenOption: localHidden,
+      recommendation: localRec,
+      nextAction: localNext,
+      safety: safety
+    };
+    return finishLocal(a, t0);
+  }
+
+  const gaps = (data.generic ? LOCAL_OPEN_GAPS : data.gaps).map(g => ({ question: g.question, why: g.why, priority: g.priority || 'must' }));
+  const a = {
+    localKind: 'clarify',
+    localTopic: topic,
+    localLabel: data.label,
+    reading: { underneath: noPersonal ? '这次先不猜你的动机：输入里还没有足够线索。' : readingGuesses[0].claim, surface: '你写的是：' + raw.slice(0, 60), guesses: readingGuesses, check: '如果这条不准，直接补一句真实顾虑即可。', histUsed: histUsed },
+    title: title,
+    summary: summary,
+    conflict: conflict,
+    facts: facts,
+    unknowns: gaps,
+    options: options,
+    blindspots: blindspots,
+    hiddenOption: hiddenOption,
+    recommendation: recommendation,
+    nextAction: nextAction,
+    safety: localSafety(all, topic)
   };
-  try{
-    const map=assignPathGaps(a);
-    a.pathQuestions={};
-    ['A','B','C'].forEach(k=>{
-      const list=(map[k]||[]).map(x=>((x&&x.g)||x)).map(g=>String((g&&g.question)||'').trim()).filter(Boolean).slice(0,2);
-      if(list.length)a.pathQuestions[k]=list;
-      a.pathQuestionsSource='match';
+  return finishLocal(a, t0);
+}
+
+function finishLocal(a, t0) {
+  try {
+    const map = assignPathGaps(a);
+    a.pathQuestions = {};
+    ['A', 'B', 'C'].forEach(k => {
+      const list = (map[k] || []).map(x => ((x && x.g) || x)).map(g => String((g && g.question) || '').trim()).filter(Boolean).slice(0, 2);
+      if (list.length) a.pathQuestions[k] = list;
+      a.pathQuestionsSource = 'match';
     });
-  }catch(e){}
-  return {source:'local',model:'本地引擎',elapsedMs:Date.now()-t0,analysis:a};
+  } catch (e) {}
+  return { source: 'local', model: '本地规则', elapsedMs: Date.now() - t0, analysis: a };
 }
 
 let demoToken=0;
@@ -4284,7 +4645,7 @@ function showCloudFallback(reason){
   const box=$('#cloud-fallback-note');if(!box)return;
   const msg=String(reason||'').trim()||'没有拿到具体原因';
   state.lastCloudError=msg;
-  const title=$('#cfn-title');if(title)title.textContent='云端这次没跑通，先用本地引擎给你出一版（当前：'+provider().name+' · '+apiModel()+'）';
+  const title=$('#cfn-title');if(title)title.textContent='云端这次没跑通，先用本地规则版给你出一版（当前：'+provider().name+' · '+apiModel()+'）';
   const msgEl=$('#cfn-msg');if(msgEl)msgEl.textContent='原因：'+msg;
   const hint=$('#cfn-hint');if(hint)hint.textContent=cloudErrorHint(msg);
   box.hidden=false;
@@ -4312,7 +4673,7 @@ async function analyze(payload) {
   state.lastRawResponse=null;state.lastValidationErrors=null;
   const requestSeq=(state.requestSeq=(state.requestSeq||0)+1);
   state.lastRequest=cloneValue(payload);
-  if(Array.isArray(payload.images)&&payload.images.length&&currentEngine()==='local'){toast('本地引擎看不了图：这次图片不会被使用，切到云端并选支持看图的模型再分析。');}
+  if(Array.isArray(payload.images)&&payload.images.length&&currentEngine()==='local'){toast('本地规则版看不了图：这次图片不会被使用，切到云端并选支持看图的模型再分析。');}
   $('#error-banner').hidden=true;setBusy(true);
   const controller=new AbortController();state.controller=controller;
   let timedOut=false;
@@ -4331,7 +4692,7 @@ async function analyze(payload) {
     let envelope;
     const engineNow=currentEngine();
     if(engineNow==='local'){
-      text('#loading-title','本地引擎正在整理');text('#loading-note','不调用模型，也不会发送你的内容…');
+      text('#loading-title','本地规则版正在整理');text('#loading-note','不调用模型，也不会发送你的内容…');
       await new Promise(res=>setTimeout(res,320));
       envelope=localAnalyze(payload);
     }
@@ -4365,16 +4726,16 @@ async function analyze(payload) {
     try{if(state.payload&&Array.isArray(state.payload.images)){delete state.payload.images;}if(state.lastRequest&&Array.isArray(state.lastRequest.images)){delete state.lastRequest.images;}}catch(e){}
     if(envelope.source==='model'&&(state.composerImages||[]).length){state.composerImages=[];try{sessionStorage.removeItem(COMPOSER_IMG_KEY);}catch(e){};if(typeof renderComposerPhotos==='function')renderComposerPhotos();}
     try{hideCloudFallback();}catch(e){}
-    text('#model-status',envelope.source==='local'?'本地引擎 · 未联网':`${envelope.model} · 已连接`);
+    text('#model-status',envelope.source==='local'?'本地规则版 · 未联网':`${envelope.model} · 已连接`);
     $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.toggle('offline',envelope.source==='local');
     if(innerWidth<850)scrollToReport();
     return true;
   } catch(error) {
     if(error.name==='AbortError'){reportError(timedOut?'模型未在 120 秒内完成。当前地图没有更新，可以稍后重试。':'已取消等待。当前地图没有更新；模型端已开始的请求可能仍会完成。',timedOut?'等待超时':'已取消本次等待');return false;}
-    // 模型失败（没网 / Key 失效 / 额度用完 / 校验没过）：自动用本地引擎兜底，不让用户空手而归
+    // 模型失败（没网 / Key 失效 / 额度用完 / 校验没过）：自动用本地规则版兜底，不让用户空手而归
     if(currentEngine()==='model'){
       try{
-        text('#loading-title','模型没连上，先用本地引擎');
+        text('#loading-title','模型没连上，先用本地规则版');
         text('#loading-note','这一步不联网、不发送内容，先给你一张可讨论的地图。');
         await new Promise(res=>setTimeout(res,240));
         const env=localAnalyze(payload);
@@ -4383,7 +4744,7 @@ async function analyze(payload) {
         if(requestSeq!==state.requestSeq)return false;
         try{if(payload&&Array.isArray(payload.images)){delete payload.images;}}catch(e){}
         renderReport(env,payload);
-        text('#model-status','本地引擎 · 已兜底');
+        text('#model-status','本地规则版 · 已兜底');
         $('#model-status').querySelector('i')?.remove();$('#model-status').prepend(document.createElement('i'));$('#model-status').classList.add('offline');
         const note=$('#source-badge');
         if(note){note.classList.remove('live');}
@@ -4577,7 +4938,7 @@ async function refine(event) {
   const answers=mergeAnswers(prev.answers,fresh);
   const baseContext=$('#context').value.trim();
   const switchContext=Object.entries(state.switchChecks||{}).filter(([,v])=>v&&v!=='unset').map(([k,v])=>`反转条件 ${k} 的状态：${v}`).join('\n');
-   const engineNow=currentEngine();const usedImages=(engineNow!=='local')&&!!currentVisionModel()&&state.followupImages.length>0;if(state.followupImages.length&&!usedImages){toast(engineNow==='local'?'本地引擎看不了图：图片这次用不上，切到云端并选支持看图的模型再更新。':'当前模型看不了图：图片这次不会发送，换支持看图的模型再更新。');}const request={dilemma:prev.dilemma,context:[baseContext,switchContext].filter(Boolean).join('\n'),answers,ownConditions,actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result},images:state.followupImages.slice()};
+   const engineNow=currentEngine();const usedImages=(engineNow!=='local')&&!!currentVisionModel()&&state.followupImages.length>0;if(state.followupImages.length&&!usedImages){toast(engineNow==='local'?'本地规则版看不了图：图片这次用不上，切到云端并选支持看图的模型再更新。':'当前模型看不了图：图片这次不会发送，换支持看图的模型再更新。');}const request={dilemma:prev.dilemma,context:[baseContext,switchContext].filter(Boolean).join('\n'),answers,ownConditions,actionResult:{status:state.actionFeedback.status,result:state.actionFeedback.result},images:state.followupImages.slice()};
   if(composeContext(request).length>12000){toast('补充的信息太长了，去左边精简一下关键条件再重新跑。');return;}
   const done=await analyze(request);
   if(done){
@@ -4699,7 +5060,7 @@ function reportMarkdown() {
   const p=state.payload||{};
   const rec=a.recommendation||{},na=a.nextAction||{},ho=a.hiddenOption||{},sf=a.safety||{};
   const stLabel=s=>s==='done'?'已完成':s==='tried'?'已尝试':'未开始';
-  const lines=[`# LucidMap · ${md(a.title||'')}`,'',`来源：${state.source==='model'?`实时模型分析（${md(state.model)}）`:state.source==='local'?'本地引擎 · 未联网':'固定示例 · 非实时分析'}`,`生成时间：${state.createdAt}`];
+  const lines=[`# LucidMap · ${md(a.title||'')}`,'',`来源：${state.source==='model'?`实时模型分析（${md(state.model)}）`:state.source==='local'?'本地规则版 · 未联网':'固定示例 · 非实时分析'}`,`生成时间：${state.createdAt}`];
   if(state.tokenUsage&&state.source==='model')lines.push(`token 用量：输入 ${state.tokenUsage.promptTokens??'—'} · 输出 ${state.tokenUsage.completionTokens??'—'} · 合计 ${state.tokenUsage.totalTokens??'—'}`);
   lines.push('','## 原问题',md(p.dilemma||''),'');
   if(p.context)lines.push('补充条件：',md(p.context),'');
@@ -4774,7 +5135,7 @@ function shareCardCanvas(){
   x.fillStyle='rgba(255,255,255,.12)';x.fillRect(0,150,W,4);
   x.fillStyle='#ffffff';x.font='700 34px '+FONT;x.fillText('LucidMap · 清醒地图',72,72);
   x.fillStyle='rgba(255,255,255,.78)';x.font='400 18px '+FONT;x.fillText('不替你决定，只帮你看清',72,108);
-  const meta=(state.source==='model'?'模型分析':state.source==='local'?'本地引擎':'固定示例')+' · '+(state.createdAt||'');
+  const meta=(state.source==='model'?'模型分析':state.source==='local'?'本地规则版':'固定示例')+' · '+(state.createdAt||'');
   x.fillStyle='rgba(255,255,255,.64)';x.font='400 16px '+FONT;
   x.fillText(meta,W-72-x.measureText(meta).width,74);
 
