@@ -1,0 +1,48 @@
+{
+  "name": "清醒地图 LucidMap",
+  "short_name": "清醒地图",
+  "description": "把纠结摊开成一张能检查的图：已知事实、待确认缺口、三条路和下一步。纯前端，不用注册。",
+  "lang": "zh-CN",
+  "start_url": "v3/m/",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#f7f8f5",
+  "theme_color": "#f7f8f5",
+  "categories": ["productivity", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "专业版",
+      "short_name": "专业版",
+      "url": "v3/pro/#app",
+      "icons": [{"src": "assets/icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "人性版",
+      "short_name": "人性版",
+      "url": "v3/human/#app",
+      "icons": [{"src": "assets/icon-192.png", "sizes": "192x192"}]
+    }
+  ]
+}

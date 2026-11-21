@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f6f7f3">
 <title>清醒地图 LucidMap · 选一个说话方式，把纠结摊开成图</title>
 <meta name="description" content="清醒地图 v3 主站：同一个分析引擎，两种说话方式。专业版克制、结构密，适合讨论与交付；人性版口语、直接，适合第一次用。选一个，30 秒拿到一张能检查的决策图。">
@@ -452,6 +452,12 @@
   }
 </style>
 <!--LUCIDMAP-CHOICE-STYLE-END-->
+<link rel="manifest" href="../manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="清醒地图">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="../assets/icon-180.png">
 </head>
 <body>
 <div id="top"></div>
@@ -704,6 +710,7 @@
         <span>清醒地图 · LucidMap　© 2026 ld007379</span>
       </div>
       <div class="lm-foot-links">
+        <a href="m/">手机版</a>
         <a href="https://github.com/ld007379/lucidmap" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">许可 Apache-2.0</a>
         <a href="#top">回到顶部 ↑</a>
@@ -729,5 +736,11 @@
 })();
 </script>
 <!--LUCIDMAP-CHOICE-BODY-END-->
+
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='127.0.0.1'||location.hostname==='localhost')){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){});});
+}
+</script>
 </body>
 </html>

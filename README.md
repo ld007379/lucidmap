@@ -125,10 +125,20 @@
 | 版本 | 地址 | 说明 |
 | --- | --- | --- |
 | **v3 主站（推荐先看）** | https://ld007379.github.io/lucidmap/v3/ | 选择页：这工具是干什么的 + 一份示例报告，先选「专业版 / 人性版」再进去 |
+| v3 手机版 / PWA | https://ld007379.github.io/lucidmap/v3/m/ | 手机入口：直接进工作台，可安装到桌面、支持离线 |
 | v3 专业版 | https://ld007379.github.io/lucidmap/v3/pro/ | 介绍页 + 工作台，措辞克制、结构密 |
 | v3 人性版 | https://ld007379.github.io/lucidmap/v3/human/ | 介绍页 + 工作台，口语、直接 |
 
 v3 的专业版和人性版**能力完全相同**，区别只在「说话方式」；进去以后顶部可以随时换另一个版本，也能回主站重新选。旧版入口已下线，旧网址会自动跳转到 v3。
+
+### 手机 / 安装到桌面
+
+手机打开 <https://ld007379.github.io/lucidmap/v3/m/>：
+
+- **iPhone**：Safari → 分享 → 添加到主屏幕
+- **Android**：Chrome → 菜单 → 安装应用 / 添加到主屏幕
+
+安装后从主屏幕图标打开，会以独立窗口运行；首次打开需要联网，之后本地引擎可以离线使用。注意：主屏幕应用与浏览器可能使用不同的本地存储，建议在主屏幕应用里再配置一次 API Key。
 
 ### 本地
 
@@ -183,6 +193,7 @@ git clone https://github.com/ld007379/lucidmap.git
 ├── index.html          # 旧入口：自动跳转到 /v3/
 ├── v3/                 # v3 新版
 │   ├── index.html      # 主站选择页：先选专业版 / 人性版
+│   ├── m/index.html    # 手机入口 / PWA 启动页
 │   ├── pro/index.html  # 专业版：介绍页 + 工作台
 │   └── human/index.html# 人性版：介绍页 + 工作台
 ├── pro/index.html      # 旧入口：自动跳转到 /v3/pro/
@@ -191,8 +202,10 @@ git clone https://github.com/ld007379/lucidmap.git
 │   ├── index.html
 │   ├── pro/index.html
 │   └── human/index.html
+├── manifest.json       # PWA manifest
+├── sw.js               # PWA service worker（离线缓存）
 ├── 404.html            # 未知路径：跳转到 /v3/
-├── assets/             # README 用的截图、封面、演示动图
+├── assets/             # 截图、封面、演示动图、PWA 图标
 ├── LICENSE             # Apache License 2.0 全文
 ├── NOTICE              # 版权归属 + 第三方组件声明（Mermaid / MIT）
 ├── TRADEMARK.md        # 名称与 Logo 的使用边界
@@ -206,7 +219,8 @@ git clone https://github.com/ld007379/lucidmap.git
 
 - **改文案 / 配色 / 追问逻辑**：在对应的 `index.html` 里搜中文关键词，改完保存刷新。
 - **加一个服务商**：在服务商配置表里加一条（接口地址 + 预置模型），界面上会自动多一个可选项。
-- **部署自己的副本**：fork 之后在仓库 Settings → Pages 里把 Source 设为 `main` / `/ (root)`，网址变成 `https://<你的账号>.github.io/lucidmap/`。v3 三页都引用仓库 `assets/`，整仓部署即可，别只拷单个 HTML。
+- **部署自己的副本**：fork 之后在仓库 Settings → Pages 里把 Source 设为 `main` / `/ (root)`，网址变成 `https://<你的账号>.github.io/lucidmap/`。v3 页面都引用仓库 `assets/`，整仓部署即可，别只拷单个 HTML。
+- **改 PWA / 离线缓存**：`manifest.json` 管安装信息，`sw.js` 管离线缓存；改了页面后把 `sw.js` 里的 `CACHE` 版本号加一，用户下次打开会更新缓存。
 - **改了要发布**：`git add -A && git commit -m "更新" && git push`，Pages 一两分钟后自动生效，网址不变。
 
 修改和再分发请保留原作者署名与 [`NOTICE`](NOTICE) 文件，并说明你改了什么——这是 Apache-2.0 的许可要求，不是请求。

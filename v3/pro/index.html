@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#f7f8f5">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ld007379.github.io/lucidmap/v3/pro/">
@@ -1910,6 +1910,16 @@ body{
 .model-chips button[aria-pressed="true"]{background:#e8f1e0;border-color:#92b47f;color:#2f5139}
 .model-note{margin:6px 0 0;font-size:11px;color:#9aa68d}
 </style>
+<style id="lm-mobile-pwa">
+html{-webkit-tap-highlight-color:transparent}
+@media(max-width:680px){
+  .topbar{padding-top:max(8px,env(safe-area-inset-top))}
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  .whats-new-button,span.version-chip{display:none!important}
+  .report-toolbar{overflow-x:auto}
+  .tool-button,.button{min-height:40px}
+}
+</style>
 
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
 <style>
@@ -2290,6 +2300,12 @@ body{
     .lm-final .lm-actions .lm-btn{flex:1 1 100%}
   }
 </style>
+<link rel="manifest" href="../../manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="清醒地图">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="../../assets/icon-180.png">
 </head>
 <body>
   <div id="top"></div>
@@ -5192,6 +5208,12 @@ document.addEventListener("click",function(e){
   var ok=window.confirm("看示例/演示会覆盖你现在写的内容（自动保存的草稿也会被替换）。\n\n要继续吗？点「取消」就保留你写的内容。");
   if(!ok){e.preventDefault();e.stopImmediatePropagation();}
 },true);
+</script>
+
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='127.0.0.1'||location.hostname==='localhost')){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(function(){});});
+}
 </script>
 </body>
 </html>
