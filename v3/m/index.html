@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f7f8f5">
-<meta name="description" content="清醒地图手机版：把纠结摊开成一张能检查的图。不用注册，不配 Key 也能用，数据只在你的浏览器里。">
+<meta name="description" content="清醒地图手机版：30 秒把纠结摊开成一张能检查的图。不用注册，不配 Key 也能用，数据只在你的浏览器里。">
 <title>清醒地图 · 手机版</title>
 <link rel="manifest" href="../../manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,126 +14,147 @@
 <link rel="apple-touch-icon" href="../../assets/icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icon-192.png">
 <style>
-:root{
-  --paper:#f7f8f5;--card:#ffffff;--ink:#25392f;--muted:#6b7a6e;--line:#dfe6d8;
-  --green:#234d3d;--green-2:#326952;--soft:#eef3e8;--amber:#a9722f;
-  --shadow:0 10px 30px rgba(35,77,61,.08);
-}
+:root{--paper:#f7f8f5;--ink:#25392f;--muted:#6b7a6e;--green:#234d3d;--green2:#326952;--line:#dfe6d8;--soft:#eef3e8;--shadow:0 14px 34px rgba(35,77,61,.10)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%}
-body{
-  background:
-    radial-gradient(70vw 45vh at 12% 0%,#e8f0df 0%,transparent 60%),
-    radial-gradient(60vw 40vh at 100% 10%,#eef3e4 0%,transparent 55%),
-    var(--paper);
-  color:var(--ink);
-  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:560px;margin:0 auto;padding:calc(26px + env(safe-area-inset-top)) 20px calc(30px + env(safe-area-inset-bottom))}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.3px;font-size:18px}
+body{background:radial-gradient(80vw 55vh at 5% 0%,#e7efdc 0%,transparent 62%),radial-gradient(70vw 45vh at 100% 8%,#edf3e3 0%,transparent 58%),var(--paper);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) 20px calc(30px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:800;letter-spacing:-.3px}
 .brand svg{width:34px;height:34px;flex:0 0 34px}
-.brand small{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.08em;margin-left:2px}
-.kicker{display:inline-flex;align-items:center;gap:7px;margin:26px 0 12px;font-size:11px;color:#5e7a66;letter-spacing:.08em}
-.kicker i{width:7px;height:7px;border-radius:50%;background:#7fa36c;display:inline-block}
-h1{font-size:clamp(30px,8.6vw,38px);line-height:1.22;margin:0 0 14px;letter-spacing:-1px;font-weight:800}
-h1 em{font-style:normal;color:var(--green-2);position:relative}
-p.lead{font-size:14.5px;line-height:1.9;color:#4c6154;margin:0 0 18px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 24px}
-.chips span{font-size:11.5px;color:#58705e;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px}
-.cards{display:grid;gap:12px;margin:0 0 18px}
-.card{
-  display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;
-  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px;
-  box-shadow:var(--shadow);transition:transform .15s ease,border-color .15s ease;
-}
-.card:active{transform:scale(.985);border-color:#a9c494}
-.card .tag{flex:0 0 38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:14px}
-.card-body{flex:1;min-width:0}
-.card.pro .tag{background:#e7f4ee;color:#2f8f6b;border:1px solid #cbe6da}
-.card.human .tag{background:#fbf0e6;color:#a96a2c;border:1px solid #efd7bf}
-.card h2{font-size:16.5px;margin:0 0 4px;letter-spacing:-.2px}
-.card p{font-size:12px;color:var(--muted);line-height:1.65;margin:0}
-.card .arrow{margin-left:auto;color:#8fa78e;font-size:20px;flex:0 0 auto}
-.note{font-size:11.5px;color:#7c8d7e;line-height:1.8;margin:0 0 22px}
-.install{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 16px;margin:0 0 20px}
-.install b{display:block;font-size:13px;margin-bottom:5px;color:#2f4a3a}
-.install p{font-size:11.5px;color:var(--muted);line-height:1.8;margin:0}
-.install button{
-  margin-top:9px;width:100%;border:0;border-radius:10px;background:var(--green);color:#fff;
-  font-size:14px;font-weight:700;padding:12px 14px;font-family:inherit;
-}
-.install button:active{background:#1b3b2e}
-.foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px;font-size:12px;color:#7c8d7e}
-.foot a{color:#376b52;text-decoration:none;border-bottom:1px solid #bcd1c2;padding-bottom:1px}
-.foot .copy{font-size:10.5px;color:#9aa99a}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.brand small{font-size:9.5px;color:#7c8d7e;font-weight:700;letter-spacing:.14em;margin-left:1px}
+.pill{font-size:10.5px;color:#55705d;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 9px;letter-spacing:.04em}
+.hero{padding-top:24px}
+.eyebrow{display:flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.08em;color:#5f7a66;margin-bottom:10px}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:#7fa36c;display:inline-block;box-shadow:0 0 0 4px rgba(127,163,108,.12)}
+h1{font-size:clamp(31px,9vw,42px);line-height:1.18;letter-spacing:-1.2px;margin:0 0 12px;font-weight:850}
+h1 em{font-style:normal;color:var(--green2);position:relative;display:inline-block}
+h1 em::after{content:"";position:absolute;left:0;right:-2px;bottom:3px;height:8px;background:linear-gradient(90deg,rgba(169,199,154,.55),rgba(169,199,154,.1));z-index:-1;border-radius:3px}
+.lead{font-size:13.5px;line-height:1.9;color:#506657;margin:0 0 16px;max-width:34em}
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--green);color:#fff;text-decoration:none;border-radius:15px;padding:15px 18px;font-size:15px;font-weight:800;box-shadow:0 12px 26px rgba(35,77,61,.20);letter-spacing:.1px}
+.cta:active{background:#1b3b2e;transform:scale(.995)}
+.cta span{margin-left:auto;font-size:18px;opacity:.85}
+.sub-cta{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 0;font-size:11px;color:#84947f}
+.version{display:flex;align-items:center;gap:4px;background:#eef3e8;border:1px solid #dfe8d6;border-radius:12px;padding:3px;margin:14px 0 0}
+.version button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px 6px;font:inherit;font-size:11.5px;color:#6a7d6b;font-weight:600;cursor:pointer}
+.version button[aria-pressed="true"]{background:#fff;color:#2f5b45;box-shadow:0 2px 8px rgba(35,77,61,.08)}
+.map-demo{position:relative;height:164px;margin:22px 0 18px;border:1px solid #dfe8d6;border-radius:22px;background:linear-gradient(150deg,#fbfcf7,#eef4e6);box-shadow:var(--shadow);overflow:hidden}
+.map-demo::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(120,150,110,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(120,150,110,.09) 1px,transparent 1px);background-size:26px 26px;mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.map-demo .md-q{position:absolute;left:14px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #d5e3cb;border-radius:12px;padding:10px 12px;font-size:11px;font-weight:700;color:#3d5b45;box-shadow:0 6px 16px rgba(35,77,61,.08);z-index:2}
+.map-demo .md-q small{display:block;font-size:9px;color:#8fa08a;font-weight:500;margin-top:2px}
+.map-demo .md-node{position:absolute;left:164px;right:14px;display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #e0e8d8;border-radius:10px;padding:8px 9px;font-size:10px;color:#4f6655;box-shadow:0 5px 14px rgba(35,77,61,.06);z-index:2}
+.map-demo .md-node b{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;font-size:9px;color:#fff;flex:0 0 18px}
+.map-demo .md-a{top:20px}.map-demo .md-a b{background:#7fa36c}
+.map-demo .md-b{top:68px}.map-demo .md-b b{background:#c08b57}
+.map-demo .md-c{top:116px}.map-demo .md-c b{background:#8a7ea8}
+.map-demo svg{position:absolute;left:74px;top:0;width:92px;height:100%;z-index:1;overflow:visible}
+.map-demo path{fill:none;stroke:#b8cfaa;stroke-width:1.7;stroke-dasharray:4 5;animation:mdash 7s linear infinite}
+@keyframes mdash{to{stroke-dashoffset:-90}}
+.sec{margin:24px 0 0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sec-head h2{font-size:15px;margin:0;letter-spacing:-.2px}
+.sec-head span{font-size:10px;color:#8a9a85}
+.try-list{display:grid;gap:9px}
+.try{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px 13px;box-shadow:0 6px 16px rgba(35,77,61,.045)}
+.try:active{transform:scale(.992);border-color:#a9c494}
+.try .ico{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:14px;font-weight:800;flex:0 0 36px}
+.try.work .ico{background:#e8f3ec;color:#2f7f5e}
+.try.city .ico{background:#eef0fa;color:#5b64a0}
+.try.love .ico{background:#fbf0e9;color:#a96a4a}
+.try .txt{flex:1;min-width:0}
+.try .txt b{display:block;font-size:13px;letter-spacing:-.1px;margin-bottom:2px}
+.try .txt small{display:block;font-size:10px;color:#8a9a85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.try .arrow{color:#9aab90;font-size:17px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:22px 0 0}
+.how div{background:rgba(255,255,255,.62);border:1px solid #e3ead9;border-radius:12px;padding:10px 8px;text-align:center}
+.how b{display:block;font-size:17px;color:#7fa36c;margin-bottom:3px;font-weight:800}
+.how span{font-size:9.5px;line-height:1.6;color:#7c8d7e}
+.install{display:flex;align-items:center;gap:11px;background:linear-gradient(120deg,#fbfcf6,#f1f6ea);border:1px solid #e0e8d6;border-radius:16px;padding:13px 14px;margin:22px 0 0}
+.install .ic{width:34px;height:34px;border-radius:10px;background:#fff;display:grid;place-items:center;font-size:16px;flex:0 0 34px;box-shadow:0 4px 10px rgba(35,77,61,.06)}
+.install .tx{flex:1;min-width:0}
+.install b{display:block;font-size:12px;margin-bottom:2px}
+.install p{font-size:10px;line-height:1.7;color:#7c8d7e;margin:0}
+.install button{border:0;background:#fff;color:#376b52;border:1px solid #d5e3cb;border-radius:9px;padding:8px 9px;font:inherit;font-size:10.5px;font-weight:700;white-space:nowrap}
+footer{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);margin-top:24px;padding-top:14px;font-size:10.5px;color:#8a9a85}
+footer a{color:#5f7a66;text-decoration:none}
+@media(max-width:360px){h1{font-size:29px}.map-demo .md-node{left:150px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="wrap">
-  <div class="brand">
-    <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg>
-    <span>清醒地图</span><small>LUCIDMAP</small>
-  </div>
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg>
+      <span>清醒地图</span><small>LUCIDMAP</small>
+    </div>
+    <span class="pill">手机版</span>
+  </header>
 
-  <div class="kicker"><i></i>决策工具 · 不用注册 · 数据不出浏览器</div>
-  <h1>把纠结，<br>摊开成一张<em>能检查的图</em>。</h1>
-  <p class="lead">写下去，30 秒后看到：已知事实、待确认缺口、三条路各自的条件，还有下一步能做什么。</p>
-  <div class="chips"><span>不配 Key 也能用</span><span>本地引擎</span><span>手机 / 电脑</span></div>
-
-  <div class="cards">
-    <a class="card pro" href="../pro/#app">
-      <span class="tag">A</span>
-      <div class="card-body"><h2>专业版</h2><p>措辞克制、结构密；适合讨论、交付、存档。</p></div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-    <a class="card human" href="../human/#app">
-      <span class="tag">B</span>
-      <div class="card-body"><h2>人性版</h2><p>口语、直接；适合第一次用、心里最乱的时候。</p></div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-  </div>
-
-  <p class="note">两个版本能力一样，只差说话方式；进去以后顶部也能随时换。</p>
-
-  <section class="install" aria-label="安装到手机">
-    <b>像 App 一样用</b>
-    <p id="install-hint">iPhone：Safari 分享 → 添加到主屏幕。Android：Chrome 菜单 → 安装应用。</p>
-    <p id="standalone" hidden>已作为 App 打开。首次打开需要联网，之后可离线使用本地引擎。</p>
-    <button id="install-btn" type="button" hidden>安装到桌面</button>
+  <section class="hero">
+    <div class="eyebrow"><i></i>30 秒 · 不用注册 · 数据只在浏览器</div>
+    <h1>先别急着选，<br>先看清<em>这张图</em>。</h1>
+    <p class="lead">写下你在纠结的事，它会还给你：已知事实、待确认的缺口、几条路各自的条件，还有下一步能做什么。</p>
+    <a class="cta" id="start-link" href="../pro/#app">开始我自己的 <span>→</span></a>
+    <p class="sub-cta">不用想好再写 · 不配 Key 也能用</p>
+    <div class="version" role="group" aria-label="说话方式">
+      <button type="button" data-version="pro" aria-pressed="true">专业版 · 结构密</button>
+      <button type="button" data-version="human" aria-pressed="false">人性版 · 更直接</button>
+    </div>
   </section>
 
-  <footer class="foot">
-    <span><a href="../">完整介绍</a> · <a href="https://github.com/ld007379/lucidmap" target="_blank" rel="noopener">GitHub</a></span>
-    <span class="copy">© 2026 ld007379</span>
-  </footer>
+  <div class="map-demo" aria-hidden="true">
+    <div class="md-q">你的问题<small>在纠结什么</small></div>
+    <svg viewBox="0 0 92 164" preserveAspectRatio="none"><path d="M2 82 C34 82 28 28 88 28"/><path d="M2 82 H88"/><path d="M2 82 C34 82 28 136 88 136"/></svg>
+    <div class="md-node md-a"><b>A</b> 继续现在的工作</div>
+    <div class="md-node md-b"><b>B</b> 辞职换方向</div>
+    <div class="md-node md-c"><b>C</b> 先做个小验证</div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-head"><h2>先试一个</h2><span>不用配 Key，直接看</span></div>
+    <div class="try-list">
+      <a class="try work" href="../pro/?example=career#app" data-example="career"><span class="ico">职</span><span class="txt"><b>我该不该辞掉现在的工作？</b><small>收入 · 方向 · 家人态度</small></span><span class="arrow">→</span></a>
+      <a class="try city" href="../pro/?example=city#app" data-example="city"><span class="ico">城</span><span class="txt"><b>回老家还是留在杭州？</b><small>工作 · 房租 · 父母</small></span><span class="arrow">→</span></a>
+      <a class="try love" href="../pro/?example=relationship#app" data-example="relationship"><span class="ico">情</span><span class="txt"><b>我该不该和男朋友分手？</b><small>底线 · 舍不得 · 三个月</small></span><span class="arrow">→</span></a>
+    </div>
+  </section>
+
+  <div class="how" aria-hidden="true">
+    <div><b>1</b><span>写一句<br>你在纠结什么</span></div>
+    <div><b>2</b><span>摆出<br>两边各是什么</span></div>
+    <div><b>3</b><span>看清条件<br>再决定</span></div>
+  </div>
+
+  <section class="install" aria-label="安装到手机">
+    <span class="ic">✦</span>
+    <div class="tx"><b>装到桌面，像 App 一样用</b><p id="install-hint">iPhone：Safari 分享 → 添加到主屏幕。Android：Chrome 菜单 → 安装应用。</p><p id="standalone" hidden>已作为 App 打开；首次联网后，本地引擎可离线用。</p></div>
+    <button id="install-btn" type="button" hidden>安装</button>
+  </section>
+
+  <footer><span><a href="../">完整介绍</a> · <a href="https://github.com/ld007379/lucidmap" target="_blank" rel="noopener">GitHub</a></span><span>© 2026 ld007379</span></footer>
 </main>
 <script>
 (function(){
-  var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  var hint = document.getElementById('install-hint');
-  var standaloneEl = document.getElementById('standalone');
-  if (standalone) { hint.hidden = true; if (standaloneEl) standaloneEl.hidden = false; }
-
-  var deferred = null;
-  var btn = document.getElementById('install-btn');
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    deferred = e;
-    if (btn) btn.hidden = false;
-  });
-  if (btn) btn.addEventListener('click', function(){
-    if (!deferred) return;
-    deferred.prompt();
-    deferred.userChoice.then(function(){ deferred = null; btn.hidden = true; });
-  });
-  window.addEventListener('appinstalled', function(){ deferred = null; if (btn) btn.hidden = true; });
-
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === '127.0.0.1' || location.hostname === 'localhost')) {
-    window.addEventListener('load', function(){
-      navigator.serviceWorker.register('../../sw.js', { scope: '../../' }).catch(function(){});
+  var version='pro';
+  function setVersion(v){
+    version=v;
+    document.querySelectorAll('[data-version]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.version===v));});
+    document.querySelectorAll('[data-example]').forEach(function(a){
+      a.href='../'+v+'/?example='+a.dataset.example+'#app';
     });
+    var start=document.getElementById('start-link');
+    if(start)start.href='../'+v+'/#app';
+  }
+  document.querySelectorAll('[data-version]').forEach(function(b){b.addEventListener('click',function(){setVersion(b.dataset.version);});});
+  var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  if(standalone){var h=document.getElementById('install-hint');if(h)h.hidden=true;var s=document.getElementById('standalone');if(s)s.hidden=false;}
+  var deferred=null,btn=document.getElementById('install-btn');
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;if(btn)btn.hidden=false;});
+  if(btn)btn.addEventListener('click',function(){if(!deferred)return;deferred.prompt();deferred.userChoice.then(function(){deferred=null;btn.hidden=true;});});
+  window.addEventListener('appinstalled',function(){deferred=null;if(btn)btn.hidden=true;});
+  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='127.0.0.1'||location.hostname==='localhost')){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(function(){});});
   }
 })();
 </script>

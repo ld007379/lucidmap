@@ -2733,7 +2733,7 @@ html{-webkit-tap-highlight-color:transparent}
   </header>
   <div class="workspace">
     <aside class="composer">
-      <div class="composer-title"><span class="eyebrow">START WITH A QUESTION</span><h1>脑子里那团乱麻，<br>咱们捋一捋。</h1><p>不用想好再说，想到哪写到哪。</p></div>
+      <div class="composer-title"><span class="eyebrow">START WITH A QUESTION</span><h1>脑子里那团乱麻，<br>咱们捋一捋。</h1><p>不用想好再说，想到哪写到哪。</p><button id="open-wizard" class="wiz-open-button" type="button">✦ 用 3 步开始</button></div>
       <form id="decision-form">
         <div class="field-top"><label for="dilemma">你现在卡在什么决定上？</label><span id="char-count">0 / 1000</span></div>
         <textarea id="dilemma" name="dilemma" maxlength="1000" required placeholder="我在纠结 A 还是 B……&#10;目前已经知道的是……&#10;最怕的是……"></textarea>
@@ -5641,6 +5641,234 @@ setTimeout(maybeAutoRefreshModels,1200);
   });
 })();
 </script>
+
+<style id="lm-mobile-wizard-style">
+#mobile-wizard{display:none}
+body.wizard-open{overflow:hidden}
+.wiz-open-button{display:none}
+@media(max-width:680px){.wiz-open-button{display:inline-flex;align-items:center;gap:6px;margin-top:10px;border:1px solid #d5e2cc;background:#fff;color:#2f5b45;border-radius:999px;padding:8px 13px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}}
+#mobile-wizard{position:fixed;inset:0;z-index:2000;background:#f7f8f5;color:#25392f;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+@media(max-width:680px){#mobile-wizard:not([hidden]){display:flex}}
+.wiz-shell{display:flex;flex-direction:column;width:100%;max-width:560px;height:100dvh;margin:0 auto;background:linear-gradient(180deg,#fbfcf7,#f4f7ef);position:relative}
+.wiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 18px 6px;flex:0 0 auto}
+.wiz-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;letter-spacing:-.2px}
+.wiz-brand svg{width:28px;height:28px;flex:0 0 28px}
+.wiz-brand small{font-size:10px;color:#7c8d7e;font-weight:600;letter-spacing:.08em}
+.wiz-skip{border:0;background:transparent;color:#7c8d7e;font:inherit;font-size:12px;padding:6px;cursor:pointer}
+.wiz-progress{display:flex;align-items:center;gap:7px;padding:0 18px 10px;flex:0 0 auto}
+.wiz-progress i{height:3px;border-radius:999px;background:#dfe8d8;flex:1;transition:background .25s ease}
+.wiz-progress i.on{background:#4f7c5d}
+.wiz-count{font-size:10px;color:#8a9a85;letter-spacing:.06em;margin-left:4px}
+.wiz-body{flex:1 1 auto;overflow:auto;padding:8px 20px 16px;-webkit-overflow-scrolling:touch}
+.wiz-step{display:none}
+.wiz-step.active{display:block;animation:wizIn .28s ease both}
+@keyframes wizIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.wiz-kicker{font-size:10px;letter-spacing:.12em;color:#7a9477;margin:12px 0 8px}
+.wiz-step h2{font-size:clamp(24px,7vw,31px);line-height:1.26;letter-spacing:-.6px;margin:0 0 8px;font-weight:800}
+.wiz-sub{font-size:13px;line-height:1.8;color:#6b7a6e;margin:0 0 18px}
+.wiz-step textarea,.wiz-step input{width:100%;box-sizing:border-box;border:1px solid #dbe5d3;background:#fff;border-radius:14px;padding:14px 15px;font:inherit;font-size:16px;line-height:1.7;color:#25392f;outline:none;box-shadow:0 6px 20px rgba(35,77,61,.04)}
+.wiz-step textarea:focus,.wiz-step input:focus{border-color:#8fb079;box-shadow:0 0 0 3px rgba(143,176,121,.16)}
+.wiz-step textarea{min-height:112px;resize:vertical}
+.wiz-step label{display:block;font-size:11px;color:#7c8d7e;margin:12px 0 6px;font-weight:600}
+.wiz-examples{display:flex;flex-direction:column;gap:8px;margin:14px 0 0}
+.wiz-example{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid #e0e8d8;background:#fff;border-radius:12px;padding:11px 12px;font:inherit;font-size:13px;color:#3f5a48;cursor:pointer}
+.wiz-example span{flex:1}
+.wiz-example em{font-style:normal;font-size:10px;color:#9aab90}
+.wiz-example b{font-size:16px;color:#8fa78e}
+.wiz-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800;flex:0 0 30px}
+.wiz-ico.work{background:#e8f3ec;color:#2f7f5e}
+.wiz-ico.city{background:#eef0fa;color:#5b64a0}
+.wiz-ico.love{background:#fbf0e9;color:#a96a4a}
+.wiz-example:active{transform:scale(.99)}
+.wiz-hint{font-size:11px;line-height:1.8;color:#8a9a85;margin:12px 0 0}
+.wiz-not-sure{border:0;background:transparent;color:#527b5f;font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:10px 0;cursor:pointer}
+.wiz-chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
+.wiz-chip{border:1px solid #dfe8d8;background:#fff;color:#4d6654;border-radius:999px;padding:8px 12px;font:inherit;font-size:12px;cursor:pointer}
+.wiz-chip[aria-pressed="true"]{background:#e7f1df;border-color:#92b47f;color:#2f5139;font-weight:600}
+.wiz-step h3{font-size:13px;margin:0 0 6px;color:#40584a}
+.wiz-actions{display:flex;gap:10px;align-items:center;padding:12px 18px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #e3ead9;background:rgba(251,252,247,.94);backdrop-filter:blur(10px);flex:0 0 auto}
+.wiz-actions button{font:inherit;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.wiz-back{border:1px solid #dbe5d3;background:#fff;color:#5f7565;flex:0 0 auto}
+.wiz-back[hidden]{display:none}
+.wiz-next{flex:1;border:0;background:#234d3d;color:#fff;box-shadow:0 8px 20px rgba(35,77,61,.18)}
+.wiz-next:disabled{opacity:.5;box-shadow:none}
+.wiz-next:active{background:#1b3b2e}
+.wiz-skip:active{color:#2f5b45}
+</style>
+<div id="mobile-wizard" hidden role="dialog" aria-modal="true" aria-labelledby="wiz-title">
+  <div class="wiz-shell">
+    <header class="wiz-top">
+      <div class="wiz-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图</span><small>3 步开始</small></div>
+      <button id="wiz-skip" class="wiz-skip" type="button">跳过，直接写</button>
+    </header>
+    <div class="wiz-progress" aria-hidden="true"><i data-dot="1" class="on"></i><i data-dot="2"></i><i data-dot="3"></i><span class="wiz-count" id="wiz-count">1 / 3</span></div>
+    <div class="wiz-body">
+      <section class="wiz-step active" data-step="1">
+        <p class="wiz-kicker">01 / 3 · 先写下来</p>
+        <h2 id="wiz-title">你现在卡在什么决定上？</h2>
+        <p class="wiz-sub">一句话就够，不用想好。写下来，才有得拆。</p>
+        <textarea id="wiz-dilemma" maxlength="300" placeholder="比如：我该不该辞掉现在的工作？"></textarea>
+        <div class="wiz-examples">
+          <button class="wiz-example" type="button" data-wiz-example="career"><i class="wiz-ico work">职</i><span>我该不该辞掉现在的工作？<em>工作 · 收入 · 方向</em></span><b>→</b></button>
+          <button class="wiz-example" type="button" data-wiz-example="city"><i class="wiz-ico city">城</i><span>回老家还是留在杭州？<em>城市 · 房租 · 父母</em></span><b>→</b></button>
+          <button class="wiz-example" type="button" data-wiz-example="relationship"><i class="wiz-ico love">情</i><span>我该不该和男朋友分手？<em>关系 · 底线 · 三个月</em></span><b>→</b></button>
+        </div>
+        <p class="wiz-hint">不知道怎么写？点一个例子，改成你的情况。</p>
+      </section>
+      <section class="wiz-step" data-step="2">
+        <p class="wiz-kicker">02 / 3 · 把两边摆出来</p>
+        <h2>你在比较哪两个选择？</h2>
+        <p class="wiz-sub">写两个短句就行；还没想好也可以先往下。</p>
+        <label for="wiz-a">A</label>
+        <input id="wiz-a" maxlength="80" placeholder="比如：继续现在的工作">
+        <label for="wiz-b">B</label>
+        <input id="wiz-b" maxlength="80" placeholder="比如：辞职换方向">
+        <button id="wiz-not-sure" class="wiz-not-sure" type="button">还没想好，先往下 →</button>
+      </section>
+      <section class="wiz-step" data-step="3">
+        <p class="wiz-kicker">03 / 3 · 最怕什么</p>
+        <h2>你最怕失去什么？</h2>
+        <p class="wiz-sub">选一个最接近的；没有也可以直接生成。</p>
+        <div class="wiz-chips" id="wiz-fears">
+          <button class="wiz-chip" type="button" data-fear="收入断档">收入断档</button>
+          <button class="wiz-chip" type="button" data-fear="错过机会">错过机会</button>
+          <button class="wiz-chip" type="button" data-fear="家人反对">家人反对</button>
+          <button class="wiz-chip" type="button" data-fear="舍不得过去">舍不得过去</button>
+          <button class="wiz-chip" type="button" data-fear="安全/健康">安全 / 健康</button>
+          <button class="wiz-chip" type="button" data-fear="时间不够">时间不够</button>
+        </div>
+        <h3>最晚什么时候要答复？</h3>
+        <div class="wiz-chips" id="wiz-deadlines">
+          <button class="wiz-chip" type="button" data-deadline="本周内">本周内</button>
+          <button class="wiz-chip" type="button" data-deadline="本月内">本月内</button>
+          <button class="wiz-chip" type="button" data-deadline="三个月内">三个月内</button>
+          <button class="wiz-chip" type="button" data-deadline="没有硬期限">没有硬期限</button>
+        </div>
+        <label for="wiz-extra">还有什么必须考虑的条件？</label>
+        <textarea id="wiz-extra" maxlength="500" placeholder="可选：比如存款、家人态度、已经试过什么……"></textarea>
+      </section>
+    </div>
+    <footer class="wiz-actions">
+      <button id="wiz-back" class="wiz-back" type="button" hidden>上一步</button>
+      <button id="wiz-next" class="wiz-next" type="button">下一步 →</button>
+    </footer>
+  </div>
+</div>
+<script>
+(function(){
+  var wiz=document.getElementById('mobile-wizard');
+  if(!wiz)return;
+  var steps=Array.prototype.slice.call(wiz.querySelectorAll('.wiz-step'));
+  var dots=Array.prototype.slice.call(wiz.querySelectorAll('[data-dot]'));
+  var count=document.getElementById('wiz-count');
+  var next=document.getElementById('wiz-next');
+  var back=document.getElementById('wiz-back');
+  var dEl=document.getElementById('wiz-dilemma');
+  var aEl=document.getElementById('wiz-a');
+  var bEl=document.getElementById('wiz-b');
+  var extraEl=document.getElementById('wiz-extra');
+  var fear='',deadline='',step=1;
+  var examples={
+    career:{d:'我该不该辞掉现在的工作？',a:'继续现在的工作',b:'辞职换方向',fear:'收入断档',deadline:'本月内'},
+    city:{d:'回老家还是留在杭州？',a:'回老家',b:'留在杭州',fear:'错过机会',deadline:'三个月内'},
+    relationship:{d:'我该不该和男朋友分手？',a:'继续这段关系',b:'分手',fear:'舍不得过去',deadline:'三个月内'}
+  };
+  function mobile(){return window.matchMedia('(max-width:680px)').matches;}
+  function updateNext(){
+    if(step===1){next.disabled=!dEl.value.trim();next.textContent='下一步 →';}
+    else if(step===2){next.disabled=false;next.textContent='下一步 →';}
+    else{next.disabled=!dEl.value.trim();next.textContent='生成我的地图 ↗';}
+    back.hidden=step===1;
+    count.textContent=step+' / 3';
+    dots.forEach(function(d,i){d.classList.toggle('on',i<step);});
+  }
+  function show(n){
+    step=Math.max(1,Math.min(3,n));
+    steps.forEach(function(s){s.classList.toggle('active',Number(s.dataset.step)===step);});
+    wiz.querySelector('.wiz-body').scrollTop=0;
+    updateNext();
+  }
+  function fillExample(key){
+    var e=examples[key];if(!e)return;
+    dEl.value=e.d;aEl.value=e.a||'';bEl.value=e.b||'';
+    fear=e.fear||'';deadline=e.deadline||'';
+    wiz.querySelectorAll('[data-fear]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.fear===fear));});
+    wiz.querySelectorAll('[data-deadline]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.deadline===deadline));});
+    show(1);
+  }
+  function openWizard(prefill){
+    if(!mobile())return;
+    wiz.hidden=false;document.body.classList.add('wizard-open');
+    if(prefill)fillExample(prefill);
+    else if(!dEl.value && document.getElementById('dilemma'))dEl.value=document.getElementById('dilemma').value.trim();
+    show(1);
+    setTimeout(function(){try{dEl.focus({preventScroll:true});}catch(e){}},80);
+  }
+  function closeWizard(skip){
+    wiz.hidden=true;document.body.classList.remove('wizard-open');
+    if(skip){
+      try{sessionStorage.setItem('lucidmap.wizard.skip','1');}catch(e){}
+      var d=dEl.value.trim();
+      var target=document.getElementById('dilemma');
+      if(d&&target&&!target.value.trim()){target.value=d;target.dispatchEvent(new Event('input',{bubbles:true}));}
+    }
+    var target=document.getElementById('dilemma');if(target)try{target.focus({preventScroll:true});}catch(e){}
+  }
+  function finish(){
+    var d=dEl.value.trim();
+    if(!d){show(1);dEl.focus();return;}
+    var a=aEl.value.trim(),b=bEl.value.trim();
+    var dilemma=d;
+    if(a&&b)dilemma=d+'；'+a+'还是'+b;
+    var parts=[];
+    var old=(document.getElementById('context')||{}).value||'';
+    if(old.trim())parts.push(old.trim());
+    if(a||b)parts.push('选项A：'+(a||'未填')+'；选项B：'+(b||'未填'));
+    if(fear)parts.push('最怕失去：'+fear);
+    if(deadline)parts.push('最晚期限：'+deadline);
+    if(extraEl.value.trim())parts.push('补充：'+extraEl.value.trim());
+    var context=parts.join('；');
+    var target=document.getElementById('dilemma');
+    var ctx=document.getElementById('context');
+    target.value=dilemma.slice(0,1000);
+    if(ctx)ctx.value=context.slice(0,12000);
+    try{target.dispatchEvent(new Event('input',{bubbles:true}));if(ctx)ctx.dispatchEvent(new Event('input',{bubbles:true}));}catch(e){}
+    closeWizard(false);
+    var form=document.getElementById('decision-form');
+    if(form)form.requestSubmit();
+  }
+  dEl.addEventListener('input',updateNext);
+  wiz.querySelectorAll('[data-wiz-example]').forEach(function(b){b.addEventListener('click',function(){fillExample(b.dataset.wizExample);});});
+  wiz.querySelectorAll('[data-fear]').forEach(function(b){b.addEventListener('click',function(){fear=b.dataset.fear;wiz.querySelectorAll('[data-fear]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});
+  wiz.querySelectorAll('[data-deadline]').forEach(function(b){b.addEventListener('click',function(){deadline=b.dataset.deadline;wiz.querySelectorAll('[data-deadline]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});
+  document.getElementById('wiz-not-sure').addEventListener('click',function(){aEl.value='';bEl.value='';show(3);});
+  next.addEventListener('click',function(){if(step<3)show(step+1);else finish();});
+  back.addEventListener('click',function(){show(step-1);});
+  document.getElementById('wiz-skip').addEventListener('click',function(){closeWizard(true);});
+  var openBtn=document.getElementById('open-wizard');
+  if(openBtn)openBtn.addEventListener('click',function(){try{sessionStorage.removeItem('lucidmap.wizard.skip');}catch(e){}openWizard();});
+  window.addEventListener('resize',function(){if(!mobile()&&!wiz.hidden)closeWizard(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!wiz.hidden)closeWizard(false);});
+  var newBtn=document.getElementById('new-decision');
+  if(newBtn)newBtn.addEventListener('click',function(){setTimeout(function(){
+    if(!mobile()||!document.getElementById('report').hidden)return;
+    dEl.value='';aEl.value='';bEl.value='';extraEl.value='';fear='';deadline='';
+    wiz.querySelectorAll('[data-fear],[data-deadline]').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    var t=document.getElementById('dilemma');if(t)t.value='';
+    var c=document.getElementById('context');if(c)c.value='';
+    openWizard();
+  },60);});
+  setTimeout(function(){
+    if(!mobile()||!wiz.hidden)return;
+    if(sessionStorage.getItem('lucidmap.wizard.skip')==='1')return;
+    if(!document.getElementById('report').hidden)return;
+    if(/[?&]manual=1/.test(location.search))return;
+    var key='';try{key=new URLSearchParams(location.search).get('example')||'';}catch(e){}
+    if(key&&examples[key])openWizard(key);else openWizard();
+  },700);
+})();
+</script>
+
 
 <!-- ===== 介绍页页脚 ===== -->
 <!--LUCIDMAP-FOOTER-START-->
