@@ -1859,6 +1859,7 @@ body{
 #report.quick-only > #local-upsell:not([hidden]){display:flex !important;}
 #report.quick-only > #safety-note:not([hidden]){display:block !important;}
 #report.quick-only .view-tabs{display:none !important;}
+@media(max-width:680px){#report.quick-only > #mobile-brief:not([hidden]){display:block !important;}}
 .quick-verdict{border:1px solid #d8ded6;border-radius:16px;background:#fff;padding:22px 24px;margin:0 0 20px;box-shadow:0 8px 26px rgba(28,52,42,.09);}
 .qv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .qv-kicker{font-size:13px;letter-spacing:.14em;color:#1f6b52;font-weight:700;}
@@ -1925,6 +1926,50 @@ html{-webkit-tap-highlight-color:transparent}
   .whats-new-button,span.version-chip{display:none!important}
   .report-toolbar{overflow-x:auto}
   .tool-button{min-height:40px}
+}
+</style>
+
+<style id="lm-mobile-report-style">
+.mobile-brief{display:none}
+@media(max-width:680px){
+  #report .report-intro{padding:18px 16px;border-radius:18px;margin-bottom:12px}
+  #report .report-intro h3{font-size:21px;line-height:1.35;margin:10px 0 8px}
+  #report .report-intro>p{font-size:12.5px;line-height:1.8}
+  #report .mobile-brief{display:block;margin:0 0 12px;padding:16px 16px 14px;border-radius:18px;background:linear-gradient(135deg,#234d3d,#326952);color:#fff;box-shadow:0 14px 30px rgba(35,77,61,.18)}
+  .mb-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .mb-kicker{font-size:10px;letter-spacing:.12em;color:#bcd4b7;white-space:nowrap}
+  .mb-line{height:1px;background:rgba(255,255,255,.18);flex:1}
+  .mb-direction{font-size:15.5px;line-height:1.7;margin:0 0 12px;font-weight:700;letter-spacing:-.1px}
+  .mb-rows{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mb-rows>div{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:9px 10px;min-width:0}
+  .mb-rows small{display:block;font-size:9px;color:#bcd4b7;margin-bottom:4px}
+  .mb-rows b{display:block;font-size:11px;line-height:1.6;font-weight:600;color:#f5faf1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  #report .map-panel{background:transparent;border:0;box-shadow:none;border-radius:0;overflow:visible}
+  #report .panel-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:4px 2px 10px}
+  #report .panel-title h4{flex:1 0 100%;font-size:18px;margin:0;letter-spacing:-.2px}
+  #report .density-switch{flex:0 0 auto;margin-left:0;border-radius:999px;overflow:hidden}
+  #report .density-switch button{white-space:nowrap;flex-shrink:0;font-size:10.5px;padding:5px 10px}
+  #report .panel-title .panel-hint{display:block;order:3;width:100%;font-size:10px;color:#8a9a85;margin-top:-2px}
+  #report .decision-map{padding:0;margin:0;background:none}
+  #report .origin-node{width:100%;max-width:none;margin:0 0 10px;padding:12px 14px;border-radius:14px}
+  #report .origin-node strong{font-size:13px}
+  #report .branch-lines{display:none}
+  #report .option-nodes{display:flex;flex-direction:column;gap:10px}
+  #report .path-node{width:100%;min-height:0;padding:14px 15px;border-radius:16px;border-left-width:4px;border-left-style:solid;text-align:left;box-shadow:0 8px 20px rgba(35,77,61,.07);gap:6px}
+  #report .path-node[data-path="A"]{border-left-color:#7fa36c}
+  #report .path-node[data-path="B"]{border-left-color:#c08b57}
+  #report .path-node[data-path="C"]{border-left-color:#8a7ea8}
+  #report .path-node .node-arrow{display:none}
+  #report .path-node strong{font-size:15px;line-height:1.5}
+  #report .path-node p{font-size:12.5px;line-height:1.7;display:block;overflow:visible;-webkit-line-clamp:unset}
+  #report .path-node small{font-size:10px;color:#8a9a85;display:block}
+  #report .path-letter{width:28px;height:28px;border-radius:8px;font-size:11px}
+  #report .light-legend,#report .map-legend{display:none}
+  #report .option-detail{padding:0;margin-top:10px}
+  #report .overview-grid{display:block}
+  #report .insight-column{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+  #report .blindspot-panel,#report .recommendation-panel{padding:16px;border-radius:16px}
+  #report .next-action-bar{border-radius:16px;padding:14px;margin-top:12px}
 }
 </style>
 
@@ -2760,6 +2805,15 @@ html{-webkit-tap-highlight-color:transparent}
         <div class="cloud-fallback-note" id="cloud-fallback-note" hidden><div class="cfn-body"><b id="cfn-title">云端这次没跑通，先用本地规则版给你出一版</b><p id="cfn-msg"></p><p class="cfn-hint" id="cfn-hint"></p></div><div class="cfn-actions"><button class="button quiet" id="cfn-retry" type="button">用云端重试</button><button class="button quiet" id="cfn-diag" type="button">复制诊断信息</button></div></div>
         <section id="report" aria-label="决策分析结果" hidden>
         <div id="safety-note" class="safety-note" role="alert" aria-live="assertive" hidden></div>
+
+        <div class="mobile-brief" id="mobile-brief" hidden>
+          <div class="mb-head"><span class="mb-kicker">如果是我</span><span class="mb-line"></span></div>
+          <p class="mb-direction" id="mb-direction"></p>
+          <div class="mb-rows">
+            <div><small>最该先确认</small><b id="mb-gap"></b></div>
+            <div><small>下一步</small><b id="mb-next"></b></div>
+          </div>
+        </div>
         <div class="quick-verdict" id="quick-verdict">
           <div class="qv-head"><span class="qv-kicker">局面概览</span><button type="button" class="qv-toggle" id="qv-toggle" aria-expanded="false">展开全部细节 ↓</button></div>
           <div class="qv-stakes"><span class="qv-stakes-label">真正的赌注</span><p id="qv-stakes"></p></div>
@@ -2788,6 +2842,8 @@ html{-webkit-tap-highlight-color:transparent}
           <h3 id="report-title"></h3><p id="report-summary"></p>
           <div class="conflict-pills"><span id="conflict-left"></span><i>↔</i><span id="conflict-right"></span><span class="facts-count" id="facts-count"></span></div>
         </div>
+
+
         <section class="reading-panel" id="reading-panel" hidden>
           <div class="reading-head"><span class="reading-kicker">我猜你心里在打什么算盘</span><h4 id="reading-underneath"></h4></div>
           <p class="reading-surface" id="reading-surface"></p>
@@ -3510,7 +3566,7 @@ if(opts.restore){
   if(opts.restore){state.version=envelope.version||1;}else{state.version++;}
   state.svg='';state.mermaid=envelope.mermaid||toMermaid(a,state.flowRounds);
   $('#welcome').hidden=true;$('#report').hidden=false;$('#new-decision').style.display='';$('#report').classList.add('quick-only');
-text('#qv-stakes',a.summary||'');
+text('#qv-stakes',(a.reading&&a.reading.underneath)||a.summary||'');
 const qvOpts=Array.isArray(a.options)?a.options:[];
 text('#qv-A-title',qvOpts[0]?.title||'');
 text('#qv-A-gain',qvOpts[0]?.gain||'');
@@ -3564,6 +3620,13 @@ const qvBtn=$('#qv-toggle');if(qvBtn){qvBtn.textContent='展开全部细节 ↓'
   makeNodes({...a,options:[optA,optB],hiddenOption});renderPathLanes({...a,options:[optA,optB],hiddenOption});state.selectedPath=null;selectPath(recommendedPath(a));
   $('#blindspot-content').innerHTML = blindspots.length ? blindspots.map(item=>`<div class="blindspot-item"><h4>${escapeHTML(item.claim||'')}</h4><blockquote>“${escapeHTML(item.evidence||'')}”</blockquote>${item.evidenceType==='decision_question'?'<span class="fact-source-tag">这是你的疑问，不是已核实的事实</span>':''}<p><span class="test-label">怎么戳破它</span>${escapeHTML(item.test||'')}</p></div>`).join('') : '<p>你给的信息还太少，我猜不出什么有价值的盲点。先补几句关键条件？</p>';
   text('#recommendation-direction',recommendation.direction);text('#recommendation-basis',recommendation.basis);text('#recommendation-switch',recommendation.switchWhen);
+  const mb=$('#mobile-brief');
+  if(mb){
+    text('#mb-direction',recommendation.direction||'先补关键条件，再决定。');
+    text('#mb-gap',(unknowns[0]&&unknowns[0].question)||'把最关键的未知写下来');
+    text('#mb-next',nextAction.action||'先补一个具体选择');
+    mb.hidden=false;
+  }
   text('#action-within',nextAction.within);text('#action-title',nextAction.action);text('#action-deliverable',nextAction.deliverable);
   $('#fact-list').innerHTML=facts.map(item=>`<article class="fact-item"><span class="fact-source-tag">你的原话</span><blockquote><i class="light green" title="原文可逐字核对"></i><span>“${escapeHTML(item.quote||'')}”</span></blockquote><p>${escapeHTML(item.implication||'')}</p></article>`).join('')||'<p style="padding:18px 22px;font-size:11px;color:#919b87">本轮没有可逐字引用的事实。</p>';
   // urgent 模式下，未知项卡片加红色边框提示
