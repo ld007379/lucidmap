@@ -1972,6 +1972,158 @@ html{-webkit-tap-highlight-color:transparent}
   #report .next-action-bar{border-radius:16px;padding:14px;margin-top:12px}
 }
 </style>
+<style id="lm-mobile-spacing-v2">
+@media(max-width:680px){
+  .topbar{padding:12px 16px;gap:8px}
+  .header-right{gap:8px}
+  .demo-top{display:none!important}
+  .status-chip{max-width:170px;font-size:9.5px}
+  .main{padding:24px 18px 0!important}
+  .workspace-heading{margin-bottom:22px}
+  .workspace-heading h2{font-size:21px;line-height:1.5}
+  #report .report-intro{padding:22px 19px!important;border-radius:20px}
+  #report .report-intro h3{font-size:22px;line-height:1.45;margin-top:12px}
+  #report .report-intro>p{font-size:13.5px;line-height:1.9}
+  #report .mobile-brief{padding:19px 18px!important;margin-bottom:16px!important;border-radius:20px}
+  #report .mb-direction{font-size:16.5px;line-height:1.8;margin-bottom:14px}
+  #report .mb-rows{gap:10px}
+  #report .mb-rows>div{padding:12px!important}
+  #report .mb-rows b{font-size:12px;line-height:1.8}
+  #report .quick-verdict{padding:20px 17px!important;border-radius:20px;margin-bottom:16px!important}
+  #report .qv-head{margin-bottom:12px}
+  #report .qv-stakes{display:block!important;padding:13px 14px!important;margin-bottom:14px!important}
+  #report .qv-stakes-label{display:block;margin-bottom:4px;padding-top:0}
+  #report .qv-stakes p{font-size:14.5px!important;line-height:1.8!important}
+  #report .qv-grid{grid-template-columns:1fr!important;gap:11px!important;margin-bottom:14px!important}
+  #report .qv-col{padding:16px 15px!important;border-radius:15px;gap:9px}
+  #report .qv-tendency{padding-top:12px}
+  #report .report-toolbar{margin:22px 0 18px!important;gap:10px}
+  #report .view-tabs{gap:10px!important;padding:4px!important;overflow-x:auto;max-width:100%}
+  #report .view-tabs button{padding:8px 10px!important;font-size:11.5px!important}
+  #report .panel-title{padding:0 2px 12px!important}
+  #report .panel-title h4{font-size:19px!important}
+  #report .density-switch button{font-size:10.5px!important;padding:6px 11px!important}
+  #report .decision-map{padding:0!important}
+  #report .origin-node{padding:14px 16px!important;margin-bottom:14px!important;border-radius:15px}
+  #report .option-nodes{gap:14px!important}
+  #report .path-node{padding:18px 17px!important;border-radius:18px!important;gap:8px!important}
+  #report .path-node strong{font-size:16px!important;line-height:1.6!important}
+  #report .path-node p{font-size:13.2px!important;line-height:1.85!important}
+  #report .path-node small{font-size:10.5px!important;line-height:1.7!important}
+  #report .path-letter{width:30px!important;height:30px!important;font-size:12px!important}
+  #report .blindspot-panel,#report .recommendation-panel{padding:20px 18px!important;margin-top:16px!important;border-radius:18px!important}
+  #report .next-action-bar{padding:18px!important;margin-top:16px!important;border-radius:18px!important}
+  #report .insight-column{gap:16px!important;margin-top:16px!important}
+  #report{padding-bottom:40px}
+  .composer{padding:28px 20px!important}
+  .composer #dilemma{min-height:185px!important}
+  .sample-section{margin-top:20px!important}
+}
+@media(max-width:390px){
+  .main{padding-left:16px!important;padding-right:16px!important}
+  .topbar{padding-left:14px!important;padding-right:14px!important}
+  #report .report-intro{padding:20px 16px!important}
+  #report .quick-verdict{padding:18px 15px!important}
+  #report .path-node{padding:17px 15px!important}
+}
+</style>
+<style id="lm-mobile-density-fix">
+@media(max-width:680px){
+  #report .unknown-item{margin:14px 16px 0!important;padding:14px 0 0!important}
+  #report .unknown-item .unknown-number{font-size:10px!important;line-height:1.6!important;margin-bottom:4px!important}
+  #report .unknown-item .gap-id-chip,
+  #report .unknown-item .gap-state,
+  #report .unknown-item .gap-priority,
+  #report .unknown-item .light{display:none!important}
+  #report .unknown-item h4{font-size:14px!important;line-height:1.75!important}
+  #report .unknown-item p{font-size:12px!important;line-height:1.85!important}
+  #report .gap-answer-link{width:100%!important;justify-content:center;margin-top:10px!important;padding:10px 12px!important;font-size:12px!important}
+  #report .followup-field{padding:14px 16px!important}
+  #report .followup-field .gap-form-tag .gap-id-chip,
+  #report .followup-field .gap-form-tag .gap-state,
+  #report .followup-field .gap-form-tag .gap-priority{display:none!important}
+  #report .followup-field label{font-size:13px!important;line-height:1.7!important}
+  #report .followup-field textarea{font-size:16px!important}
+  #report .sc-item{display:block!important;padding:14px 0!important;border-top:1px solid #e3ead9}
+  #report .sc-item:first-child{border-top:0}
+  #report .sc-text{display:block!important;font-size:12.5px!important;line-height:1.75!important;margin-bottom:9px}
+  #report .sc-opts{display:flex!important;flex-direction:column!important;gap:6px!important;width:100%!important;margin-top:0!important}
+  #report .sc-btn{width:100%!important;min-height:0!important;text-align:left!important;white-space:normal!important;font-size:11.5px!important;line-height:1.5!important;padding:9px 12px!important;border-radius:9px!important}
+  #report .switch-checks{padding:0 16px!important}
+  #report .switch-update-button{margin-top:14px!important}
+  #report .condition-panel{padding:18px!important;border-radius:18px!important}
+  #report .reading-panel{padding:16px!important}
+}
+</style>
+<style id="lm-mobile-report-v2">
+#mobile-report{display:none;position:fixed;inset:0;z-index:1900;flex-direction:column;background:#f4f7f0;color:#22302a;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+@media(max-width:680px){
+  #report{display:none!important}
+  #mobile-report:not([hidden]){display:flex}
+  body.mobile-report-open{overflow:hidden}
+}
+.mr-top{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:rgba(247,249,243,.96);border-bottom:1px solid #e2e9d9;backdrop-filter:blur(12px);flex:0 0 auto}
+.mr-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;letter-spacing:-.2px}
+.mr-brand svg{width:30px;height:30px;flex:0 0 30px}
+.mr-brand small{display:block;font-size:9px;color:#8a9a85;font-weight:600;letter-spacing:.04em;margin-top:2px}
+.mr-meta{margin-left:auto;font-size:9px;color:#7c8d7e;background:#fff;border:1px solid #e0e8d8;border-radius:999px;padding:5px 8px;white-space:nowrap;max-width:40vw;overflow:hidden;text-overflow:ellipsis}
+.mr-new{border:1px solid #d5e3cb;background:#fff;color:#376b52;border-radius:10px;padding:8px 10px;font:inherit;font-size:11px;font-weight:700;white-space:nowrap}
+.mr-tabs{display:flex;gap:4px;padding:10px 16px 8px;background:#f4f7f0;flex:0 0 auto}
+.mr-tab{flex:1;border:0;background:transparent;color:#7c8d7e;border-radius:10px;padding:9px 6px;font:inherit;font-size:12px;font-weight:600}
+.mr-tab[aria-selected="true"]{background:#fff;color:#2f5b45;box-shadow:0 3px 10px rgba(35,77,61,.08)}
+.mr-scroll{flex:1 1 auto;overflow:auto;-webkit-overflow-scrolling:touch;padding:4px 18px calc(32px + env(safe-area-inset-bottom))}
+.mr-safety{margin:8px 0 12px;padding:12px 14px;border-radius:14px;font-size:12px;line-height:1.75;background:#fdf3e8;border:1px solid #efd7bf;color:#8a5a2f}
+.mr-safety.urgent{background:#fdf1ef;border-color:#e8b4ae;color:#8f3a30}
+.mr-pane[hidden]{display:none}
+.mr-verdict{background:linear-gradient(145deg,#234d3d,#326952);color:#fff;border-radius:22px;padding:22px 20px;box-shadow:0 16px 34px rgba(35,77,61,.18);margin:6px 0 18px}
+.mr-kicker{font-size:10px;letter-spacing:.12em;color:#bcd4b7;font-weight:700}
+.mr-verdict h1{font-size:23px;line-height:1.5;letter-spacing:-.4px;margin:9px 0 8px;font-weight:800}
+.mr-verdict p{font-size:12.5px;line-height:1.8;color:#dce8d6;margin:0}
+.mr-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
+.mr-section-head h2{font-size:16px;margin:0;letter-spacing:-.2px}
+.mr-section-head span{font-size:10px;color:#8a9a85}
+.mr-paths{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px;margin:0 -2px}
+.mr-paths::-webkit-scrollbar{display:none}
+.mr-path{flex:0 0 86%;scroll-snap-align:start;background:#fff;border:1px solid #dfe8d6;border-left:5px solid #7fa36c;border-radius:18px;box-shadow:0 8px 22px rgba(35,77,61,.07);overflow:hidden}
+.mr-path.opt-b{border-left-color:#c08b57}
+.mr-path.hidden{border-left-color:#8a7ea8;background:#fbf9ff}
+.mr-path summary{list-style:none;display:flex;align-items:flex-start;gap:10px;padding:17px 16px;cursor:pointer}
+.mr-path summary::-webkit-details-marker{display:none}
+.mr-path summary strong{flex:1;font-size:15px;line-height:1.6;font-weight:700}
+.mr-path summary i{font-style:normal;color:#9aab90;font-size:17px;line-height:1.2}
+.mr-letter{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#e8f3ec;color:#2f7f5e;font-size:12px;font-weight:800;flex:0 0 30px}
+.mr-path.opt-b .mr-letter{background:#fbf0e6;color:#a96a2c}
+.mr-path.hidden .mr-letter{background:#f0ecf8;color:#6f5f96}
+.mr-path-body{border-top:1px solid #eef2e9;padding:4px 16px 16px}
+.mr-row{padding:10px 0 0}
+.mr-row small{display:block;font-size:10px;color:#8a9a85;margin-bottom:3px}
+.mr-row p{font-size:13px;line-height:1.8;color:#3f5447;margin:0}
+.mr-next{background:#fff;border:1px solid #dfe8d6;border-radius:18px;padding:18px;margin:4px 0 10px;box-shadow:0 8px 22px rgba(35,77,61,.06)}
+.mr-next span{font-size:10px;color:#7c8d7e;letter-spacing:.06em}
+.mr-next h3{font-size:15px;line-height:1.65;margin:7px 0 5px;font-weight:700}
+.mr-next p{font-size:12px;line-height:1.75;color:#6b7a6e;margin:0}
+.mr-card{background:#fff;border:1px solid #dfe8d6;border-radius:18px;padding:18px;margin:0 0 14px;box-shadow:0 6px 18px rgba(35,77,61,.05)}
+.mr-card h2{font-size:16px;margin:0 0 10px;letter-spacing:-.2px}
+.mr-card>p{font-size:13px;line-height:1.85;color:#3f5447;margin:0}
+.mr-fact,.mr-gap,.mr-blind{padding:12px 0;border-top:1px solid #eef2e9}
+.mr-fact:first-child,.mr-gap:first-child,.mr-blind:first-child{border-top:0;padding-top:0}
+.mr-fact p{font-size:13px;line-height:1.8;color:#3f5447;margin:0 0 4px}
+.mr-fact small{font-size:11px;line-height:1.7;color:#8a9a85;display:block}
+.mr-gap{display:flex;gap:10px;align-items:flex-start}
+.mr-gap>span{width:22px;height:22px;border-radius:7px;background:#eef3e8;color:#6d8469;display:grid;place-items:center;font-size:11px;font-weight:700;flex:0 0 22px}
+.mr-gap b{display:block;font-size:13px;line-height:1.7;font-weight:600;color:#2f4a3a;margin-bottom:3px}
+.mr-gap p{font-size:11.5px;line-height:1.75;color:#7c8d7e;margin:0}
+.mr-blind b{display:block;font-size:13px;line-height:1.7;color:#2f4a3a;margin-bottom:3px}
+.mr-blind p{font-size:12px;line-height:1.8;color:#6b7a6e;margin:0}
+.mr-switch-list ul{margin:8px 0 0;padding-left:18px}
+.mr-switch-list li{font-size:12px;line-height:1.8;color:#5f7565;margin-bottom:4px}
+.mr-actions{display:grid;gap:9px;margin:4px 0 0}
+.mr-actions button{border:0;border-radius:12px;padding:13px;font:inherit;font-size:13px;font-weight:700;background:#fff;border:1px solid #dfe8d6;color:#376b52}
+.mr-actions button.primary{background:#234d3d;color:#fff;border-color:#234d3d}
+.mr-empty{font-size:12px;line-height:1.8;color:#8a9a85;margin:0}
+.mr-path[open] summary i{transform:rotate(45deg)}
+.mr-path summary i{transition:transform .2s ease}
+</style>
 
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
 <style>
@@ -3653,6 +3805,7 @@ const qvBtn=$('#qv-toggle');if(qvBtn){qvBtn.textContent='展开全部细节 ↓'
     }
     saveDraft();
   }
+  setTimeout(function(){ if(typeof renderMobileReport==='function') renderMobileReport(a,envelope); },0);
 }
 
 function setBusy(busy) {
@@ -5929,6 +6082,117 @@ body.wizard-open{overflow:hidden}
     var key='';try{key=new URLSearchParams(location.search).get('example')||'';}catch(e){}
     if(key&&examples[key])openWizard(key);else openWizard();
   },700);
+})();
+</script>
+<script>
+(function(){
+  function esc(v){return (typeof escapeHTML==='function')?escapeHTML(v==null?'':String(v)):String(v==null?'':v);}
+  function isMobile(){return window.matchMedia('(max-width:680px)').matches;}
+  function setText(id,value){var e=document.getElementById(id);if(e)e.textContent=value==null?'':String(value);}
+  function showTab(name){
+    var sec=document.getElementById('mobile-report');if(!sec)return;
+    sec.querySelectorAll('[data-mr-tab]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.mrTab===name));});
+    sec.querySelectorAll('[data-mr-pane]').forEach(function(p){p.hidden=p.dataset.mrPane!==name;});
+    var sc=sec.querySelector('.mr-scroll');if(sc)sc.scrollTop=0;
+  }
+  function hide(){
+    var sec=document.getElementById('mobile-report');if(sec)sec.hidden=true;
+    document.body.classList.remove('mobile-report-open');
+  }
+  function build(){
+    if(document.getElementById('mobile-report'))return document.getElementById('mobile-report');
+    var sec=document.createElement('section');
+    sec.id='mobile-report';sec.hidden=true;
+    sec.innerHTML=`
+      <header class="mr-top">
+        <div class="mr-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版报告</small></span></div>
+        <span class="mr-meta" id="mr-meta"></span>
+        <button class="mr-new" id="mr-new" type="button">重来</button>
+      </header>
+      <div class="mr-tabs" role="tablist" aria-label="报告分区">
+        <button class="mr-tab" type="button" data-mr-tab="overview" aria-selected="true">总览</button>
+        <button class="mr-tab" type="button" data-mr-tab="why" aria-selected="false">依据</button>
+        <button class="mr-tab" type="button" data-mr-tab="action" aria-selected="false">行动</button>
+      </div>
+      <div class="mr-scroll">
+        <div class="mr-safety" id="mr-safety" hidden></div>
+        <div class="mr-pane" data-mr-pane="overview">
+          <section class="mr-verdict"><span class="mr-kicker">如果是我</span><h1 id="mr-direction"></h1><p id="mr-basis"></p></section>
+          <div class="mr-section-head"><h2>三条路</h2><span>点开看条件</span></div>
+          <div class="mr-paths" id="mr-paths"></div>
+          <section class="mr-next"><span>下一步</span><h3 id="mr-next-action"></h3><p id="mr-next-deliverable"></p></section>
+        </div>
+        <div class="mr-pane" data-mr-pane="why" hidden>
+          <section class="mr-card"><h2>真正的赌注</h2><p id="mr-reading"></p></section>
+          <section class="mr-card"><h2>你说过的事实</h2><div id="mr-facts"></div></section>
+          <section class="mr-card"><h2>还没底的事</h2><div id="mr-gaps"></div></section>
+          <section class="mr-card"><h2>我可能漏看的</h2><div id="mr-blind"></div></section>
+        </div>
+        <div class="mr-pane" data-mr-pane="action" hidden>
+          <section class="mr-card"><h2>现在做什么</h2><p id="mr-action"></p><p id="mr-deliverable"></p></section>
+          <section class="mr-card"><h2>什么时候改主意</h2><p id="mr-switch"></p><div class="mr-switch-list" id="mr-switch-list"></div></section>
+          <section class="mr-card"><h2>第三条路</h2><h3 id="mr-hidden-title" style="font-size:14px;line-height:1.7;margin:0 0 8px"></h3><p id="mr-hidden-why"></p><p id="mr-hidden-exp" style="margin-top:8px"></p></section>
+          <div class="mr-actions"><button type="button" id="mr-export">导出 Markdown</button><button type="button" class="primary" id="mr-restart">重新开始</button></div>
+        </div>
+      </div>`;
+    document.body.appendChild(sec);
+    sec.querySelectorAll('[data-mr-tab]').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.mrTab);});});
+    document.getElementById('mr-new').addEventListener('click',function(){hide();document.getElementById('new-decision').click();});
+    document.getElementById('mr-restart').addEventListener('click',function(){hide();document.getElementById('new-decision').click();});
+    document.getElementById('mr-export').addEventListener('click',function(){var b=document.getElementById('export-report');if(b)b.click();});
+    window.addEventListener('resize',function(){
+      if(!isMobile()){hide();return;}
+      if(state.report && document.getElementById('mobile-report') && document.getElementById('mobile-report').hidden){
+        window.renderMobileReport(state.report,{source:state.source});
+      }
+    });
+    return sec;
+  }
+  window.renderMobileReport=function(a,envelope){
+    if(!isMobile()||!a)return;
+    build();
+    var sec=document.getElementById('mobile-report');
+    var rec=a.recommendation||{},next=a.nextAction||{},safety=a.safety||{};
+    var opts=Array.isArray(a.options)?a.options:[];
+    var hidden=a.hiddenOption||{};
+    var facts=Array.isArray(a.facts)?a.facts:[];
+    var gaps=Array.isArray(a.unknowns)?a.unknowns:[];
+    var blinds=Array.isArray(a.blindspots)?a.blindspots:[];
+    var src=(envelope&&envelope.source)||state.source;
+    setText('mr-meta',src==='local'?'本地规则':(src==='model'?(state.model||'云端模型'):'示例'));
+    setText('mr-direction',rec.direction||'先补关键条件，再决定。');
+    setText('mr-basis',rec.basis||'');
+    setText('mr-reading',(a.reading&&a.reading.underneath)||a.summary||'');
+    setText('mr-next-action',next.action||'先补一个具体选择');
+    setText('mr-next-deliverable',next.deliverable||'');
+    setText('mr-action',next.action||'先补一个具体选择');
+    setText('mr-deliverable',next.deliverable||'');
+    setText('mr-switch',rec.switchWhen||'');
+    setText('mr-hidden-title',hidden.title||'');
+    setText('mr-hidden-why',hidden.why||'');
+    setText('mr-hidden-exp',hidden.experiment||'');
+    var safetyEl=document.getElementById('mr-safety');
+    if(safetyEl){var note=safety.note||'';safetyEl.hidden=!note;safetyEl.textContent=note;safetyEl.className='mr-safety '+(safety.level||'');}
+    var paths=opts.map(function(o){return {id:o.id||'A',title:o.title,gain:o.gain,cost:o.cost,condition:o.condition,kind:'option'};});
+    if(hidden.title)paths.push({id:'C',title:hidden.title,kind:'hidden'});
+    document.getElementById('mr-paths').innerHTML=paths.map(function(p){
+      var cls=p.kind==='hidden'?'hidden':(p.id==='B'?'opt-b':'opt-a');
+      var body;
+      if(p.kind==='hidden'){
+        body='<div class="mr-row"><small>为什么</small><p>'+esc(hidden.why)+'</p></div><div class="mr-row"><small>先怎么做</small><p>'+esc(hidden.experiment)+'</p></div><div class="mr-row"><small>看什么信号</small><p>'+esc(hidden.signal)+'</p></div><div class="mr-row"><small>什么时候停</small><p>'+esc(hidden.stopRule)+'</p></div>';
+      }else{
+        body='<div class="mr-row"><small>能拿到</small><p>'+esc(p.gain)+'</p></div><div class="mr-row"><small>要付出</small><p>'+esc(p.cost)+'</p></div><div class="mr-row"><small>成立条件</small><p>'+esc(p.condition)+'</p></div>';
+      }
+      return '<details class="mr-path '+cls+'"><summary><span class="mr-letter">'+esc(p.id)+'</span><strong>'+esc(p.title)+'</strong><i>＋</i></summary><div class="mr-path-body">'+body+'</div></details>';
+    }).join('');
+    document.getElementById('mr-facts').innerHTML=facts.length?facts.map(function(f){return '<div class="mr-fact"><p>“'+esc(f.quote)+'”</p><small>'+esc(f.implication)+'</small></div>';}).join(''):'<p class="mr-empty">这轮没有可引用的原话。</p>';
+    document.getElementById('mr-gaps').innerHTML=gaps.length?gaps.map(function(g,i){return '<div class="mr-gap"><span>'+(i+1)+'</span><div><b>'+esc(g.question)+'</b><p>'+esc(g.why)+'</p></div></div>';}).join(''):'<p class="mr-empty">暂时没有必须补的条件。</p>';
+    document.getElementById('mr-blind').innerHTML=blinds.length?blinds.map(function(b){return '<div class="mr-blind"><b>'+esc(b.claim)+'</b><p>'+esc(b.test)+'</p></div>';}).join(''):'<p class="mr-empty">这轮没有明显的盲点。</p>';
+    var conds=Array.isArray(rec.switchConditions)?rec.switchConditions:[];
+    document.getElementById('mr-switch-list').innerHTML=conds.length?('<ul>'+conds.map(function(c){return '<li>'+esc(typeof c==='string'?c:(c&&c.condition)||'')+'</li>';}).join('')+'</ul>'):'';
+    sec.hidden=false;document.body.classList.add('mobile-report-open');showTab('overview');
+  };
+  window.hideMobileReport=hide;
 })();
 </script>
 
