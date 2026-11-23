@@ -2144,6 +2144,27 @@ html{-webkit-tap-highlight-color:transparent}
 .mr-sheet-actions button:disabled{opacity:.55}
 </style>
 
+<style id="lm-mobile-core">
+.mr-icon{border:0;background:#fff;border:1px solid #d5e3cb;color:#376b52;height:32px;border-radius:10px;font-size:11px;font-weight:700;line-height:1;padding:0 9px}
+.mr-status{font-size:10px;color:#7c8d7e;letter-spacing:.03em;margin:2px 2px 10px}
+.mr-diff{background:#fdf8ee;border:1px solid #ecd9b8;border-radius:16px;padding:15px;margin:0 0 14px}
+.mr-diff-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+.mr-diff-head h2{font-size:14px;margin:0;color:#6f5328}
+.mr-diff-head span{font-size:9px;color:#a48452}
+.mr-diff-body p{font-size:12px;line-height:1.8;color:#6b5537;margin:4px 0}
+.mr-diff-main{font-weight:700;color:#4f3b20!important}
+.mr-checkin textarea{width:100%;box-sizing:border-box;border:1px solid #dbe5d3;background:#fbfcf8;border-radius:11px;padding:10px 12px;font:inherit;font-size:16px;line-height:1.7;color:#25392f;min-height:64px;margin-top:9px;resize:vertical}
+.mr-af{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.mr-af button{border:1px solid #dbe5d3;background:#fff;color:#5f7565;border-radius:10px;padding:9px 4px;font:inherit;font-size:11px;font-weight:600}
+.mr-af button[aria-pressed="true"]{background:#234d3d;border-color:#234d3d;color:#fff}
+.mr-af-hint{font-size:10px;line-height:1.7;color:#8a9a85;margin:7px 0 0!important}
+.mr-archive-list{display:grid;gap:9px;margin-top:4px}
+.mr-archive-item{text-align:left;border:1px solid #dfe8d6;background:#fff;border-radius:14px;padding:13px 14px;font:inherit;color:#25392f}
+.mr-archive-item strong{display:block;font-size:13.5px;line-height:1.5;font-weight:700;margin-bottom:4px}
+.mr-archive-item small{display:block;font-size:11px;line-height:1.65;color:#7c8d7e;margin-bottom:4px}
+.mr-archive-item span{display:block;font-size:9px;color:#a0ad98}
+</style>
+
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
 <style>
   .lm{
@@ -3705,7 +3726,9 @@ if(opts.restore){
     ? {labels:envelope.gapMeta.labels||{},states:envelope.gapMeta.states||{},priorities:envelope.gapMeta.priorities||{},retired:[],kept:[],added:[],isFirstRound:true,truncated:false}
     : reconcileGaps(a, payload);
   state.gapMeta={labels:gapChanges.labels,states:gapChanges.states,priorities:gapChanges.priorities};
+  const mobilePrev=(!opts.restore&&state.report&&state.payload&&state.payload.dilemma===payload.dilemma)?{report:state.report,version:state.version||1}:null;
   state.report=a;state.payload=cloneValue(payload);state.source=envelope.source;state.model=envelope.model || '';
+  state.mobilePrevious=mobilePrev;
   state.createdAt=envelope.createdAt||new Date().toLocaleString('zh-CN',{hour12:false});
   if(opts.restore){state.version=envelope.version||1;}else{state.version++;}
   state.svg='';state.mermaid=envelope.mermaid||toMermaid(a,state.flowRounds);
@@ -6117,11 +6140,111 @@ body.wizard-open{overflow:hidden}
   function hide(){
     var sec=document.getElementById('mobile-report');if(sec)sec.hidden=true;
     document.body.classList.remove('mobile-report-open');
-    closeAdd();
+    closeAdd();closeArchive();
   }
   function closeAdd(){
     var s=document.getElementById('mr-sheet');if(s)s.hidden=true;
     var st=document.getElementById('mr-sheet-status');if(st)st.textContent='';
+  }
+  function closeArchive(){
+    var s=document.getElementById('mr-archive-sheet');if(s)s.hidden=true;
+  }
+  function openArchive(){
+    var s=document.getElementById('mr-archive-sheet');if(!s)return;
+    var listEl=document.getElementById('mr-archive-list');
+    var items=(typeof loadHistory==='function')?loadHistory():[];
+    if(!items.length){
+      listEl.innerHTML='<p class="mr-empty">还没有保存的决定。完成一次分析后会自动存在这台手机里。</p>';
+    }else{
+      listEl.innerHTML=items.map(function(it){
+        var d=(it.dilemma||'').replace(/\s+/g,' ');
+        return '<button type="button" class="mr-archive-item" data-mr-hid="'+esc(it.id)+'"><strong>'+esc(it.title||'未命名决定')+'</strong><small>'+esc(d.slice(0,52))+(d.length>52?'…':'')+'</small><span>'+esc(it.createdAt||'')+' · 第 '+esc(it.version||1)+' 版</span></button>';
+      }).join('');
+      listEl.querySelectorAll('[data-mr-hid]').forEach(function(b){b.addEventListener('click',function(){var id=b.dataset.mrHid;closeArchive();if(typeof openHistory==='function')openHistory(id);});});
+    }
+    s.hidden=false;
+  }
+  function renderDiff(){
+    var el=document.getElementById('mr-diff');if(!el)return;
+    var prev=state.mobilePrevious;
+    if(!prev||!prev.report||!state.report){el.hidden=true;return;}
+    var old=prev.report,cur=state.report;
+    var oldDir=(old.recommendation&&old.recommendation.direction)||'';
+    var newDir=(cur.recommendation&&cur.recommendation.direction)||'';
+    var key=function(g){return g.id||g.question;};
+    var oldKeys=new Set((old.unknowns||[]).map(key));
+    var newKeys=new Set((cur.unknowns||[]).map(key));
+    var resolved=(old.unknowns||[]).filter(function(g){return !newKeys.has(key(g));});
+    var added=(cur.unknowns||[]).filter(function(g){return !oldKeys.has(key(g));});
+    var bits=[];
+    if(newDir&&oldDir&&newDir!==oldDir)bits.push('<p class="mr-diff-main">结论变了：现在更倾向「'+esc(newDir)+'」。</p>');
+    else if(newDir)bits.push('<p class="mr-diff-main">结论没变，还是「'+esc(newDir)+'」；补充让它更具体。</p>');
+    if(added.length||resolved.length){
+      bits.push('<p>新增 '+added.length+' 个待确认'+(resolved.length?'，解决了 '+resolved.length+' 个旧问题':'')+'。</p>');
+    }
+    if(!bits.length)bits.push('<p>这轮没有明显变化，补充的信息已经写进底稿。</p>');
+    document.getElementById('mr-diff-ver').textContent='第 '+prev.version+' 版 → 第 '+state.version+' 版';
+    document.getElementById('mr-diff-body').innerHTML=bits.join('');
+    el.hidden=false;
+  }
+  function renderActionFeedback(){
+    var st=(state.actionFeedback&&state.actionFeedback.status)||'todo';
+    var box=document.getElementById('mr-af');if(!box)return;
+    box.querySelectorAll('[data-mr-af]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mrAf===st));});
+    var ta=document.getElementById('mr-af-result');if(ta&&ta.value!==((state.actionFeedback&&state.actionFeedback.result)||''))ta.value=(state.actionFeedback&&state.actionFeedback.result)||'';
+  }
+  function setActionFeedback(status){
+    if(!state.actionFeedback)state.actionFeedback={status:'todo',result:''};
+    state.actionFeedback.status=status;renderActionFeedback();
+    if(typeof updateCurrentHistory==='function')updateCurrentHistory();
+    if(typeof saveDraft==='function')saveDraft();
+    try{if(navigator.vibrate)navigator.vibrate(8);}catch(e){}
+  }
+  function wrapCanvas(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+    var chars=Array.from(String(text||''));var line='';var lines=[];
+    for(var i=0;i<chars.length;i++){var test=line+chars[i];if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=chars[i];if(lines.length>=maxLines-1)break;}else line=test;}
+    if(line&&lines.length<maxLines)lines.push(line);
+    for(var j=0;j<lines.length;j++)ctx.fillText(lines[j],x,y+j*lineHeight);
+    return y+lines.length*lineHeight;
+  }
+  function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  async function shareMobileCard(){
+    var a=state.report;if(!a)return;
+    var c=document.createElement('canvas');c.width=1080;c.height=1440;var x=c.getContext('2d');
+    x.fillStyle='#f7f8f3';x.fillRect(0,0,1080,1440);
+    x.fillStyle='#234d3d';roundRect(x,40,40,1000,430,36);x.fill();
+    x.fillStyle='#bcd4b7';x.font='700 24px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('清醒地图  LUCIDMAP',82,100);
+    x.fillStyle='#fff';x.font='800 30px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('如果是我',82,162);
+    x.font='800 46px "PingFang SC","Microsoft YaHei",sans-serif';
+    var dirEnd=wrapCanvas(x,(a.recommendation&&a.recommendation.direction)||'先补关键条件，再决定。',82,232,910,58,3);
+    x.fillStyle='#dce8d6';x.font='400 20px "PingFang SC","Microsoft YaHei",sans-serif';
+    wrapCanvas(x,(a.recommendation&&a.recommendation.basis)||'',82,Math.min(dirEnd+12,404),910,30,2);
+    var paths=(a.options||[]).slice(0,2).concat(a.hiddenOption?[a.hiddenOption]:[]);
+    var y=520;
+    paths.slice(0,3).forEach(function(o,i){
+      x.fillStyle='#ffffff';roundRect(x,40,y,1000,145,24);x.fill();
+      x.fillStyle=i===2?'#f0ecf8':'#e8f3ec';roundRect(x,68,y+38,58,58,16);x.fill();
+      x.fillStyle=i===2?'#6f5f96':'#2f7f5e';x.font='800 26px "PingFang SC","Microsoft YaHei",sans-serif';x.textAlign='center';x.fillText(String.fromCharCode(65+i),97,y+76);x.textAlign='left';
+      x.fillStyle='#25392f';x.font='700 30px "PingFang SC","Microsoft YaHei",sans-serif';
+      wrapCanvas(x,o.title||'',150,y+58,820,40,2);
+      y+=165;
+    });
+    x.fillStyle='#ffffff';roundRect(x,40,y+10,1000,150,24);x.fill();
+    x.fillStyle='#7c8d7e';x.font='700 20px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('下一步',68,y+52);
+    x.fillStyle='#25392f';x.font='700 28px "PingFang SC","Microsoft YaHei",sans-serif';
+    wrapCanvas(x,(a.nextAction&&a.nextAction.action)||'',68,y+92,930,38,2);
+    x.fillStyle='#234d3d';x.font='800 28px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('你也可以做一张',68,1206);
+    x.fillStyle='#6b7a6e';x.font='400 22px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('把纠结摊开，30 秒拿到自己的三条路',68,1248);
+    x.fillStyle='#7c8d7e';x.font='400 20px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('ld007379.github.io/lucidmap/v3/pro/',68,1380);
+    x.fillStyle='#a0ad98';x.font='400 18px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('清醒地图 · 不替你决定，只帮你看清',68,1410);
+    var blob=await new Promise(function(res){c.toBlob(res,'image/png');});
+    if(!blob){if(typeof toast==='function')toast('这张图没生成成功，再试一次。');return;}
+    var file=new File([blob],'清醒地图-我的决定.png',{type:'image/png'});
+    try{
+      if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'清醒地图 · 我的决定',text:'我的决定地图'});return;}
+    }catch(e){}
+    var url=URL.createObjectURL(blob);var aEl=document.createElement('a');aEl.href=url;aEl.download='清醒地图-我的决定.png';document.body.appendChild(aEl);aEl.click();aEl.remove();setTimeout(function(){URL.revokeObjectURL(url);},2000);
+    if(typeof toast==='function')toast('图已保存，可以发给朋友。');
   }
   function openAdd(){
     var s=document.getElementById('mr-sheet');if(!s)return;
@@ -6166,6 +6289,7 @@ body.wizard-open{overflow:hidden}
       <header class="mr-top">
         <div class="mr-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版报告</small></span></div>
         <span class="mr-meta" id="mr-meta"></span>
+        <button class="mr-icon" id="mr-archive" type="button" aria-label="我的决定" title="我的决定">决定</button>
         <button class="mr-new" id="mr-new" type="button">重来</button>
       </header>
       <div class="mr-tabs" role="tablist" aria-label="报告分区">
@@ -6176,7 +6300,9 @@ body.wizard-open{overflow:hidden}
       <div class="mr-scroll">
         <div class="mr-safety" id="mr-safety" hidden></div>
         <div class="mr-pane" data-mr-pane="overview">
+          <div class="mr-status" id="mr-status"></div>
           <section class="mr-verdict"><span class="mr-kicker">如果是我</span><h1 id="mr-direction"></h1><p id="mr-basis"></p></section>
+          <section class="mr-diff" id="mr-diff" hidden><div class="mr-diff-head"><h2>这次变了什么</h2><span id="mr-diff-ver"></span></div><div id="mr-diff-body"></div></section>
           <div class="mr-section-head"><h2>三条路</h2><span>点开看条件</span></div>
           <div class="mr-paths" id="mr-paths"></div>
           <section class="mr-next"><span>下一步</span><h3 id="mr-next-action"></h3><p id="mr-next-deliverable"></p></section>
@@ -6189,9 +6315,10 @@ body.wizard-open{overflow:hidden}
         </div>
         <div class="mr-pane" data-mr-pane="action" hidden>
           <section class="mr-card"><h2>现在做什么</h2><p id="mr-action"></p><p id="mr-deliverable"></p></section>
+          <section class="mr-card mr-checkin"><h2>行动到哪了</h2><div class="mr-af" id="mr-af"><button type="button" data-mr-af="todo">没动</button><button type="button" data-mr-af="tried">试了一下</button><button type="button" data-mr-af="done">搞定了</button></div><textarea id="mr-af-result" maxlength="300" placeholder="实际结果，下一版会参考"></textarea><p class="mr-af-hint">只存在这台手机，下一次更新会带上。</p></section>
           <section class="mr-card"><h2>什么时候改主意</h2><p id="mr-switch"></p><div class="mr-switch-list" id="mr-switch-list"></div></section>
           <section class="mr-card"><h2>第三条路</h2><h3 id="mr-hidden-title" style="font-size:14px;line-height:1.7;margin:0 0 8px"></h3><p id="mr-hidden-why"></p><p id="mr-hidden-exp" style="margin-top:8px"></p></section>
-          <div class="mr-actions"><button type="button" id="mr-export">导出 Markdown</button><button type="button" class="primary" id="mr-restart">重新开始</button></div>
+          <div class="mr-actions"><button type="button" id="mr-share">分享这张图</button><button type="button" id="mr-export">导出 Markdown</button><button type="button" class="primary" id="mr-restart">重新开始</button></div>
         </div>
       </div>
       <div class="mr-compose"><button type="button" id="mr-add">＋ 补充信息，重新出一版</button></div>
@@ -6205,6 +6332,13 @@ body.wizard-open{overflow:hidden}
           <p class="mr-sheet-status" id="mr-sheet-status"></p>
           <div class="mr-sheet-actions"><button type="button" id="mr-sheet-cancel">取消</button><button type="button" class="primary" id="mr-sheet-submit">更新地图</button></div>
         </div>
+      </div>
+      <div class="mr-sheet" id="mr-archive-sheet" hidden>
+        <div class="mr-sheet-card">
+          <div class="mr-sheet-head"><h2>我的决定</h2><button type="button" id="mr-archive-close" aria-label="关闭">✕</button></div>
+          <p class="mr-sheet-sub">存在这台手机里；点一条恢复，不会上传。</p>
+          <div class="mr-archive-list" id="mr-archive-list"></div>
+        </div>
       </div>`;
     document.body.appendChild(sec);
     sec.querySelectorAll('[data-mr-tab]').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.mrTab);});});
@@ -6212,6 +6346,12 @@ body.wizard-open{overflow:hidden}
     document.getElementById('mr-restart').addEventListener('click',function(){hide();document.getElementById('new-decision').click();});
     document.getElementById('mr-export').addEventListener('click',function(){var b=document.getElementById('export-report');if(b)b.click();});
     document.getElementById('mr-add').addEventListener('click',openAdd);
+    document.getElementById('mr-archive').addEventListener('click',openArchive);
+    document.getElementById('mr-archive-close').addEventListener('click',closeArchive);
+    document.getElementById('mr-archive-sheet').addEventListener('click',function(e){if(e.target.id==='mr-archive-sheet')closeArchive();});
+    document.getElementById('mr-af').addEventListener('click',function(e){var b=e.target.closest('[data-mr-af]');if(!b)return;setActionFeedback(b.dataset.mrAf);});
+    var afTa=document.getElementById('mr-af-result');if(afTa){var afTimer=null;afTa.addEventListener('input',function(){if(!state.actionFeedback)state.actionFeedback={status:'todo',result:''};state.actionFeedback.result=afTa.value;clearTimeout(afTimer);afTimer=setTimeout(function(){if(typeof updateCurrentHistory==='function')updateCurrentHistory();if(typeof saveDraft==='function')saveDraft();},400);});}
+    document.getElementById('mr-share').addEventListener('click',shareMobileCard);
     document.getElementById('mr-sheet-close').addEventListener('click',closeAdd);
     document.getElementById('mr-sheet-cancel').addEventListener('click',closeAdd);
     document.getElementById('mr-sheet-submit').addEventListener('click',submitAdd);
@@ -6266,6 +6406,9 @@ body.wizard-open{overflow:hidden}
     document.getElementById('mr-blind').innerHTML=blinds.length?blinds.map(function(b){return '<div class="mr-blind"><b>'+esc(b.claim)+'</b><p>'+esc(b.test)+'</p></div>';}).join(''):'<p class="mr-empty">这轮没有明显的盲点。</p>';
     var conds=Array.isArray(rec.switchConditions)?rec.switchConditions:[];
     document.getElementById('mr-switch-list').innerHTML=conds.length?('<ul>'+conds.map(function(c){return '<li>'+esc(typeof c==='string'?c:(c&&c.condition)||'')+'</li>';}).join('')+'</ul>'):'';
+    var status=document.getElementById('mr-status');
+    if(status){var recCount=(Array.isArray(a.options)?a.options.length:0)+(a.hiddenOption&&a.hiddenOption.title?1:0);var gapCount=Array.isArray(a.unknowns)?a.unknowns.length:0;status.textContent='第 '+(state.version||1)+' 版 · '+recCount+' 条路 · '+gapCount+' 个待确认';}
+    renderDiff();renderActionFeedback();
     sec.hidden=false;document.body.classList.add('mobile-report-open');showTab('overview');
   };
   window.hideMobileReport=hide;
