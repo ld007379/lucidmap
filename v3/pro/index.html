@@ -2217,6 +2217,26 @@ body.mobile-landing-open{overflow:hidden}
 .ml-history{border:0;background:transparent;color:#6d8469;font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:8px 0;margin:2px auto 0;display:block}
 @media(max-width:360px){.ml-hero h1{font-size:30px}.ml-wrap{padding-left:16px;padding-right:16px}}
 @media(prefers-reduced-motion:reduce){.ml-p{animation:none}}
+
+.ml-flow-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 3px 7px}
+.ml-flow-head span{font-size:10px;color:#6d8469;font-weight:700;letter-spacing:.05em}
+.ml-flow-head small{font-size:9px;color:#a0ad98}
+.ml-flow{position:relative;height:164px;border:1px solid #dfe8d6;border-radius:20px;background:linear-gradient(150deg,#fbfcf7,#eef4e6);box-shadow:0 10px 26px rgba(35,77,61,.06);overflow:hidden}
+.ml-flow::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(120,150,110,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(120,150,110,.08) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+.ml-flow-q{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:132px;box-sizing:border-box;background:#fff;border:1px solid #d5e3cb;border-radius:12px;padding:10px 11px;box-shadow:0 6px 14px rgba(35,77,61,.06);z-index:2}
+.ml-flow-q span{display:block;font-size:8px;color:#8a9a85;margin-bottom:3px}
+.ml-flow-q b{font-size:11px;line-height:1.5;font-weight:700;color:#3d5b45;display:block}
+.ml-flow-svg{position:absolute;left:76px;top:0;width:88px;height:100%;z-index:1;overflow:visible}
+.ml-flow path{fill:none;stroke:#b8cfaa;stroke-width:1.7;stroke-dasharray:4 5;animation:mlDash 7s linear infinite}
+@keyframes mlDash{to{stroke-dashoffset:-90}}
+.ml-flow-node{position:absolute;left:164px;right:14px;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e0e8d8;border-radius:9px;padding:7px 8px;font-size:10px;color:#4f6655;box-shadow:0 5px 12px rgba(35,77,61,.05);z-index:2}
+.ml-flow-node b{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;font-size:9px;font-weight:800;color:#fff;flex:0 0 18px}
+.ml-flow-node span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.ml-flow-node.a{top:18px}.ml-flow-node.a b{background:#7fa36c}
+.ml-flow-node.b{top:64px}.ml-flow-node.b b{background:#c08b57}
+.ml-flow-node.c{top:110px}.ml-flow-node.c b{background:#8a7ea8}
+@media(max-width:360px){.ml-flow-q{width:116px}.ml-flow-svg{left:68px;width:82px}.ml-flow-node{left:148px}}
+@media(prefers-reduced-motion:reduce){.ml-flow path{animation:none}}
 </style>
 
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
@@ -6482,19 +6502,16 @@ body.wizard-open{overflow:hidden}
   function build(){
     if(document.getElementById('mobile-landing'))return;
     var d=document.createElement('div');d.id='mobile-landing';d.hidden=true;
-    d.innerHTML='<div class="ml-wrap"><div class="ml-top"><div class="ml-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版</small></span></div><span class="ml-badge">30 秒</span></div><div class="ml-hero"><span class="ml-kicker">不替你决定，只帮你看清</span><h1>脑子里一团，<br><em>摊开</em>成三条路。</h1><p>写下你现在最卡的那件事。30 秒后，你会看到：哪些是事实、哪些还没底、三条路各自的条件，以及下一步。</p></div><div class="ml-form"><label class="ml-form-label" for="ml-input">我现在卡在</label><textarea id="ml-input" maxlength="200" placeholder="比如：要不要辞掉现在的工作？"></textarea><div class="ml-chips"><button type="button" class="ml-chip" data-ml-chip="career">要不要辞职</button><button type="button" class="ml-chip" data-ml-chip="relationship">要不要分手</button><button type="button" class="ml-chip" data-ml-chip="city">回老家还是留下</button></div><button type="button" class="ml-start" id="ml-start">摊开看看 <span>→</span></button></div><div class="ml-arrow">摊开后，是这样 <b>↓</b></div><div class="ml-preview"><div class="ml-preview-head"><span>你会得到这样一张图</span><small>示例输出 · 三条路</small></div><div class="ml-map"><div class="ml-q"><span>你现在卡在</span><b id="ml-q">要不要辞掉现在的工作？</b></div><div class="ml-paths"><div class="ml-p a"><i>A</i><span id="ml-a">继续现在的工作<small id="ml-as">能拿到：稳定现金流</small></span></div><div class="ml-p b"><i>B</i><span id="ml-b">辞职换方向<small id="ml-bs">要付出：收入断档的风险</small></span></div><div class="ml-p c"><i>C</i><span id="ml-c">先做一个付费小单<small id="ml-cs">用一个月换真实证据</small></span></div></div><p class="ml-note">每条路都写清：能拿到什么 / 要付出什么 / 什么条件下成立</p></div></div><button type="button" class="ml-history" id="ml-history" hidden>我的决定</button><p class="ml-trust">不注册 · 不配 Key 也能用 · 内容只留在本机</p></div>';
+    d.innerHTML='<div class="ml-wrap"><div class="ml-top"><div class="ml-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版</small></span></div><span class="ml-badge">30 秒</span></div><div class="ml-hero"><span class="ml-kicker">不替你决定，只帮你看清</span><h1>脑子里一团，<br><em>摊开</em>成三条路。</h1><p>写下你现在最卡的那件事。30 秒后，你会看到：哪些是事实、哪些还没底、三条路各自的条件，以及下一步。</p></div><div class="ml-form"><label class="ml-form-label" for="ml-input">我现在卡在</label><textarea id="ml-input" maxlength="200" placeholder="比如：要不要辞掉现在的工作？"></textarea><div class="ml-chips"><button type="button" class="ml-chip" data-ml-chip="career">要不要辞职</button><button type="button" class="ml-chip" data-ml-chip="relationship">要不要分手</button><button type="button" class="ml-chip" data-ml-chip="city">回老家还是留下</button></div><button type="button" class="ml-start" id="ml-start">摊开看看 <span>→</span></button></div><div class="ml-arrow">摊开后，是这样 <b>↓</b></div><div class="ml-flow-head"><span>你会得到这样一张图</span><small>示例 · 点上面的例子会变</small></div><div class="ml-flow"><div class="ml-flow-q"><span>你现在卡在</span><b id="ml-q">要不要辞掉现在的工作？</b></div><svg class="ml-flow-svg" viewBox="0 0 92 164" preserveAspectRatio="none" aria-hidden="true"><path d="M2 82 C34 82 28 28 88 28"/><path d="M2 82 H88"/><path d="M2 82 C34 82 28 136 88 136"/></svg><div class="ml-flow-node a"><b>A</b><span id="ml-a">继续现在的工作</span></div><div class="ml-flow-node b"><b>B</b><span id="ml-b">辞职换方向</span></div><div class="ml-flow-node c"><b>C</b><span id="ml-c">先做一个付费小单</span></div></div><button type="button" class="ml-history" id="ml-history" hidden>我的决定</button><p class="ml-trust">不注册 · 不配 Key 也能用 · 内容只留在本机</p></div>';
     document.body.appendChild(d);
     var input=document.getElementById('ml-input'),start=document.getElementById('ml-start');
     function enable(){}
     function apply(key){
       var e=DATA[key];if(!e)return;
       document.getElementById('ml-q').textContent=e.q;
-      document.getElementById('ml-a').firstChild.textContent=e.a;
-      document.getElementById('ml-b').firstChild.textContent=e.b;
-      document.getElementById('ml-c').firstChild.textContent=e.c;
-      document.getElementById('ml-as').textContent=e.as;
-      document.getElementById('ml-bs').textContent=e.bs;
-      document.getElementById('ml-cs').textContent=e.cs;
+      document.getElementById('ml-a').textContent=e.a;
+      document.getElementById('ml-b').textContent=e.b;
+      document.getElementById('ml-c').textContent=e.c;
     }
     function selectChip(key){
       var e=DATA[key];if(!e)return;
