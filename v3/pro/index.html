@@ -2124,6 +2124,25 @@ html{-webkit-tap-highlight-color:transparent}
 .mr-path[open] summary i{transform:rotate(45deg)}
 .mr-path summary i{transition:transform .2s ease}
 </style>
+<style id="lm-mobile-followup">
+.mr-compose{flex:0 0 auto;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(247,249,243,.97);border-top:1px solid #e2e9d9}
+.mr-compose button{width:100%;border:0;border-radius:14px;background:#234d3d;color:#fff;padding:14px;font:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 20px rgba(35,77,61,.16)}
+.mr-sheet{position:fixed;inset:0;z-index:1950;background:rgba(20,35,28,.5);display:none;align-items:flex-end;justify-content:center}
+.mr-sheet:not([hidden]){display:flex}
+.mr-sheet-card{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#fbfcf8;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 50px rgba(20,35,28,.18)}
+.mr-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
+.mr-sheet-head h2{font-size:18px;margin:0}
+.mr-sheet-close{border:0;background:#eef3e8;color:#5f7565;width:32px;height:32px;border-radius:50%;font-size:16px}
+.mr-sheet-sub{font-size:11.5px;line-height:1.8;color:#7c8d7e;margin:4px 0 14px}
+.mr-sheet-label{display:block;font-size:12px;line-height:1.7;color:#3f5447;font-weight:600;margin:14px 0 6px}
+.mr-sheet-fields textarea,.mr-sheet-card>textarea{width:100%;box-sizing:border-box;border:1px solid #dbe5d3;background:#fff;border-radius:12px;padding:12px 13px;font:inherit;font-size:16px;line-height:1.7;color:#25392f;outline:none;min-height:82px;resize:vertical}
+.mr-sheet-fields textarea:focus,.mr-sheet-card>textarea:focus{border-color:#8fb079;box-shadow:0 0 0 3px rgba(143,176,121,.14)}
+.mr-sheet-status{font-size:11.5px;line-height:1.7;color:#9a6a3f;margin:10px 0 0;min-height:16px}
+.mr-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.mr-sheet-actions button{border:1px solid #dbe5d3;background:#fff;color:#376b52;border-radius:12px;padding:13px;font:inherit;font-size:13px;font-weight:700}
+.mr-sheet-actions button.primary{background:#234d3d;border-color:#234d3d;color:#fff}
+.mr-sheet-actions button:disabled{opacity:.55}
+</style>
 
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
 <style>
@@ -6098,6 +6117,46 @@ body.wizard-open{overflow:hidden}
   function hide(){
     var sec=document.getElementById('mobile-report');if(sec)sec.hidden=true;
     document.body.classList.remove('mobile-report-open');
+    closeAdd();
+  }
+  function closeAdd(){
+    var s=document.getElementById('mr-sheet');if(s)s.hidden=true;
+    var st=document.getElementById('mr-sheet-status');if(st)st.textContent='';
+  }
+  function openAdd(){
+    var s=document.getElementById('mr-sheet');if(!s)return;
+    var report=state.report||{};
+    var gaps=Array.isArray(report.unknowns)?report.unknowns:[];
+    var prev=state.payload||{};
+    var answers=Array.isArray(prev.answers)?prev.answers:[];
+    var fields=document.getElementById('mr-sheet-fields');
+    fields.innerHTML=gaps.length?gaps.map(function(g,i){
+      var old=answers.find(function(a){return (a.gapId&&a.gapId===g.id)||(a.question&&a.question===g.question);});
+      return '<label class="mr-sheet-label">'+(i+1)+'. '+esc(g.question)+'</label><textarea data-add-gap="'+esc(g.id||'')+'" data-add-q="'+esc(g.question||'')+'" maxlength="500" placeholder="知道多少写多少，不确定也可以写“我猜是……”">'+esc(old?old.answer:'')+'</textarea>';
+    }).join(''):'<p class="mr-empty">这轮没有待确认的问题；可以只补背景。</p>';
+    var st=document.getElementById('mr-sheet-status');if(st)st.textContent='';
+    s.hidden=false;
+    setTimeout(function(){var ta=fields.querySelector('textarea');if(ta)ta.focus();},100);
+  }
+  async function submitAdd(){
+    var s=document.getElementById('mr-sheet');if(!s)return;
+    var status=document.getElementById('mr-sheet-status');
+    var btn=document.getElementById('mr-sheet-submit');
+    var prev=state.payload||{};
+    var fresh=[];
+    document.querySelectorAll('#mr-sheet-fields textarea').forEach(function(ta){var v=ta.value.trim();if(v)fresh.push({question:ta.dataset.addQ||'',gapId:ta.dataset.addGap||'',answer:v});});
+    var extra=(document.getElementById('mr-extra')||{}).value||'';extra=extra.trim();
+    if(!fresh.length&&!extra){if(status)status.textContent='写一句再更新，或者点取消。';return;}
+    if(!prev.dilemma){if(status)status.textContent='没有找到原问题，先点「重来」重新开始。';return;}
+    if(state.busy){if(status)status.textContent='正在分析中，稍等一下。';return;}
+    var merged=(typeof mergeAnswers==='function')?mergeAnswers(prev.answers||[],fresh):(prev.answers||[]).concat(fresh);
+    var request={dilemma:prev.dilemma,context:[prev.context,extra].filter(Boolean).join('\n'),answers:merged,ownConditions:(state.ownConditions||[]).map(function(c){return {id:c.id,text:c.text};}),actionResult:state.actionFeedback||{status:'todo',result:''},images:[]};
+    if(btn){btn.disabled=true;btn.textContent='更新中…';}
+    if(status)status.textContent='正在重新整理…';
+    var ok=false;
+    try{ok=await analyze(request);}catch(e){ok=false;}
+    if(btn){btn.disabled=false;btn.textContent='更新地图';}
+    if(ok){closeAdd();}else if(status){status.textContent='这次没更新成功，再试一次。';}
   }
   function build(){
     if(document.getElementById('mobile-report'))return document.getElementById('mobile-report');
@@ -6134,12 +6193,29 @@ body.wizard-open{overflow:hidden}
           <section class="mr-card"><h2>第三条路</h2><h3 id="mr-hidden-title" style="font-size:14px;line-height:1.7;margin:0 0 8px"></h3><p id="mr-hidden-why"></p><p id="mr-hidden-exp" style="margin-top:8px"></p></section>
           <div class="mr-actions"><button type="button" id="mr-export">导出 Markdown</button><button type="button" class="primary" id="mr-restart">重新开始</button></div>
         </div>
+      </div>
+      <div class="mr-compose"><button type="button" id="mr-add">＋ 补充信息，重新出一版</button></div>
+      <div class="mr-sheet" id="mr-sheet" hidden>
+        <div class="mr-sheet-card">
+          <div class="mr-sheet-head"><h2>补充信息</h2><button type="button" id="mr-sheet-close" aria-label="关闭">✕</button></div>
+          <p class="mr-sheet-sub">知道多少写多少，空着也行。补充后会重新出一版。</p>
+          <div class="mr-sheet-fields" id="mr-sheet-fields"></div>
+          <label class="mr-sheet-label" for="mr-extra">其他背景 / 条件</label>
+          <textarea id="mr-extra" maxlength="1000" placeholder="比如：期限、存款、家人态度……"></textarea>
+          <p class="mr-sheet-status" id="mr-sheet-status"></p>
+          <div class="mr-sheet-actions"><button type="button" id="mr-sheet-cancel">取消</button><button type="button" class="primary" id="mr-sheet-submit">更新地图</button></div>
+        </div>
       </div>`;
     document.body.appendChild(sec);
     sec.querySelectorAll('[data-mr-tab]').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.mrTab);});});
     document.getElementById('mr-new').addEventListener('click',function(){hide();document.getElementById('new-decision').click();});
     document.getElementById('mr-restart').addEventListener('click',function(){hide();document.getElementById('new-decision').click();});
     document.getElementById('mr-export').addEventListener('click',function(){var b=document.getElementById('export-report');if(b)b.click();});
+    document.getElementById('mr-add').addEventListener('click',openAdd);
+    document.getElementById('mr-sheet-close').addEventListener('click',closeAdd);
+    document.getElementById('mr-sheet-cancel').addEventListener('click',closeAdd);
+    document.getElementById('mr-sheet-submit').addEventListener('click',submitAdd);
+    document.getElementById('mr-sheet').addEventListener('click',function(e){if(e.target.id==='mr-sheet')closeAdd();});
     window.addEventListener('resize',function(){
       if(!isMobile()){hide();return;}
       if(state.report && document.getElementById('mobile-report') && document.getElementById('mobile-report').hidden){
