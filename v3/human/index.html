@@ -2166,7 +2166,7 @@ html{-webkit-tap-highlight-color:transparent}
 </style>
 
 <style id="lm-mobile-landing">
-#mobile-landing{display:none;position:fixed;inset:0;z-index:1850;background:linear-gradient(180deg,#f6f8f1 0%,#eef4e7 100%);color:#22302a;overflow:auto;-webkit-overflow-scrolling:touch}
+#mobile-landing{display:none;position:fixed;inset:0;z-index:1850;background:radial-gradient(1200px 700px at 80% -10%,#dfeccf 0%,transparent 55%),linear-gradient(180deg,#f7f9f2 0%,#eef4e7 100%);color:#22302a;overflow:auto;-webkit-overflow-scrolling:touch}
 #mobile-landing:not([hidden]){display:block}
 body.mobile-landing-open{overflow:hidden}
 .ml-wrap{max-width:560px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));min-height:100dvh;display:flex;flex-direction:column}
@@ -2175,32 +2175,48 @@ body.mobile-landing-open{overflow:hidden}
 .ml-brand svg{width:32px;height:32px}
 .ml-brand small{display:block;font-size:9px;color:#8a9a85;font-weight:600;letter-spacing:.04em;margin-top:2px}
 .ml-badge{margin-left:auto;font-size:9px;color:#6d8469;background:#fff;border:1px solid #dbe7d1;border-radius:999px;padding:5px 9px}
-.ml-hero{margin:30px 2px 20px}
+.ml-hero{margin:26px 2px 16px}
 .ml-kicker{font-size:10px;letter-spacing:.12em;color:#6d8469;font-weight:700}
-.ml-hero h1{font-size:34px;line-height:1.38;letter-spacing:-1.2px;margin:9px 0 10px;font-weight:800;color:#1f3d30}
-.ml-hero p{font-size:13.5px;line-height:1.85;color:#6b7a6e;margin:0;max-width:420px}
-.ml-map{background:#fff;border:1px solid #dfe8d6;border-radius:22px;padding:16px;box-shadow:0 14px 34px rgba(35,77,61,.09);margin:4px 0 14px}
-.ml-q{background:#f4f7f0;border-radius:13px;padding:12px 13px;margin-bottom:10px}
-.ml-q span{display:block;font-size:9px;color:#8a9a85;margin-bottom:4px}
-.ml-q b{font-size:14px;line-height:1.55;font-weight:700;color:#2f4a3a}
-.ml-paths{display:grid;gap:7px}
-.ml-p{display:flex;align-items:flex-start;gap:9px;border:1px solid #e5ecdd;border-left:4px solid #7fa36c;border-radius:11px;padding:9px 10px;background:#fcfdfb}
+.ml-hero h1{font-size:34px;line-height:1.4;letter-spacing:-1.2px;margin:9px 0 10px;font-weight:800;color:#1f3d30}
+.ml-hero h1 em{font-style:normal;color:#2f6b4f;position:relative;white-space:nowrap}
+.ml-hero h1 em:after{content:"";position:absolute;left:1px;right:1px;bottom:2px;height:7px;background:#cfe2bd;border-radius:4px;z-index:-1}
+.ml-hero p{font-size:13px;line-height:1.8;color:#6b7a6e;margin:0;max-width:430px}
+.ml-form{background:#fff;border:1px solid #dfe8d6;border-radius:20px;padding:15px;box-shadow:0 16px 36px rgba(35,77,61,.1);margin:4px 0 0}
+.ml-form-label{display:block;font-size:10px;letter-spacing:.06em;color:#8a9a85;font-weight:700;margin:0 2px 7px}
+.ml-form textarea{width:100%;box-sizing:border-box;border:1px solid #dbe5d3;background:#f8faf4;border-radius:12px;padding:12px 13px;font:inherit;font-size:16px;line-height:1.6;color:#25392f;min-height:78px;resize:none;outline:none}
+.ml-form textarea:focus{border-color:#8fb079;box-shadow:0 0 0 3px rgba(143,176,121,.14);background:#fff}
+.ml-chips{display:flex;gap:6px;flex-wrap:wrap;margin:9px 2px 11px}
+.ml-chip{border:1px solid #dfe8d6;background:#fbfcf8;color:#5f7565;border-radius:999px;padding:6px 9px;font:inherit;font-size:10.5px;line-height:1.2}
+.ml-chip[aria-pressed="true"]{background:#eef4e7;border-color:#b9cfa8;color:#2f6b4f;font-weight:700}
+.ml-start{width:100%;border:0;border-radius:13px;background:#234d3d;color:#fff;padding:14px;font:inherit;font-size:14px;font-weight:800;box-shadow:0 10px 22px rgba(35,77,61,.2)}
+.ml-start:disabled{opacity:.4;box-shadow:none}
+.ml-arrow{display:flex;align-items:center;justify-content:center;gap:6px;color:#9aab90;font-size:10px;letter-spacing:.04em;margin:12px 0 8px}
+.ml-arrow b{font-weight:400;font-size:14px;color:#7fa36c}
+.ml-preview{background:#fff;border:1px solid #dfe8d6;border-radius:20px;padding:13px;box-shadow:0 10px 26px rgba(35,77,61,.06)}
+.ml-preview-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 3px 9px}
+.ml-preview-head span{font-size:10px;color:#6d8469;font-weight:700;letter-spacing:.05em}
+.ml-preview-head small{font-size:9px;color:#a0ad98}
+.ml-map{background:#fcfdfb;border:1px solid #edf2e7;border-radius:15px;padding:11px}
+.ml-q{background:#f4f7f0;border-radius:11px;padding:10px 11px;margin-bottom:8px}
+.ml-q span{display:block;font-size:8.5px;color:#8a9a85;margin-bottom:3px}
+.ml-q b{font-size:13px;line-height:1.5;font-weight:700;color:#2f4a3a}
+.ml-paths{display:grid;gap:6px}
+.ml-p{display:flex;align-items:flex-start;gap:8px;border:1px solid #e5ecdd;border-left:4px solid #7fa36c;border-radius:10px;padding:7px 9px;background:#fff;animation:mlIn .45s both}
+.ml-p:nth-child(2){animation-delay:.06s}
+.ml-p:nth-child(3){animation-delay:.12s}
+@keyframes mlIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 .ml-p.b{border-left-color:#c08b57}
 .ml-p.c{border-left-color:#8a7ea8;background:#fbf9ff}
-.ml-p i{width:22px;height:22px;border-radius:6px;background:#e8f3ec;color:#2f7f5e;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:800;flex:0 0 22px}
+.ml-p i{width:21px;height:21px;border-radius:6px;background:#e8f3ec;color:#2f7f5e;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:800;flex:0 0 21px}
 .ml-p.b i{background:#fbf0e6;color:#a96a2c}
 .ml-p.c i{background:#f0ecf8;color:#6f5f96}
-.ml-p span{font-size:11.5px;line-height:1.55;color:#3f5447;font-weight:600}
-.ml-p span small{display:block;font-size:9.5px;color:#8a9a85;font-weight:400;margin-top:1px}
-.ml-note{font-size:9.5px;line-height:1.65;color:#8a9a85;margin:10px 2px 0}
-.ml-example{border:0;background:transparent;color:#376b52;font:inherit;font-size:12px;font-weight:700;padding:10px 2px;text-align:left}
-.ml-example span{color:#9aab90;margin-left:4px}
-.ml-actions{margin-top:auto;padding-top:10px}
-.ml-cta{width:100%;border:0;border-radius:15px;background:#234d3d;color:#fff;padding:15px;font:inherit;font-size:15px;font-weight:800;box-shadow:0 12px 26px rgba(35,77,61,.22)}
-.ml-cta span{float:right;font-weight:400}
+.ml-p span{font-size:11px;line-height:1.5;color:#3f5447;font-weight:600}
+.ml-p span small{display:block;font-size:9px;color:#8a9a85;font-weight:400;margin-top:1px}
+.ml-note{font-size:9px;line-height:1.6;color:#8a9a85;margin:7px 2px 0}
 .ml-trust{font-size:9.5px;line-height:1.7;color:#8a9a85;text-align:center;margin:10px 0 0}
-.ml-history{border:0;background:transparent;color:#6d8469;font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:8px 0;margin-top:4px}
+.ml-history{border:0;background:transparent;color:#6d8469;font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:8px 0;margin:2px auto 0;display:block}
 @media(max-width:360px){.ml-hero h1{font-size:30px}.ml-wrap{padding-left:16px;padding-right:16px}}
+@media(prefers-reduced-motion:reduce){.ml-p{animation:none}}
 </style>
 
 <!-- ===== 新版 v3 落地页样式（由 build_v3.py 注入）===== -->
@@ -6483,22 +6499,51 @@ body.wizard-open{overflow:hidden}
 
 <script>
 (function(){
+  var DATA={
+    career:{q:'要不要辞掉现在的工作？',a:'继续现在的工作',as:'能拿到：稳定现金流',b:'辞职换方向',bs:'要付出：收入断档的风险',c:'先做一个付费小单',cs:'用一个月换真实证据',ctx:'选项A：继续现在的工作；选项B：辞职换方向'},
+    relationship:{q:'要不要和男朋友分手？',a:'继续这段关系',as:'能拿到：熟悉和支持',b:'分手',bs:'要付出：失去这段关系',c:'先记录一个月',cs:'用事实换一个清楚的判断',ctx:'选项A：继续这段关系；选项B：分手'},
+    city:{q:'回老家还是留在杭州？',a:'回老家',as:'能拿到：离家近、成本低',b:'留在杭州',bs:'要付出：房租和不确定',c:'先两地试一个月',cs:'用真实生活换答案',ctx:'选项A：回老家；选项B：留在杭州'}
+  };
   function mobile(){return window.matchMedia('(max-width:680px)').matches;}
+  function $(s){return document.querySelector(s);}
   function build(){
     if(document.getElementById('mobile-landing'))return;
     var d=document.createElement('div');d.id='mobile-landing';d.hidden=true;
-    d.innerHTML='<div class="ml-wrap"><div class="ml-top"><div class="ml-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版</small></span></div><span class="ml-badge">30 秒</span></div><div class="ml-hero"><span class="ml-kicker">不替你决定，只帮你看清</span><h1>把纠结，<br>摊开成一张图。</h1><p>写下一个正在纠结的决定，马上看到已知事实、还没底的事、三条路和下一步。</p></div><div class="ml-map"><div class="ml-q"><span>你现在卡在</span><b>去杭州，还是回南充？</b></div><div class="ml-paths"><div class="ml-p a"><i>A</i><span>去杭州入职<small>能拿到：1.2 万月薪和行业机会</small></span></div><div class="ml-p b"><i>B</i><span>回南充考编<small>要付出：放弃杭州 offer</small></span></div><div class="ml-p c"><i>C</i><span>先留成都接项目<small>用一年换真实证据</small></span></div></div><p class="ml-note">每条路都写清：能拿到什么 / 要付出什么 / 什么条件下成立</p></div><button type="button" class="ml-example" id="ml-example">先看这个示例地图 <span>→</span></button><div class="ml-actions"><button type="button" class="ml-cta" id="ml-start">开始梳理我的决定 <span>→</span></button><button type="button" class="ml-history" id="ml-history" hidden>我的决定</button><p class="ml-trust">不注册 · 不配 Key 也能用 · 内容只留在本机</p></div></div>';
+    d.innerHTML='<div class="ml-wrap"><div class="ml-top"><div class="ml-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#234d3d"/><path d="M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z" fill="#a9c79a"/><circle cx="50" cy="50" r="4" fill="#eef6e8"/></svg><span>清醒地图<small>手机版</small></span></div><span class="ml-badge">30 秒</span></div><div class="ml-hero"><span class="ml-kicker">不替你决定，只帮你看清</span><h1>脑子里一团，<br><em>摊开</em>成三条路。</h1><p>写下你现在最卡的那件事。30 秒后，你会看到：哪些是事实、哪些还没底、三条路各自的条件，以及下一步。</p></div><div class="ml-form"><label class="ml-form-label" for="ml-input">我现在卡在</label><textarea id="ml-input" maxlength="200" placeholder="比如：要不要辞掉现在的工作？"></textarea><div class="ml-chips"><button type="button" class="ml-chip" data-ml-chip="career">要不要辞职</button><button type="button" class="ml-chip" data-ml-chip="relationship">要不要分手</button><button type="button" class="ml-chip" data-ml-chip="city">回老家还是留下</button></div><button type="button" class="ml-start" id="ml-start">摊开看看 <span>→</span></button></div><div class="ml-arrow">摊开后，是这样 <b>↓</b></div><div class="ml-preview"><div class="ml-preview-head"><span>你会得到这样一张图</span><small>示例输出 · 三条路</small></div><div class="ml-map"><div class="ml-q"><span>你现在卡在</span><b id="ml-q">要不要辞掉现在的工作？</b></div><div class="ml-paths"><div class="ml-p a"><i>A</i><span id="ml-a">继续现在的工作<small id="ml-as">能拿到：稳定现金流</small></span></div><div class="ml-p b"><i>B</i><span id="ml-b">辞职换方向<small id="ml-bs">要付出：收入断档的风险</small></span></div><div class="ml-p c"><i>C</i><span id="ml-c">先做一个付费小单<small id="ml-cs">用一个月换真实证据</small></span></div></div><p class="ml-note">每条路都写清：能拿到什么 / 要付出什么 / 什么条件下成立</p></div></div><button type="button" class="ml-history" id="ml-history" hidden>我的决定</button><p class="ml-trust">不注册 · 不配 Key 也能用 · 内容只留在本机</p></div>';
     document.body.appendChild(d);
-    document.getElementById('ml-start').addEventListener('click',function(){hide();if(window.openMobileWizard)window.openMobileWizard();});
-    document.getElementById('ml-example').addEventListener('click',function(){hide();if(typeof showExample==='function')showExample();});
+    var input=document.getElementById('ml-input'),start=document.getElementById('ml-start');
+    function enable(){}
+    function apply(key){
+      var e=DATA[key];if(!e)return;
+      document.getElementById('ml-q').textContent=e.q;
+      document.getElementById('ml-a').firstChild.textContent=e.a;
+      document.getElementById('ml-b').firstChild.textContent=e.b;
+      document.getElementById('ml-c').firstChild.textContent=e.c;
+      document.getElementById('ml-as').textContent=e.as;
+      document.getElementById('ml-bs').textContent=e.bs;
+      document.getElementById('ml-cs').textContent=e.cs;
+    }
+    function selectChip(key){
+      var e=DATA[key];if(!e)return;
+      input.value=e.q;selected=key;enable();apply(key);
+      d.querySelectorAll('[data-ml-chip]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mlChip===key));});
+    }
+    var selected='';
+    input.addEventListener('input',function(){selected='';enable();d.querySelectorAll('[data-ml-chip]').forEach(function(b){b.setAttribute('aria-pressed','false');});});
+    input.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();start.click();}});
+    d.querySelectorAll('[data-ml-chip]').forEach(function(b){b.addEventListener('click',function(){selectChip(b.dataset.mlChip);});});
+    start.addEventListener('click',function(){
+      var v=input.value.trim();if(!v){input.focus();return;}
+      var target=document.getElementById('dilemma');if(target)target.value=v;
+      if(selected&&DATA[selected]){var c=document.getElementById('context');if(c)c.value=DATA[selected].ctx;}
+      hide();if(window.openMobileWizard)window.openMobileWizard();
+    });
     document.getElementById('ml-history').addEventListener('click',function(){hide();var b=document.getElementById('history-button');if(b)b.click();});
   }
   function show(){
     if(!mobile())return;
-    var report=document.getElementById('report');
-    if(report&&!report.hidden)return;
-    var wiz=document.getElementById('mobile-wizard');
-    if(wiz&&!wiz.hidden)return;
+    var report=document.getElementById('report');if(report&&!report.hidden)return;
+    var wiz=document.getElementById('mobile-wizard');if(wiz&&!wiz.hidden)return;
     build();
     var d=document.getElementById('mobile-landing');if(!d)return;
     var history=document.getElementById('ml-history');
