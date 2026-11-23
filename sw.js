@@ -1,7 +1,7 @@
 /* 清醒地图 LucidMap · PWA service worker
    策略：页面走网络优先（离线回缓存）；静态资源缓存优先。
    更新时改 CACHE 版本号即可。 */
-const CACHE = 'lucidmap-v3-2026-11-22-18';
+const CACHE = 'lucidmap-v3-2026-11-22-19';
 const BASE = new URL('./', self.location.href);
 const CORE = [
   'v3/m/',
