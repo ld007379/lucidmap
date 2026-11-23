@@ -2656,8 +2656,9 @@ body.lm-intro-open{overflow:hidden}
     if(disabled)return;
     if(!window.matchMedia('(max-width:680px)').matches)return;
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var day=(function(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);})();
     if(!forced){
-      try{if(sessionStorage.getItem('lucidmap.intro.seen')==='1')return;}catch(e){}
+      try{if(localStorage.getItem('lucidmap.intro.day')===day)return;}catch(e){}
     }
     var report=document.getElementById('report');
     if(report&&!report.hidden)return;
@@ -2667,7 +2668,7 @@ body.lm-intro-open{overflow:hidden}
     var seen=false;
     function finish(){
       if(seen)return;seen=true;
-      try{sessionStorage.setItem('lucidmap.intro.seen','1');}catch(e){}
+      try{localStorage.setItem('lucidmap.intro.day',day);}catch(e){}
       d.classList.add('lm-intro-out');
       setTimeout(function(){d.hidden=true;d.classList.remove('lm-intro-out');document.body.classList.remove('lm-intro-open');},500);
     }
