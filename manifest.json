@@ -3,7 +3,7 @@
   "short_name": "清醒地图",
   "description": "把纠结摊开成一张能检查的图：已知事实、待确认缺口、三条路和下一步。纯前端，不用注册。",
   "lang": "zh-CN",
-  "start_url": "v3/m/",
+  "start_url": "v3/pro/",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],

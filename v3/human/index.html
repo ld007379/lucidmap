@@ -4032,10 +4032,10 @@ const KEY_STORAGE = 'lucidmap.deepseek.api-key.v1';
 /* ---- 多服务商：同一套 OpenAI 兼容协议，Key/模型各存各的 ---- */
 const PROVIDERS = {
   deepseek:   {name:'DeepSeek',  short:'DeepSeek', url:'https://api.deepseek.com/chat/completions', modelsUrl:'https://api.deepseek.com/models', model:'deepseek-flash', models:["deepseek-flash","deepseek-v4-pro"], vision:["deepseek-flash"], keyPage:'https://platform.deepseek.com/api_keys', json:true, extra:{thinking:{type:'disabled'}}},
-  qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', modelsUrl:'https://dashscope.aliyuncs.com/compatible-mode/v1/models', model:'qwen4-max', models:["qwen4-max","qwen3.8-flash","qwen3.8-max","qwen3.5-flash","qwen3.5-plus"], vision:["qwen4-max","qwen3.8-flash","qwen3.8-max","qwen3.5-flash","qwen3.5-plus"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
-  moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', modelsUrl:'https://api.moonshot.cn/v1/models', model:'kimi-k3', models:["kimi-k3","kimi-k3.1-pro"], vision:["kimi-k3","kimi-k3.1-pro"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
-  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', modelsUrl:'https://api.siliconflow.cn/v1/models', model:'deepseek-ai/DeepSeek-V3.2', models:["deepseek-ai/DeepSeek-V3.2","Qwen/Qwen3-235B-A22B-Thinking-2507","Qwen/Qwen3-VL-235B-A22B-Instruct"], vision:["Qwen/Qwen3-VL-235B-A22B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
-  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', modelsUrl:'https://openrouter.ai/api/v1/models', model:'openai/gpt-6.2-sol', models:["openai/gpt-6.2-astra","openai/gpt-6.2-sol","openai/gpt-6.1-terra","openai/gpt-6.1-sol","openai/gpt-6-astra","openai/gpt-6-sol","openai/gpt-6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], vision:["openai/gpt-6.2-astra","openai/gpt-6.2-sol","openai/gpt-6.1-terra","openai/gpt-6.1-sol","openai/gpt-6-astra","openai/gpt-6-sol","openai/gpt-6-luna","anthropic/claude-sonnet-5.5","google/gemini-3.8-flash","deepseek/deepseek-v4.1-flash"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
+  qwen:       {name:'通义千问',  short:'千问',     url:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', modelsUrl:'https://dashscope.aliyuncs.com/compatible-mode/v1/models', model:'qwen4-max', models:["qwen4-max","qwen3.8-flash","qwen3.8-max"], vision:["qwen4-max","qwen3.8-flash","qwen3.8-max"], keyPage:'https://bailian.console.aliyun.com/', json:false, extra:{}},
+  moonshot:   {name:'Kimi',      short:'Kimi',     url:'https://api.moonshot.cn/v1/chat/completions', modelsUrl:'https://api.moonshot.cn/v1/models', model:'kimi-k3.1-pro', models:["kimi-k3.1-pro","kimi-k3"], vision:["kimi-k3.1-pro","kimi-k3"], keyPage:'https://platform.moonshot.cn/console/api-keys', json:false, extra:{}},
+  siliconflow:{name:'硅基流动',  short:'硅基',     url:'https://api.siliconflow.cn/v1/chat/completions', modelsUrl:'https://api.siliconflow.cn/v1/models', model:'deepseek-ai/DeepSeek-V4.1-Flash', models:["deepseek-ai/DeepSeek-V4.1-Flash","Qwen/Qwen3-VL-235B-A22B-Instruct"], vision:["deepseek-ai/DeepSeek-V4.1-Flash","Qwen/Qwen3-VL-235B-A22B-Instruct"], keyPage:'https://cloud.siliconflow.cn/account/ak', json:true, extra:{}},
+  openrouter: {name:'OpenRouter（GPT/Claude）', short:'OpenRouter', url:'https://openrouter.ai/api/v1/chat/completions', modelsUrl:'https://openrouter.ai/api/v1/models', model:'openai/gpt-6.2-sol-pro', models:["openai/gpt-6.2-astra-pro","openai/gpt-6.2-sol-pro","openai/gpt-6.2-astra","openai/gpt-6.2-sol","google/gemini-4-neon","anthropic/claude-fable-5.2","qwen/qwen4-max"], vision:["openai/gpt-6.2-astra-pro","openai/gpt-6.2-sol-pro","openai/gpt-6.2-astra","openai/gpt-6.2-sol","google/gemini-4-neon","anthropic/claude-fable-5.2","qwen/qwen4-max"], keyPage:'https://openrouter.ai/keys', json:true, extra:{}},
 };
 const PROVIDER_KEY='lucidmap.provider.v1';
 function providerId(){const p=lsGet(PROVIDER_KEY);return PROVIDERS[p]?p:'deepseek';}
@@ -4203,7 +4203,7 @@ async function refreshModelList(auto){
     raw.forEach(x=>{const id=String((x&&x.id)||(x&&x.name)||x||'');if(id)meta.set(id,Number((x&&(x.created||x.created_at))||0)||0);});
     let ids=Array.from(new Set(raw.map(x=>String((x&&x.id)||(x&&x.name)||x||'')).filter(Boolean)));
     ids=ids.filter(m=>!/embedding|embed-|whisper|tts|dall-e|moderation|rerank|bge-|stable-diffusion|text-to-speech|speech|audio|image-generation/i.test(m));
-    const legacy=/(qwen-(plus|max|turbo)|qwen2(\.|$)|deepseek-v3(\.1)?($|-)|gpt-5(\.|$)|gpt-4o|gpt-4(\.|$)|claude-3|gemini-1(\.|$)|moonshot-v1|kimi-latest|deepseek-chat|deepseek-reasoner|-terminus)/i;
+    const legacy=/(qwen-(plus|max|turbo)|qwen2(\.|$)|qwen3\.5|deepseek-v3(\.1)?($|-)|gpt-5(\.|$)|gpt-4o|gpt-4(\.|$)|gpt-6(\.1)?($|-)|claude-3|claude-4|claude-(sonnet|opus)-5|gemini-(1|2|3)(\.|$)|moonshot-v1|kimi-latest|deepseek-chat|deepseek-reasoner|-terminus)/i;
     const allIds=ids.slice();
     let kept=ids.filter(m=>!legacy.test(m));
     const hidden=allIds.length-kept.length;
@@ -6621,6 +6621,7 @@ body.wizard-open{overflow:hidden}
   function hide(){var d=document.getElementById('mobile-landing');if(d)d.hidden=true;document.body.classList.remove('mobile-landing-open');}
   window.showMobileLanding=show;window.hideMobileLanding=hide;
   setTimeout(function(){if(mobile())show();},30);
+  try{var exKey=new URLSearchParams(location.search).get('example')||'';if(/^(career|city|relationship)$/.test(exKey)){setTimeout(function(){hide();if(window.openMobileWizard)window.openMobileWizard(exKey);},80);}}catch(e){}
 })();
 </script>
 

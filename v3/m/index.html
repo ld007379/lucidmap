@@ -114,9 +114,9 @@ footer a{color:#5f7a66;text-decoration:none}
   <section class="sec">
     <div class="sec-head"><h2>先试一个</h2><span>不用配 Key，直接看</span></div>
     <div class="try-list">
-      <a class="try work" href="../pro/?example=career#app" data-example="career"><span class="ico">职</span><span class="txt"><b>我该不该辞掉现在的工作？</b><small>收入 · 方向 · 家人态度</small></span><span class="arrow">→</span></a>
-      <a class="try city" href="../pro/?example=city#app" data-example="city"><span class="ico">城</span><span class="txt"><b>回老家还是留在杭州？</b><small>工作 · 房租 · 父母</small></span><span class="arrow">→</span></a>
-      <a class="try love" href="../pro/?example=relationship#app" data-example="relationship"><span class="ico">情</span><span class="txt"><b>我该不该和男朋友分手？</b><small>底线 · 舍不得 · 三个月</small></span><span class="arrow">→</span></a>
+      <a class="try work" href="../pro/?example=career&intro=0#app" data-example="career"><span class="ico">职</span><span class="txt"><b>我该不该辞掉现在的工作？</b><small>收入 · 方向 · 家人态度</small></span><span class="arrow">→</span></a>
+      <a class="try city" href="../pro/?example=city&intro=0#app" data-example="city"><span class="ico">城</span><span class="txt"><b>回老家还是留在杭州？</b><small>工作 · 房租 · 父母</small></span><span class="arrow">→</span></a>
+      <a class="try love" href="../pro/?example=relationship&intro=0#app" data-example="relationship"><span class="ico">情</span><span class="txt"><b>我该不该和男朋友分手？</b><small>底线 · 舍不得 · 三个月</small></span><span class="arrow">→</span></a>
     </div>
   </section>
 
@@ -141,7 +141,7 @@ footer a{color:#5f7a66;text-decoration:none}
     version=v;
     document.querySelectorAll('[data-version]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.version===v));});
     document.querySelectorAll('[data-example]').forEach(function(a){
-      a.href='../'+v+'/?example='+a.dataset.example+'#app';
+      a.href='../'+v+'/?example='+a.dataset.example+'&intro=0#app';
     });
     var start=document.getElementById('start-link');
     if(start)start.href='../'+v+'/#app';
