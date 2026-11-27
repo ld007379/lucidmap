@@ -5815,7 +5815,7 @@ function paintActionFeedback(restore){
   const ta=$('#af-result'); if(ta)ta.value=(state.actionFeedback&&state.actionFeedback.result)||'';
 }
 function updateCurrentHistory(){
-  if(!state.historyId||state.source!=='model')return;
+  if(!state.historyId)return;
   const list=loadHistory();const at=list.findIndex(x=>x.id===state.historyId);
   if(at<0)return;
   list[at].actionFeedback={status:state.actionFeedback.status,result:state.actionFeedback.result};
@@ -5843,7 +5843,7 @@ function loadSession(it){
   state.ownSeq=state.ownConditions.length;
   state.actionFeedback=it.actionFeedback?{status:it.actionFeedback.status||'todo',result:it.actionFeedback.result||''}:{status:'todo',result:''};
   state.switchChecks=it.switchChecks?{...it.switchChecks}:{};
-  state.historyId=(it.source==='model')?it.id:null;
+  state.historyId=(it.source==='model'||it.source==='local')?it.id:null;
   (it.report.unknowns||[]).forEach(u=>{if(validGapId(u.id)){gapUsedIds.add(u.id);gapSequence=Math.max(gapSequence,Number(u.id.slice(4))||0);}});
   updateOwnCondition();
   $('#welcome').hidden=true;$('#report').hidden=false;$('#new-decision').style.display='';$('#error-banner').hidden=true;
